@@ -15,7 +15,6 @@ At this time we recommend using
 # Install
 
 ``` bash
- nvm use
  npm install
 ```
 
