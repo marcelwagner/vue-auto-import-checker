@@ -1,6 +1,6 @@
 {
   "name": "vue-unplugin-checker",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Check if your used vue components in template are all registered with unplugin",
   "main": "index.ts",
   "scripts": {

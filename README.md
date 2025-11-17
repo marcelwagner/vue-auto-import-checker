@@ -1,6 +1,6 @@
 # Vue unplugin checker
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![GitHub release](https://img.shields.io/github/release/vue-unplugin-checker/vue-unplugin-checker.svg)]
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 Check via cli whether the Vue unplugin has every tag in your template registered. Currently ignoring all html and vuetify@3.10.11 tags.
 
