@@ -5,19 +5,19 @@ import { componentList } from './plugins/componentList';
 import { htmlTags } from './plugins/htmlTags';
 import { vuetifyTags } from './plugins/vuetifyTags';
 
-export default async function (componentsFile: string, directoryPath: string, quiet: boolean) {
-  const stats = {
+export default async function (componentsFile: string, directoryPath: string, quiet: boolean): Promise<ComponentSearch> {
+  const stats: Stats = {
     fileCounter: 0,
     templateFiles: 0,
     startTime: Date.now(),
     endTime: Date.now()
   };
 
-  const unknownTags: { file: string; line: number; tagName: string; lines: string[] }[] = [];
+  const unknownTags: UnknownTags[] = [];
 
   const componentsList = await componentList(componentsFile);
 
-  const iterateDirectoryRecursive = async (directoryPath: string, indent = 0) => {
+  const iterateDirectoryRecursive = async (directoryPath: string, indent = 0): Promise<void> => {
     try {
       const entries = await fs.readdir(directoryPath, { withFileTypes: true });
 
@@ -37,7 +37,7 @@ export default async function (componentsFile: string, directoryPath: string, qu
 
           stats.templateFiles++;
 
-          const unknownTagsOfFile: { line: number; tagName: string; lines: string[] }[] = [];
+          const unknownTagsOfFile: UnknownTagsOfFile[] = [];
 
           let script = false;
           let style = false;

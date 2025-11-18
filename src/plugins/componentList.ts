@@ -3,7 +3,7 @@ import path from 'node:path';
 
 export async function componentList(
   componentsFilePath: string
-): Promise<{ tag: string; rawTag: string }[]> {
+): Promise<ComponentList[]> {
   try {
     const componentsFile = path.join(componentsFilePath);
     const componentsFileContent = await fs.readFile(componentsFile, 'utf8');

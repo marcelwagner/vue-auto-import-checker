@@ -1,11 +1,16 @@
 #!/usr/bin/env -S npx tsx
 
 import { program } from 'commander';
-import { createRequire } from 'node:module';
 import checkForUnknownTags, { componentList } from './index';
+import packageJson from './package.json';
 
-const require = createRequire(import.meta.url);
-const packageJson = require('./package.json');
+const whisperFinally = async (unknownTags: UnknownTags[]) => {
+  if (unknownTags.length >= 1) {
+    return program.error(`Found ${unknownTags.length} unknown tags.`, { exitCode: -1 });
+  }
+
+  console.log('No unknown tags found');
+}
 
 (async () => {
   program
@@ -65,12 +70,7 @@ const packageJson = require('./package.json');
     );
 
     if (quiet) {
-      if (unknownTags.length >= 1) {
-        return program.error(`Found ${unknownTags.length} unknown tags.`, { exitCode: -1 });
-      }
-
-      console.log('No unknown tags found');
-      return;
+      return whisperFinally(unknownTags);
     }
 
     if (showResult) {
@@ -110,12 +110,7 @@ const packageJson = require('./package.json');
       console.log('');
     }
 
-    if (unknownTags.length >= 1) {
-      return program.error(`Found ${unknownTags.length} unknown tags.`, { exitCode: -1 });
-    }
-
-    console.log('No unknown tags found');
-    return;
+    return whisperFinally(unknownTags);
   } catch (error: any) {
     program.error(error?.errorText, { exitCode: -1 });
   }
