@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Check if the used vue components in templates are all registered with unplugin",
   "main": "index.ts",
   "scripts": {
@@ -21,6 +21,10 @@
   ],
   "author": "Marcel Wagner <marcel.wagner@email.de>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcelwagner/vue-auto-import-checker"
+  },
   "type": "module",
   "devDependencies": {
     "oxlint": "^1.28.0",
