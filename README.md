@@ -1,4 +1,4 @@
-# Vue unplugin checker
+# Vue auto-import checker
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
@@ -21,7 +21,7 @@ At this time we recommend using
 # Usage
 
 ``` bash
- npx vue-unplugin-checker -h
+ npx vue-auto-import-checker -h
 ```
 
 If your local version of node is <=23.4.0 you can also use
