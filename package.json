@@ -1,7 +1,7 @@
 {
   "name": "vue-unplugin-checker",
-  "version": "0.1.2",
-  "description": "Check if your used vue components in template are all registered with unplugin",
+  "version": "0.2.1",
+  "description": "Check if the used vue components in templates are all registered with unplugin",
   "main": "index.ts",
   "scripts": {
     "lint": "oxlint --tsconfig=tsconfig.json"
@@ -28,11 +28,11 @@
     "prettier-plugin-organize-imports": "^4.3.0"
   },
   "dependencies": {
-    "@types/node": "^24.10.1",
-    "commander": "^14.0.2",
-    "dotenv": "^17.2.3",
-    "html-tags": "^5.1.0",
-    "tsx": "^4.20.6",
-    "typescript": "^5.9.3"
+    "@types/node": "24.10.1",
+    "commander": "14.0.2",
+    "dotenv": "17.2.3",
+    "html-tags": "5.1.0",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
   }
 }
