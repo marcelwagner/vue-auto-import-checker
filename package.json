@@ -1,6 +1,6 @@
 {
-  "name": "vue-unplugin-checker",
-  "version": "0.2.1",
+  "name": "vue-auto-import-checker",
+  "version": "0.3.0",
   "description": "Check if the used vue components in templates are all registered with unplugin",
   "main": "index.ts",
   "scripts": {
@@ -11,7 +11,7 @@
     "npm": ">=10.8.2"
   },
   "bin": {
-    "vue-unplugin-checker": "cli.ts"
+    "vue-auto-import-checker": "cli.ts"
   },
   "keywords": [
     "vue",

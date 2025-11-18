@@ -8,7 +8,7 @@
   ],
   "include": [
     "./*.ts",
-    "./lib/**/*.ts",
+    "./src/*.ts",
     "./types/**/*.ts",
     "./tests/**/*.ts"
   ],
