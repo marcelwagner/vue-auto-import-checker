@@ -1,11 +1,12 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { componentList } from './plugins/componentList';
-import { htmlTags } from './plugins/htmlTags';
-import { vuetifyTags } from './plugins/vuetifyTags';
+import { componentList } from './plugins/componentList.ts';
+import { htmlTags } from './plugins/htmlTags.ts';
+import { vuetifyTags } from './plugins/vuetifyTags.ts';
+import type { VAIC_Config } from '../types/config.interface.ts';
 
-export default async function (componentsFile: string, directoryPath: string, quiet: boolean): Promise<ComponentSearch> {
+export default async function ({componentsFile, projectPath, html, vuetify, tags, quiet}: VAIC_Config): Promise<ComponentSearch> {
   const getUnknownTagsFromFile = async (fullPath: string): Promise<boolean> => {
     try {
       stats.fileCounter++;
@@ -57,16 +58,28 @@ export default async function (componentsFile: string, directoryPath: string, qu
         const cleanedTag = lineMatchesTag?.[0].trim().replace(/</g, '').replace(/>/g, '');
         const pureTag = cleanedTag.replace(/-/g, '').toLowerCase();
 
-        const tagIsHtml = htmlTags.some(tag => tag === pureTag);
+        if (html) {
+          const tagIsHtml = htmlTags.some(tag => tag === pureTag);
 
-        if (tagIsHtml) {
-          return false;
+          if (tagIsHtml) {
+            return false;
+          }
         }
 
-        const tagIsVuetify = vuetifyTags.some(tag => tag === pureTag);
+        if (vuetify) {
+          const tagIsVuetify = vuetifyTags.some(tag => tag === pureTag);
 
-        if (tagIsVuetify) {
-          return false;
+          if (tagIsVuetify) {
+            return false;
+          }
+        }
+
+        if (tags.length >= 1) {
+          const tagIs = tags.some(tag => tag === pureTag);
+
+          if (tagIs) {
+            return false;
+          }
         }
 
         const componentTagList = componentsList.map(component => component.tag);
@@ -89,7 +102,7 @@ export default async function (componentsFile: string, directoryPath: string, qu
       return false;
     } catch (error) {
       if (!quiet) {
-        console.error({ errorText: `Error reading path ${directoryPath}: ${error}` });
+        console.error({ errorText: `Error reading path ${fullPath}: ${error}` });
       }
       return false;
     }
@@ -97,6 +110,8 @@ export default async function (componentsFile: string, directoryPath: string, qu
 
   const getUnknownTagsFromDirectory = async (directoryPath: string, indent = 0): Promise<void> => {
     try {
+      stats.dirCounter++;
+
       const entries = await fs.readdir(directoryPath, { withFileTypes: true });
 
       for (const entry of entries) {
@@ -121,6 +136,7 @@ export default async function (componentsFile: string, directoryPath: string, qu
 
   const stats: Stats = {
     fileCounter: 0,
+    dirCounter: 0,
     templateFiles: 0,
     startTime: Date.now(),
     endTime: Date.now()
@@ -130,7 +146,7 @@ export default async function (componentsFile: string, directoryPath: string, qu
 
   const componentsList = await componentList(componentsFile);
 
-  await getUnknownTagsFromDirectory(directoryPath);
+  await getUnknownTagsFromDirectory(projectPath);
 
   stats.endTime = Date.now();
 

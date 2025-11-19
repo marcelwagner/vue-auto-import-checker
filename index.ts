@@ -1,14 +1,11 @@
-import getUnknownTags from './src/getUnknownTags';
+import getUnknownTags from './src/getUnknownTags.ts';
+import type { VAIC_Config } from './types/config.interface.ts';
 
-export default async function (componentsFile: string, projectPath: string, quiet = false) {
-  if (componentsFile && projectPath) {
-    return getUnknownTags(componentsFile, projectPath, quiet);
-  } else {
-    return Promise.reject('componentsFile and projectPath are required');
-  }
-}
+export default async function (config: VAIC_Config) {
+  return getUnknownTags(config);
+};
 
-export * as getUnknownTags from './src/getUnknownTags';
-export * from './src/plugins/componentList';
-export * from './src/plugins/htmlTags';
-export * from './src/plugins/vuetifyTags';
+export * as getUnknownTags from './src/getUnknownTags.ts';
+export * from './src/plugins/componentList.ts';
+export * from './src/plugins/htmlTags.ts';
+export * from './src/plugins/vuetifyTags.ts';

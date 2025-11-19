@@ -1,14 +1,12 @@
 {
   "exclude": [
     "node_modules",
-    ".cache",
-    "logs",
-    "dist",
+    "tests",
     "tsconfig.json"
   ],
   "include": [
     "./*.ts",
-    "./src/*.ts",
+    "./src/**/*.ts",
     "./types/**/*.ts",
     "./tests/**/*.ts"
   ],
@@ -24,7 +22,7 @@
     // "disableReferencedProjectLoad": true,             /* Reduce the number of projects loaded automatically by TypeScript. */
 
     /* Language and Environment */
-    "target": "ESNext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "target": "esnext",                                  /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
     "lib": [
       "ESNext"
     ],                                                   /* Specify a set of bundled library declaration files that describe the target runtime environment. */

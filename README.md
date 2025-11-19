@@ -32,10 +32,13 @@ If your local version of node is <=23.4.0 you can also use
 
 ## Options
 
-- -v or --version
-- -s or --stats                   print stats after check (default: false)
-- -r or --result                  print result after check (default: false)
-- -q or --quiet                   suppress output (default: false)
-- -c or --components-file <file>  write the file name or path to the file (relative to the current working directory) (default: "./components.d.ts")
-- -p or --project-path <path>     path to the vue project files to look for vue components (relative to the current working directory) (default: "")
-- -h or --help                    display help for command
+- -c --components-file <file>  write the file name or path to the file (relative to the current working directory) (default: "./components.d.ts")
+- -p --project-path <path>     path to the vue project files to look for vue components (relative to the current working directory) (default: "")
+- -s --stats                   print stats after check (default: false)
+- -r --result                  print result after check (default: false)
+- -q --quiet                   suppress output (default: false)
+- --tags [tags...]             ignore these tags (default: [])
+- --vuetify                    ignore vuetify tags (default: false)
+- --html                       ignore html tags (default: true)
+- -v, --version                output the current version
+- -h, --help                   display help for command
