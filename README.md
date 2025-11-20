@@ -1,21 +1,28 @@
 # Vue auto-import checker
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) 
 
-Check via cli whether vue unplugin has every tag in your template registered. Currently ignoring all html and vuetify@3.10.11 tags.
+A CLI tool that checks whether every non-HTML tag used in your Vue templates is properly registered in `components.d.ts 
+when using unplugin-vue-components (or similar auto-import setups).
 
-# Dependencies
+You can configure the checker to:
 
-At this time we recommend using
+- Ignore standard HTML tags (default: true)
+- Ignore Vuetify component tags (currently v3.10.11)
+- Ignore any additional custom tags you specify
 
-- Node.js >=23.5.0*
+# Requirements
 
-*\* See usage for more info about node <= 23.4.0*
+We recommend using:
 
-# Install
+- Node.js >= 23.5.0
+
+\*See the *Usage* section for a workaround on Node.js <= 23.4.0.
+
+# Installation
 
 ``` bash
- npm install
+ npm i vue-auto-import-checker
 ```
 
 # Usage
@@ -24,21 +31,56 @@ At this time we recommend using
  npx vue-auto-import-checker -h
 ```
 
-If your local version of node is <=23.4.0 you can also use
+If you're running **Node.js <= 23.4.0**, you can use:
 
 ``` bash
  tsx cli.ts -h
 ```
 
+## Example
+
+Assume:
+- Your `components.d.ts` file lives at: \
+`./tests/data/vue-test-project/components.d.ts`
+- Vue component files are located in: \
+`./tests/data/vue-test-project/src/`
+- You are using Vuetify and a custom component named `ToolingIcon
+
+``` bash
+ npx vue-auto-import-checker \
+  -c ./tests/data/vue-test-project/components.d.ts \
+  -p ./tests/data/vue-test-project/src/ \
+  --vuetify \
+  --customtags toolingicon \
+  -r \
+  -s
+```
+
 ## Options
 
-- -c --components-file <file>  write the file name or path to the file (relative to the current working directory) (default: "./components.d.ts")
-- -p --project-path <path>     path to the vue project files to look for vue components (relative to the current working directory) (default: "")
-- -s --stats                   print stats after check (default: false)
-- -r --result                  print result after check (default: false)
-- -q --quiet                   suppress output (default: false)
-- --tags [tags...]             ignore these tags (default: [])
-- --vuetify                    ignore vuetify tags (default: false)
-- --html                       ignore html tags (default: true)
-- -v, --version                output the current version
-- -h, --help                   display help for command
+| Option                         | Alias | Description                                                                 | Default              |
+|--------------------------------|-------|-----------------------------------------------------------------------------|----------------------|
+| `--components-file <file>`     | `-c`  | Path to the `components.d.ts` file (relative to CWD)                        | `./components.d.ts`  |
+| `--project-path <path>`        | `-p`  | Path to the Vue source directory (relative to CWD)                          | `""`                 |
+| `--stats`                      | `-s`  | Print a summary of the check                                                | `false`              |
+| `--result`                     | `-r`  | Print detailed results                                                      | `false`              |
+| `--quiet`                      | `-q`  | Suppress all output                                                         | `false`              |
+| `--customtags [customtags...]` | —     | Ignore these component tags                                                 | `[]`                 |
+| `--vuetify`                    | —     | Ignore Vuetify component tags                                               | `false`              |
+| `--html`                       | —     | Ignore HTML element tags                                                    | `true`               |
+| `--version`                    | `-v`  | Show the currently installed version                                        | —                    |
+| `--help`                       | `-h`  | Display help information                                                    | —                    |
+
+## Feedback & Contributions
+
+If this tool helps you out, consider leaving a star on the repository — it really motivates further development!
+
+Found a bug? Something not working as expected?  
+Please open an issue on so it can be fixed quickly.
+
+Missing a feature you’d love to see?  
+Feature requests are very welcome as well!
+
+[![GitHub](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/marcelwagner/vue-auto-import-checker)
+
+Thanks for helping make **Vue Auto-Import Checker** better for everyone! 🙌

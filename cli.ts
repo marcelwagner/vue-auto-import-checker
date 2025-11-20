@@ -27,7 +27,7 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
     .option('-s --stats', 'print stats after check', false)
     .option('-r --result', 'print result after check', false)
     .option('-q --quiet', 'suppress output', false)
-    .option('--tags [tags...]', 'ignore these tags', [])
+    .option('--customtags [customtags...]', 'ignore these tags', [])
     .option('--vuetify', 'ignore vuetify tags', false)
     .option('--html', 'ignore html tags', true)
     .version(packageJson.version, '-v, --version', 'output the current version');
@@ -39,7 +39,7 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
   const quiet = Boolean(options.quiet);
   const vuetify = Boolean(options.vuetify);
   const html = Boolean(options.html);
-  const tags = options.tags as string[];
+  const customTags = options.customtags as string[];
   const showStats = Boolean(options.stats);
   const showResult = Boolean(options.result);
   const componentsFile = options.componentsFile;
@@ -66,7 +66,7 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
       projectPath,
       vuetify,
       html,
-      tags
+      customTags
     });
 
     if (quiet) {

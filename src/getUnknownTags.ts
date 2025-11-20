@@ -6,7 +6,7 @@ import { htmlTags } from './plugins/htmlTags.ts';
 import { vuetifyTags } from './plugins/vuetifyTags.ts';
 import type { VAIC_Config } from '../types/config.interface.ts';
 
-export default async function ({componentsFile, projectPath, html, vuetify, tags, quiet}: VAIC_Config): Promise<ComponentSearch> {
+export default async function ({componentsFile, projectPath, html, vuetify, customTags, quiet}: VAIC_Config): Promise<ComponentSearch> {
   const getUnknownTagsFromFile = async (fullPath: string): Promise<boolean> => {
     try {
       stats.fileCounter++;
@@ -59,25 +59,28 @@ export default async function ({componentsFile, projectPath, html, vuetify, tags
         const pureTag = cleanedTag.replace(/-/g, '').toLowerCase();
 
         if (html) {
-          const tagIsHtml = htmlTags.some(tag => tag === pureTag);
+          const isHtmlTag = htmlTags.some(tag => tag === pureTag);
 
-          if (tagIsHtml) {
+          if (isHtmlTag) {
             return false;
           }
         }
 
         if (vuetify) {
-          const tagIsVuetify = vuetifyTags.some(tag => tag === pureTag);
+          const isVuetifyTag = vuetifyTags.some(tag => tag === pureTag);
 
-          if (tagIsVuetify) {
+          if (isVuetifyTag) {
             return false;
           }
         }
 
-        if (tags.length >= 1) {
-          const tagIs = tags.some(tag => tag === pureTag);
+        if (customTags.length >= 1) {
+          const isCustomTag = customTags.some(customTagRaw => {
+            const customTag = customTagRaw.replace(/-/, '').toLowerCase();
+            return customTag === pureTag;
+          });
 
-          if (tagIs) {
+          if (isCustomTag) {
             return false;
           }
         }
