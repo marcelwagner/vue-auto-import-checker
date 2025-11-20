@@ -39,13 +39,17 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
     <br />
 
     More instructions are available in
-    <a href="javascript:void(0)" @click="openReadmeInEditor"><code>README.md</code></a
-    >.
+    <a href="javascript:void(0)" @click="(someVar: SomeType<ThisNot>) => openReadmeInEditor"><code>README.md</code></a>.
   </WelcomeItem>
 
   <WelcomeItem>
     <template #icon>
-      <EcosystemIcon />
+      <EcosystemIcon
+        class="cursor-pointer"
+        clas1="cursor-pointer"
+        clas2="cursor-pointer"
+        clas3="cursor-pointer"
+        @click="(someVar: SomeType<ThisShouldBeReconized>) => openReadmeInEditor" />
     </template>
     <template #heading>Ecosystem</template>
 

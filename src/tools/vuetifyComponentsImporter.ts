@@ -28,7 +28,7 @@ export async function vuetifyComponentsImporter () {
 
     await fs.writeFile(
       vuetifyTagsFile,
-      `export const vuetifyTags = ${JSON.stringify(componentsList, null, 2)} as string[];\n`,
+      `export const vuetifyTags: string[] = ${JSON.stringify(componentsList, null, 2)};\n`,
       'utf8'
     );
 

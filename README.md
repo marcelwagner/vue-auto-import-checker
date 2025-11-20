@@ -46,6 +46,23 @@ But you can import your own set of tags by using the `vuetify-importer` tool.
 This will modify your vuetify tag-list, so that the checker ignores all vuetify tags from your current vuetify 
 implementation. (tested with vuetify v3.8.3 - v3.11.1)
 
+Try to use other versions and report, for which version the importer works.
+
+## VueUse >= 14.0.0
+
+We provide a list of vueUse tags from version `14.0.0` out of the box.
+
+But you can import your own set of tags by using the `vueuse-importer` tool.
+
+``` bash
+ npx vue-auto-import-checker -t vueuse-importer
+```
+
+This will modify your vueUse tag-list, so that the checker ignores all vueUse tags from your current vueUse
+implementation. (tested with @vueuse/components v14.0.0)
+
+Try to use other versions and report, for which version the importer works.
+
 ## Node.js <= 23.4.0
 
 If you're running **Node.js <= 23.4.0**, you can use:
@@ -54,9 +71,14 @@ If you're running **Node.js <= 23.4.0**, you can use:
  tsx cli.ts -h
 ```
 
+Tested with Node.js v22.18.1
+
+Try to use other versions and report, for which version the cli works.
+
 # Example
 
-Assume:
+1. Assumption
+
 - Your `components.d.ts` file lives at: \
 `./tests/data/vue-test-project/components.d.ts`
 - Vue component files are located in: \
@@ -68,41 +90,40 @@ Assume:
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   --vuetify \
-  --customtags toolingicon \
+  --customtags ToolingIcon EcosystemIcon \
   -r \
   -s
 ```
 
 or
 
-Assume:
+2. Assumption
+
 - Your `components.d.ts` file lives at: \
   `./tests/data/vue-test-project/components.d.ts`
 - Vue component files are located in: \
   `./tests/data/vue-test-project/src/`
 - You are using Vuetify and a custom component named `ToolingIcon`
-- And you only want to have this tool in your CI/CD chain to fail or pass
+- And you only want to have this tool in your CI workflow to fail or pass
 
 ``` bash
  npx vue-auto-import-checker \
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   --vuetify \
-  --customtags toolingicon
+  --customtags ToolingIcon EcosystemIcon
 ```
 
 or
 
-Assume:
+3. Assumption
+
 - Your `components.d.ts` file lives at: \
   `./tests/data/vue-test-project/components.d.ts`
 - And you only want a list of all tags the components.d.ts file is providing
 
 ``` bash
- npx vue-auto-import-checker \
-  -c ./tests/data/vue-test-project/components.d.ts \
-  -r \
-  -s
+ npx vue-auto-import-checker -c ./tests/data/vue-test-project/components.d.ts
 ```
 
 # CI/CD Integration
@@ -116,21 +137,23 @@ This allows you to easily break builds when auto-imports are missing.
 
 # Options
 
-| Option                         | Alias | Description                                                                 | Default             |
-|--------------------------------|-------|-----------------------------------------------------------------------------|---------------------|
-| `--components-file <file>`     | `-c`  | Path to the `components.d.ts` file (relative to CWD)                        | `./components.d.ts` |
-| `--project-path <path>`        | `-p`  | Path to the Vue source directory (relative to CWD)                          | `""`                |
-| `--stats`                      | `-s`  | Print a summary of the check                                                | `false`             |
-| `--result`                     | `-r`  | Print detailed results                                                      | `false`             |
-| `--quiet`                      | `-q`  | Suppress all output                                                         | `false`             |
-| `--customtags [customtags...]` | —     | Ignore these component tags                                                 | `[]`                |
-| `--vuetify`                    | —     | Ignore Vuetify component tags                                               | `false`             |
-| `--html`                       | —     | Ignore HTML element tags                                                    | `true`              |
-| `--tools`                      | `-t`  | use tools to customize your checker                                         | `[]`                |
-| `--version`                    | `-v`  | Show the currently installed version                                        | —                   |
-| `--help`                       | `-h`  | Display help information                                                    | —                   |
-
-
+| Option                         | Alias | Description                                           | Default             |
+|--------------------------------|-------|-------------------------------------------------------|---------------------|
+| `--components-file <file>`     | `-c`  | Path to the `components.d.ts` file (relative to CWD)  | `./components.d.ts` |
+| `--project-path <path>`        | `-p`  | Path to the Vue source directory (relative to CWD)    | `""`                |
+| `--stats`                      | `-s`  | Print a summary of the check                          | `false`             |
+| `--result`                     | `-r`  | Print detailed results                                | `false`             |
+| `--quiet`                      | `-q`  | Suppress all output                                   | `false`             |
+| `--customtags [customtags...]` | —     | Ignore these component tags                           | `[]`                |
+| `--vuetify`                    | —     | Ignore Vuetify component tags                         | `false`             |
+| `--vue`                        | —     | Ignore Vue component tags                             | `true`              |
+| `--vueuse`                     | —     | Ignore VueUse component tags                          | `true`              |
+| `--vuerouter`                  | —     | Ignore VueRouter component tags                       | `true`              |
+| `--svg`                        | —     | Ignore svg element tags                               | `true`              |
+| `--html`                       | —     | Ignore HTML element tags                              | `true`              |
+| `--tools [tools...]`           | `-t`  | use tools to customize your checker                   | `[]`                |
+| `--version`                    | `-v`  | Show the currently installed version                  | —                   |
+| `--help`                       | `-h`  | Display help information                              | —                   |
 
 # Feedback & Contributions
 

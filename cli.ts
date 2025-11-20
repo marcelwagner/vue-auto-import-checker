@@ -3,6 +3,7 @@
 import { program } from 'commander';
 import checkForUnknownTags, { componentList, vuetifyComponentsImporter } from './index.ts';
 import packageJson from './package.json';
+import { vueUseComponentsImporter } from './src/tools/vueUseComponentsImporter.ts';
 
 const whisperFinally = async (unknownTags: UnknownTags[]) => {
   if (unknownTags.length >= 1) {
@@ -31,38 +32,55 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
     .option('--customtags [customtags...]', 'ignore these tags', [])
     .option('--vuetify', 'ignore vuetify tags', false)
     .option('--html', 'ignore html tags', true)
+    .option('--svg', 'ignore svg tags', true)
+    .option('--vue', 'ignore vue tags', true)
+    .option('--vueuse', 'ignore vueUse tags', true)
+    .option('--vuerouter', 'ignore vueRouter tags', true)
     .version(packageJson.version, '-v, --version', 'output the current version');
 
   program.parse();
 
   const options = program.opts();
-
+  // Quiet mode
   const quiet = Boolean(options.quiet);
+  // Ignore tags
   const vuetify = Boolean(options.vuetify);
   const html = Boolean(options.html);
-  const customTags = options.customtags as string[];
+  const svg = Boolean(options.svg);
+  const vue = Boolean(options.vue);
+  const vueUse = Boolean(options.vueuse);
+  const vueRouter = Boolean(options.vuerouter);
+  const customTags: string[] = options.customtags;
+  // Stats and result
   const showStats = Boolean(options.stats);
   const showResult = Boolean(options.result);
-  const componentsFile = options.componentsFile;
-  const projectPath = options.projectPath;
-  const tools = options.tools as string[];
+  // Paths
+  const componentsFile = String(options.componentsFile);
+  const projectPath = String(options.projectPath);
+  // Tools
+  const tools: string[] = options.tools;
 
   if (tools.length >= 1) {
     try {
+      let toolTags;
+
       if (tools.includes('vuetify-importer')) {
-        const vuetifyTags = await vuetifyComponentsImporter();
-
-        console.log('\n' + `Found ${vuetifyTags.length} vuetify tags:` + '\n');
-
-        vuetifyTags.forEach(tag => console.log(tag));
-
-        console.log('');
-        return;
+        toolTags = await vuetifyComponentsImporter();
+      } else if (tools.includes('vueuse-importer')) {
+        toolTags = await vueUseComponentsImporter();
+      } else {
+        program.error('No tool found. We provide only "vuetify-importer" at the moment', { exitCode: -1 });
       }
-      program.error('No tool found. We provide only "vuetify-importer" at the moment', { exitCode: -1 });
+
+      console.log('\n' + `Found ${toolTags.length} vuetify tags:` + '\n');
+
+      toolTags.forEach(tag => console.log(tag));
+
+      console.log('');
     } catch (error: any) {
       program.error(error?.errorText, { exitCode: -1 });
     }
+    return;
   }
 
   // If only components file is provided, list components and exit
@@ -90,6 +108,10 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
       projectPath,
       vuetify,
       html,
+      svg,
+      vue,
+      vueUse,
+      vueRouter,
       customTags
     });
 
@@ -129,8 +151,7 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
       }
 
       console.log('\n' + `Found ${unknownTags.length} unknown tags` + '\n');
-      unknownTags.map(tag => console.log(tag.tagName));
-
+      Array.from(new Set(unknownTags.map(tag => tag.tagName))).map(tag => console.log(tag));
       console.log('\n' + `Time taken: ${stats.endTime - stats.startTime} ms`);
       console.log(`Files scanned: ${stats.fileCounter}`);
       console.log(`Directories scanned: ${stats.dirCounter}`);
