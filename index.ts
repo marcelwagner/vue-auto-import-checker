@@ -6,6 +6,7 @@ export default async function (config: VAIC_Config) {
 };
 
 export * as getUnknownTags from './src/getUnknownTags.ts';
+export * from './src/tools/vuetifyComponentsImporter.ts';
 export * from './src/plugins/componentList.ts';
 export * from './src/plugins/htmlTags.ts';
 export * from './src/plugins/vuetifyTags.ts';

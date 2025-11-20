@@ -58,8 +58,15 @@ export default async function ({componentsFile, projectPath, html, vuetify, cust
         const cleanedTag = lineMatchesTag?.[0].trim().replace(/</g, '').replace(/>/g, '');
         const pureTag = cleanedTag.replace(/-/g, '').toLowerCase();
 
+        const isTagInList = (tagList: string[], tag: string): boolean => {
+          return tagList.some(tagFromListRaw => {
+            const tagFromList = tagFromListRaw.replace(/-/, '').toLowerCase();
+            return tagFromList === tag;
+          })
+        };
+
         if (html) {
-          const isHtmlTag = htmlTags.some(tag => tag === pureTag);
+          const isHtmlTag = isTagInList(htmlTags as string[], pureTag);
 
           if (isHtmlTag) {
             return false;
@@ -67,7 +74,7 @@ export default async function ({componentsFile, projectPath, html, vuetify, cust
         }
 
         if (vuetify) {
-          const isVuetifyTag = vuetifyTags.some(tag => tag === pureTag);
+          const isVuetifyTag = isTagInList(vuetifyTags, pureTag);
 
           if (isVuetifyTag) {
             return false;
@@ -75,10 +82,7 @@ export default async function ({componentsFile, projectPath, html, vuetify, cust
         }
 
         if (customTags.length >= 1) {
-          const isCustomTag = customTags.some(customTagRaw => {
-            const customTag = customTagRaw.replace(/-/, '').toLowerCase();
-            return customTag === pureTag;
-          });
+          const isCustomTag = isTagInList(customTags, pureTag);
 
           if (isCustomTag) {
             return false;
@@ -105,7 +109,7 @@ export default async function ({componentsFile, projectPath, html, vuetify, cust
       return false;
     } catch (error) {
       if (!quiet) {
-        console.error({ errorText: `Error reading path ${fullPath}: ${error}` });
+        return Promise.reject({ errorText: `Error reading path ${fullPath}: ${error}` });
       }
       return false;
     }
@@ -132,7 +136,7 @@ export default async function ({componentsFile, projectPath, html, vuetify, cust
       }
     } catch (error) {
       if (!quiet) {
-        console.error({ errorText: `Error reading path ${directoryPath}: ${error}` });
+        return Promise.reject({ errorText: `Error reading path ${directoryPath}: ${error}` });
       }
     }
   };

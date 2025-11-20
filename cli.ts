@@ -1,7 +1,7 @@
 #!/usr/bin/env -S npx tsx
 
 import { program } from 'commander';
-import checkForUnknownTags, { componentList } from './index.ts';
+import checkForUnknownTags, { componentList, vuetifyComponentsImporter } from './index.ts';
 import packageJson from './package.json';
 
 const whisperFinally = async (unknownTags: UnknownTags[]) => {
@@ -24,6 +24,7 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
       'path to the vue project files to look for vue components (relative to the current working directory)',
       ''
     )
+    .option('-t --tools [tools...]', 'use tools to customize your checker', [])
     .option('-s --stats', 'print stats after check', false)
     .option('-r --result', 'print result after check', false)
     .option('-q --quiet', 'suppress output', false)
@@ -44,6 +45,27 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
   const showResult = Boolean(options.result);
   const componentsFile = options.componentsFile;
   const projectPath = options.projectPath;
+  const tools = options.tools as string[];
+
+  if (tools.length >= 1) {
+    try {
+      if (tools.includes('vuetify-importer')) {
+        const vuetifyTags = await vuetifyComponentsImporter();
+
+        console.log('\n' + `Found ${vuetifyTags.length} vuetify tags:` + '\n');
+
+        vuetifyTags.forEach(tag => console.log(tag));
+
+        console.log('');
+        return;
+      }
+      program.error('No tool found. We provide only "vuetify-importer" at the moment', { exitCode: -1 });
+    } catch (error: any) {
+      program.error(error?.errorText, { exitCode: -1 });
+    }
+  }
+
+  // If only components file is provided, list components and exit
 
   if (componentsFile && !projectPath) {
     try {
@@ -60,6 +82,8 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
     return;
   }
 
+  // If project path and components file are provided, check for unknown tags
+
   try {
     const { unknownTags, stats } = await checkForUnknownTags({
       componentsFile,
@@ -69,9 +93,13 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
       customTags
     });
 
+    // Handle quiet mode
+
     if (quiet) {
       return whisperFinally(unknownTags);
     }
+
+    // Print result
 
     if (showResult) {
       let currentFile = '';
@@ -92,6 +120,8 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
 
       console.log('');
     }
+
+    // Print stats
 
     if (showStats) {
       if (showResult) {
