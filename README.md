@@ -2,7 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) 
 
-A CLI tool that checks whether every non-HTML tag used in your Vue templates is properly registered in `components.d.ts 
+A CLI tool that checks whether every non-HTML tag used in your Vue templates is properly registered in `components.d.ts` 
 when using unplugin-vue-components (or similar auto-import setups).
 
 You can configure the checker to:
@@ -44,7 +44,7 @@ Assume:
 `./tests/data/vue-test-project/components.d.ts`
 - Vue component files are located in: \
 `./tests/data/vue-test-project/src/`
-- You are using Vuetify and a custom component named `ToolingIcon
+- You are using Vuetify and a custom component named `ToolingIcon`
 
 ``` bash
  npx vue-auto-import-checker \
@@ -55,6 +55,47 @@ Assume:
   -r \
   -s
 ```
+
+or
+
+Assume:
+- Your `components.d.ts` file lives at: \
+  `./tests/data/vue-test-project/components.d.ts`
+- Vue component files are located in: \
+  `./tests/data/vue-test-project/src/`
+- You are using Vuetify and a custom component named `ToolingIcon`
+- And you only want to have this tool in your CI/CD chain to fail or pass
+
+``` bash
+ npx vue-auto-import-checker \
+  -c ./tests/data/vue-test-project/components.d.ts \
+  -p ./tests/data/vue-test-project/src/ \
+  --vuetify \
+  --customtags toolingicon
+```
+
+or
+
+Assume:
+- Your `components.d.ts` file lives at: \
+  `./tests/data/vue-test-project/components.d.ts`
+- And you only want a list of all tags the components.d.ts file is providing
+
+``` bash
+ npx vue-auto-import-checker \
+  -c ./tests/data/vue-test-project/components.d.ts \
+  -r \
+  -s
+```
+
+### CI/CD Integration
+
+This tool is CI-friendly —
+
+- If unknown tags are detected, the CLI will exit with a non-zero status code
+- If no issues are found, it will exit successfully with code `0`
+
+This allows you to easily break builds when auto-imports are missing.
 
 ## Options
 
@@ -70,6 +111,8 @@ Assume:
 | `--html`                       | —     | Ignore HTML element tags                                                    | `true`               |
 | `--version`                    | `-v`  | Show the currently installed version                                        | —                    |
 | `--help`                       | `-h`  | Display help information                                                    | —                    |
+
+
 
 ## Feedback & Contributions
 
