@@ -3,15 +3,21 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) 
 
 A CLI tool that checks whether every non-HTML tag used in your Vue templates is properly registered in `components.d.ts` 
-when using unplugin-vue-components (or similar auto-import setups).
+when using unplugin-vue-components (or similar auto-import setups). 
 
-You can configure the checker to:
+You can configure the checker to: 
 
-- Ignore standard HTML tags (default: true)
-- Ignore Vuetify component tags (currently v3.8.3)*
-- Ignore any additional custom tags you specify
+- Ignore standard HTML tags 
+- Ignore Vue component tags 
+- Ignore VueUse component tags (currently v13.5.0)* 
+- Ignore VueRouter component tags 
+- Ignore SVG element tags 
+- Ignore Vuetify component tags (currently v3.8.3)* 
+- Ignore any additional custom tags you specify 
 
-\*See the *Usage* section for more vuetify-related information.
+HTML, Vue, VueRouter, VueUse and SVG tags are ignored by default.
+
+\*See the *Usage* section for more vuetify & VueUse related information.
 
 # Requirements
 
@@ -48,9 +54,9 @@ implementation. (tested with vuetify v3.8.3 - v3.11.1)
 
 Try to use other versions and report, for which version the importer works.
 
-## VueUse >= 14.0.0
+## VueUse >= 13.5.0
 
-We provide a list of vueUse tags from version `14.0.0` out of the box.
+We provide a list of vueUse tags from version `13.5.0` out of the box.
 
 But you can import your own set of tags by using the `vueuse-importer` tool.
 

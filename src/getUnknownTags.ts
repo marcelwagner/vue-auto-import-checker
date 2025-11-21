@@ -52,9 +52,9 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
         return false; // Skip lines within <script> or <style> blocks
       }
 
-      const lineMatchesTag = line.match(/<([a-zA-Z0-9-]+)/);
+      const lineMatchesTag = line.match(/<([\w-]+)/);
       const possibleSelfClosingTag = line.match(/<([\S]+)>/);
-      const possibleTypeInEventProperty = line.match(/="\([\w\W]+<([a-zA-Z0-9-_]+)>/);
+      const possibleTypeInEventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)>/);
 
       if (lineMatchesTag === null) {
         return false;

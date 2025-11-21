@@ -49,7 +49,19 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
         clas1="cursor-pointer"
         clas2="cursor-pointer"
         clas3="cursor-pointer"
-        @click="(someVar: SomeType<ThisShouldBeReconized>) => openReadmeInEditor" />
+        @click="
+          (
+            someVar: SomeType<Type>,
+            otherVar: Type,
+            anotherVar: AnotherType,
+            thirdVar: AnotherType<any>
+          ) =>
+            openReadmeInEditor
+        "
+        @click2="
+          (someVar: SomeType<Type>) => openReadmeInEditor
+        "
+        @click3="(someVar: SomeType<Type>) => openReadmeInEditor" />
     </template>
     <template #heading>Ecosystem</template>
 
