@@ -72,7 +72,7 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
 
       const isTagInList = (tagList: string[], tag: string): boolean => {
         return tagList.some(tagFromListRaw => {
-          const tagFromList = tagFromListRaw.replace(/-/, '').toLowerCase();
+          const tagFromList = tagFromListRaw.replace(/-/g, '').toLowerCase();
           return tagFromList === tag;
         })
       };

@@ -44,6 +44,10 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
 
   <WelcomeItem>
     <template #icon>
+      <v-date-input
+        some-prop="someValue"
+        :another-prop="anotherValue"
+      />
       <EcosystemIcon
         class="cursor-pointer"
         clas1="cursor-pointer"
