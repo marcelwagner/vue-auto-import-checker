@@ -101,6 +101,7 @@ export default async function ({
       const multipleTags = completeTag?.[1].includes('>') && completeTag?.[1].includes('<');
       const endTag = line.match(/<\/([\w-]+)>/);
       const eventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)[<\S>]*>/);
+      const propertyTyping = line.match(/[\w-]+="[\w- ]+<([\w-]+)[<\S>]*>/);
 
       // No matching tag found in line
       if (startTag === null) {
@@ -115,7 +116,9 @@ export default async function ({
           !multipleTags &&
           endTag === null) ||
         // Event properts typeing looks like a tag
-        startTag?.[1] === eventProperty?.[1]
+        startTag?.[1] === eventProperty?.[1] ||
+        // Typing inside a property looks like a tag
+        startTag?.[1] === propertyTyping?.[1]
       ) {
         return;
       }

@@ -60,6 +60,7 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
             thirdVar: AnotherType<any>
           ) => openReadmeInEditor
         "
+        property="openReadmeInEditor as Type<OfType<'bar'>>"
         @click2="(someVar: SomeType<Type>) => openReadmeInEditor"
         @click3="(someVar: SomeType<Type<'bar'>>) => openReadmeInEditor"
         @click4="(someVar: SomeType<Type>) => openReadmeInEditor"
