@@ -140,3 +140,6 @@ vite.config.ts.timestamp-*
 
 # IDE
 .idea/
+
+# Local setup
+/publish.sh
