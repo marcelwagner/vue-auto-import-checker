@@ -2,9 +2,9 @@ import fs from 'node:fs';
 import fsPromise from 'node:fs/promises';
 import path from 'node:path';
 
-export async function vuetifyComponentsImporter(basePath: string) {
+export async function vuetifyComponentsImporter(pwd: string) {
   try {
-    const vuetifyDirectory = path.join(basePath, './node_modules/vuetify/lib/components');
+    const vuetifyDirectory = path.join(pwd, 'node_modules/vuetify/lib/components');
     const listOfDirectories = await fsPromise.readdir(vuetifyDirectory);
 
     const componentsList = [];
@@ -13,7 +13,7 @@ export async function vuetifyComponentsImporter(basePath: string) {
       const componentDir = dir.match(/^V[A-Z][a-zA-Z0-9]+/);
 
       if (componentDir) {
-        const indexFile = path.join(vuetifyDirectory, dir, `/index.d.ts`);
+        const indexFile = path.join(vuetifyDirectory, dir, `index.d.ts`);
         const listOfComponents = await fsPromise.readFile(indexFile, 'utf8');
 
         for (const componentExport of listOfComponents.split('\n')) {
@@ -26,13 +26,13 @@ export async function vuetifyComponentsImporter(basePath: string) {
       }
     }
 
-    const vuetifyTagsFile = path.join(basePath, './.plugincache/vuetifyTags.json');
+    const vuetifyTagsFile = path.join(pwd, 'node_modules/.cache/vuetifyTags.json');
 
     const localVuetifyTagsFileExists = fs.existsSync(vuetifyTagsFile);
-    const localDirExists = fs.existsSync(path.join(basePath, './.plugincache'));
+    const localDirExists = fs.existsSync(path.join(pwd, 'node_modules/.cache'));
 
     if (!localDirExists) {
-      await fsPromise.mkdir(path.join(basePath, './.plugincache'));
+      await fsPromise.mkdir(path.join(pwd, 'node_modules/.cache'));
     }
 
     await fsPromise[localVuetifyTagsFileExists ? 'writeFile' : 'appendFile'](

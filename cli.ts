@@ -74,8 +74,8 @@ const basePath = path.dirname(__filename);
       const vuetify = tools.includes('vuetify-importer');
 
       const toolTags = vuetify
-        ? await vuetifyComponentsImporter(basePath)
-        : await vueUseComponentsImporter(basePath);
+        ? await vuetifyComponentsImporter(process.env?.PWD || '')
+        : await vueUseComponentsImporter(process.env?.PWD || '');
 
       if (toolTags.length >= 1) {
         writeToolsResult(tools, toolTags);
@@ -109,8 +109,9 @@ const basePath = path.dirname(__filename);
   // If project path and components file are provided, check for unknown tags
   try {
     const { unknownTags, stats } = await checkForUnknownTags({
-      componentsFile,
-      projectPath,
+      componentsFile: path.join(process.env?.PWD || '', componentsFile),
+      projectPath: path.join(process.env?.PWD || '', projectPath),
+      userGeneratedPath: path.join(process.env?.PWD || '', 'node_modules/.cache'),
       noHtml,
       noSvg,
       noVue,

@@ -2,12 +2,12 @@ import fs from 'node:fs';
 import fsPromise from 'node:fs/promises';
 import path from 'node:path';
 
-export async function vueUseComponentsImporter(basePath: string) {
+export async function vueUseComponentsImporter(pwd: string) {
   try {
     // index.d.mts for vuetify 13.5.0
-    const indexMFile = path.join(basePath, './node_modules/@vueuse/components/index.d.mts');
+    const indexMFile = path.join(pwd, 'node_modules/@vueuse/components/index.d.mts');
     // index.d.mts for vuetify 14.0.0
-    const indexFile = path.join(basePath, './node_modules/@vueuse/components/dist/index.d.ts');
+    const indexFile = path.join(pwd, 'node_modules/@vueuse/components/dist/index.d.ts');
 
     const indexMFileExists = fs.existsSync(indexMFile);
     const indexFileExists = fs.existsSync(indexFile);
@@ -32,13 +32,13 @@ export async function vueUseComponentsImporter(basePath: string) {
       }
     }
 
-    const vueUseTagsFile = path.join(basePath, './.plugincache/vueUseTags.json');
+    const vueUseTagsFile = path.join(pwd, 'node_modules/.cache/vueUseTags.json');
 
     const localVueUseTagsFileExists = fs.existsSync(vueUseTagsFile);
-    const localDirExists = fs.existsSync(path.join(basePath, './.plugincache'));
+    const localDirExists = fs.existsSync(path.join(pwd, 'node_modules/.cache'));
 
     if (!localDirExists) {
-      await fsPromise.mkdir(path.join(basePath, './.plugincache'));
+      await fsPromise.mkdir(path.join(pwd, 'node_modules/.cache'));
     }
 
     await fsPromise[localVueUseTagsFileExists ? 'writeFile' : 'appendFile'](

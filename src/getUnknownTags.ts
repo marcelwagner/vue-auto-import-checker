@@ -12,6 +12,7 @@ import { default as vueTags } from './plugins/vueTags.json';
 export default async function ({
   componentsFile,
   projectPath,
+  userGeneratedPath,
   noHtml,
   noSvg,
   noVue,
@@ -22,33 +23,29 @@ export default async function ({
   quiet,
   basePath
 }: VAIC_Config): Promise<ComponentSearch> {
-  const localVueUsePluginExists = fs.existsSync(
-    path.join(basePath, './.plugincache/vueUseTags.json')
-  );
-  const localVuetifyPluginExists = fs.existsSync(
-    path.join(basePath, './.plugincache/vuetifyTags.json')
-  );
+  const localVueUsePluginExists = fs.existsSync(path.join(userGeneratedPath, 'vueUseTags.json'));
+  const localVuetifyPluginExists = fs.existsSync(path.join(userGeneratedPath, 'vuetifyTags.json'));
 
   let vueUseTags = [] as string[];
   let vuetifyTags = [] as string[];
 
   if (localVueUsePluginExists) {
     vueUseTags = JSON.parse(
-      await fsPromise.readFile(path.join(basePath, './.plugincache/vueUseTags.json'), 'utf8')
+      await fsPromise.readFile(path.join(userGeneratedPath, 'vueUseTags.json'), 'utf8')
     );
   } else {
     vueUseTags = JSON.parse(
-      await fsPromise.readFile(path.join(basePath, './src/plugins/vueUseTags.json'), 'utf8')
+      await fsPromise.readFile(path.join(basePath, 'src/plugins/vueUseTags.json'), 'utf8')
     );
   }
 
   if (localVuetifyPluginExists) {
     vuetifyTags = JSON.parse(
-      await fsPromise.readFile(path.join(basePath, './.plugincache/vuetifyTags.json'), 'utf8')
+      await fsPromise.readFile(path.join(userGeneratedPath, 'vuetifyTags.json'), 'utf8')
     );
   } else {
     vuetifyTags = JSON.parse(
-      await fsPromise.readFile(path.join(basePath, './src/plugins/vuetifyTags.json'), 'utf8')
+      await fsPromise.readFile(path.join(basePath, 'src/plugins/vuetifyTags.json'), 'utf8')
     );
   }
 
@@ -226,9 +223,9 @@ export default async function ({
 
   const unknownTags: UnknownTags[] = [];
 
-  const componentsList = await componentList(path.join(process.env?.PWD || '', componentsFile));
+  const componentsList = await componentList(componentsFile);
 
-  await getUnknownTagsFromDirectory(path.join(process.env?.PWD || '', projectPath));
+  await getUnknownTagsFromDirectory(projectPath);
 
   stats.endTime = Date.now();
 

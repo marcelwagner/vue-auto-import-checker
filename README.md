@@ -52,7 +52,7 @@ But you can import your own set of tags by using the `vuetify-importer` tool.
 This will add a new vuetify tag-list from your actual vuetify implementation, so that the checker ignores all vuetify
 tags from your current vuetify version. (tested with vuetify v3.8.3 - v3.11.1)
 
-This will add a folder (.plugincache) to your basepath.
+This will add a folder (.cache) to your node_modules folder.
 
 Try to use other versions and report, for which version the importer works.
 
@@ -69,7 +69,7 @@ But you can import your own set of tags by using the `vueuse-importer` tool.
 This will add a new vueUse tag-list from your actual vueUse implementation, so that the checker ignores all vueUse tags
 from your current vueUse version. (tested with @vueuse/components v14.0.0)
 
-This will add a folder (.plugincache) to your basepath.
+This will add a folder (.cache) to your node_modules folder.
 
 Try to use other versions and report, for which version the importer works.
 
