@@ -100,7 +100,7 @@ export default async function ({
       const completeTag = line.match(/<([\w]+[\W\w]+[\w]+)>/);
       const multipleTags = completeTag?.[1].includes('>') && completeTag?.[1].includes('<');
       const endTag = line.match(/<\/([\w-]+)>/);
-      const eventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)>/);
+      const eventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)[<\S>]*>/);
 
       // No matching tag found in line
       if (startTag === null) {
@@ -109,13 +109,13 @@ export default async function ({
 
       // Event property as tag or quirks tag found
       if (
+        // Quirks Tags, Links, etc...
         (completeTag !== null &&
           startTag?.[1] !== completeTag?.[1] &&
           !multipleTags &&
           endTag === null) ||
-        (completeTag !== null &&
-          startTag?.[1] === completeTag?.[1] &&
-          startTag?.[1] === eventProperty?.[1])
+        // Event properts typeing looks like a tag
+        startTag?.[1] === eventProperty?.[1]
       ) {
         return;
       }

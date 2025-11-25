@@ -61,7 +61,8 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
           ) => openReadmeInEditor
         "
         @click2="(someVar: SomeType<Type>) => openReadmeInEditor"
-        @click3="(someVar: SomeType<Type>) => openReadmeInEditor"
+        @click3="(someVar: SomeType<Type<'bar'>>) => openReadmeInEditor"
+        @click4="(someVar: SomeType<Type>) => openReadmeInEditor"
       />
       <EcosystemIcon></EcosystemIcon>
     </template>
