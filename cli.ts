@@ -1,17 +1,22 @@
 #!/usr/bin/env -S npx tsx
 
 import { program } from 'commander';
-import checkForUnknownTags, { componentList, vuetifyComponentsImporter } from './index.ts';
+import path from 'node:path';
+import url from 'node:url';
+import checkForUnknownTags, {
+  componentList,
+  vuetifyComponentsImporter,
+  vueUseComponentsImporter,
+  writeComponents,
+  writeFinal,
+  writeResult,
+  writeStats,
+  writeToolsResult
+} from './index.ts';
 import packageJson from './package.json';
-import { vueUseComponentsImporter } from './src/tools/vueUseComponentsImporter.ts';
 
-const whisperFinally = async (unknownTags: UnknownTags[]) => {
-  if (unknownTags.length >= 1) {
-    return program.error(`${new Date().toLocaleString()}: Found ${unknownTags.length} unknown tags`, { exitCode: -1 });
-  }
-
-  console.log(`${new Date().toLocaleString()}: No unknown tags found`);
-}
+const __filename = url.fileURLToPath(import.meta.url);
+const basePath = path.dirname(__filename);
 
 (async () => {
   program
@@ -31,11 +36,11 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
     .option('-q --quiet', 'suppress output', false)
     .option('--customtags [customtags...]', 'ignore these tags', [])
     .option('--vuetify', 'ignore vuetify tags', false)
-    .option('--html', 'ignore html tags', true)
-    .option('--svg', 'ignore svg tags', true)
-    .option('--vue', 'ignore vue tags', true)
-    .option('--vueuse', 'ignore vueUse tags', true)
-    .option('--vuerouter', 'ignore vueRouter tags', true)
+    .option('--vueuse', 'ignore vueUse tags', false)
+    .option('--nohtml', 'ignore html tags', false)
+    .option('--nosvg', 'ignore svg tags', false)
+    .option('--novue', 'ignore vue tags', false)
+    .option('--novuerouter', 'ignore vueRouter tags', true)
     .version(packageJson.version, '-v, --version', 'output the current version');
 
   program.parse();
@@ -45,11 +50,11 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
   const quiet = Boolean(options.quiet);
   // Ignore tags
   const vuetify = Boolean(options.vuetify);
-  const html = Boolean(options.html);
-  const svg = Boolean(options.svg);
-  const vue = Boolean(options.vue);
   const vueUse = Boolean(options.vueuse);
-  const vueRouter = Boolean(options.vuerouter);
+  const noHtml = Boolean(options.nohtml);
+  const noSvg = Boolean(options.nosvg);
+  const noVue = Boolean(options.novue);
+  const noVueRouter = Boolean(options.novuerouter);
   const customTags: string[] = options.customtags;
   // Stats and result
   const showStats = Boolean(options.stats);
@@ -62,104 +67,93 @@ const whisperFinally = async (unknownTags: UnknownTags[]) => {
 
   if (tools.length >= 1) {
     try {
-      let toolTags;
-
-      if (tools.includes('vuetify-importer')) {
-        toolTags = await vuetifyComponentsImporter();
-      } else if (tools.includes('vueuse-importer')) {
-        toolTags = await vueUseComponentsImporter();
-      } else {
-        program.error('No tool found. We provide only "vuetify-importer" at the moment', { exitCode: -1 });
+      if (!['vuetify-importer', 'vueuse-importer'].some(tool => !tools.includes(tool))) {
+        program.error(`No tool found with the name ${tools} found.`, { exitCode: -1 });
       }
 
-      console.log('\n' + `Found ${toolTags.length} vuetify tags:` + '\n');
+      const vuetify = tools.includes('vuetify-importer');
 
-      toolTags.forEach(tag => console.log(tag));
+      const toolTags = vuetify
+        ? await vuetifyComponentsImporter(basePath)
+        : await vueUseComponentsImporter(basePath);
 
-      console.log('');
+      if (toolTags.length >= 1) {
+        writeToolsResult(tools, toolTags);
+        return;
+      }
+
+      console.log(`No tags found`);
     } catch (error: any) {
-      program.error(error?.errorText, { exitCode: -1 });
+      program.error(`Tool error ${error?.errorText}`, { exitCode: -1 });
     }
     return;
   }
 
   // If only components file is provided, list components and exit
-
   if (componentsFile && !projectPath) {
     try {
-      const componentsList = await componentList(componentsFile);
+      const componentsList = await componentList(path.join(basePath, componentsFile));
 
-      console.log('\n' + 'Found components:' + '\n');
+      if (componentsList.length >= 1) {
+        writeComponents(componentsList);
+        return;
+      }
 
-      componentsList.forEach(component => console.log(component.rawTag));
-
-      console.log('');
+      console.log(`No components found`);
     } catch (error: any) {
-      program.error(error?.errorText, { exitCode: -1 });
+      program.error(`Component list error ${error?.errorText}`, { exitCode: -1 });
     }
     return;
   }
 
   // If project path and components file are provided, check for unknown tags
-
   try {
     const { unknownTags, stats } = await checkForUnknownTags({
       componentsFile,
       projectPath,
+      noHtml,
+      noSvg,
+      noVue,
+      noVueRouter,
       vuetify,
-      html,
-      svg,
-      vue,
       vueUse,
-      vueRouter,
-      customTags
+      customTags,
+      basePath
+    });
+
+    const uniqueTags = Array.from(new Set(unknownTags.map(tag => tag.tagName)));
+    const files: string[] = [];
+
+    unknownTags.forEach(tag => {
+      if (!files.includes(tag.file)) {
+        files.push(tag.file);
+      }
     });
 
     // Handle quiet mode
-
     if (quiet) {
-      return whisperFinally(unknownTags);
+      return writeFinal(unknownTags.length, uniqueTags.length, files.length);
     }
 
     // Print result
-
     if (showResult) {
-      let currentFile = '';
-
-      unknownTags.forEach(({ file, line, tagName, lines }) => {
-        if (currentFile !== file) {
-          console.log('\n' + `File: ${file}`);
-          currentFile = file;
-        }
-        console.log('\n' + '...');
-
-        lines.forEach((fullLine: string) => console.log(`${fullLine}`));
-
-        console.log('...' + '\n');
-
-        console.log(`Line: ${line}, Tag: <${tagName}>`);
-      });
-
-      console.log('');
+      writeResult(unknownTags);
     }
 
-    // Print stats
-
+    // Print line between stats & results
     if (showStats) {
       if (showResult) {
         console.log('....................................');
       }
-
-      console.log('\n' + `Found ${unknownTags.length} unknown tags` + '\n');
-      Array.from(new Set(unknownTags.map(tag => tag.tagName))).map(tag => console.log(tag));
-      console.log('\n' + `Time taken: ${stats.endTime - stats.startTime} ms`);
-      console.log(`Files scanned: ${stats.fileCounter}`);
-      console.log(`Directories scanned: ${stats.dirCounter}`);
-      console.log(`Template files scanned: ${stats.templateFiles}`+ '\n');
     }
 
-    return whisperFinally(unknownTags);
+    // Print stats
+    if (showStats) {
+      writeStats(stats, files, unknownTags, uniqueTags);
+    }
+
+    return writeFinal(unknownTags.length, uniqueTags.length, files.length);
   } catch (error: any) {
-    program.error(error?.errorText, { exitCode: -1 });
+    program.error(`Program error: ${error?.errorText}`, { exitCode: -1 });
   }
 })();

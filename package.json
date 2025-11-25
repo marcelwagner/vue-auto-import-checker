@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.6.2",
+  "version": "0.7.0",
   "description": "Check if the used vue components in templates are all registered with unplugin",
   "main": "index.ts",
   "scripts": {
@@ -27,9 +27,11 @@
   },
   "type": "module",
   "devDependencies": {
+    "@vueuse/components": "13.5.0",
     "oxlint": "^1.28.0",
     "prettier": "^3.6.2",
-    "prettier-plugin-organize-imports": "^4.3.0"
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "vuetify": "3.8.3"
   },
   "dependencies": {
     "@types/node": "24.10.1",
@@ -39,17 +41,5 @@
     "svg-tag-names": "3.0.1",
     "tsx": "4.20.6",
     "typescript": "5.9.3"
-  },
-  "peerDependencies": {
-    "@vueuse/components": "^13.5.0",
-    "vuetify": "^3.8.3"
-  },
-  "peerDependenciesMeta": {
-    "vuetify": {
-      "optional": true
-    },
-    "@vueuse/components": {
-      "optional": true
-    }
   }
 }

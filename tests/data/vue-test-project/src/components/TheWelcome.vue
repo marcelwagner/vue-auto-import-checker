@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ToolingIcon from '@/components/icons/IconTooling.vue'
+import ToolingIcon from '@/components/icons/IconTooling.vue';
 
-const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
+const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
 </script>
 
 <template>
@@ -39,15 +39,14 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
     <br />
 
     More instructions are available in
-    <a href="javascript:void(0)" @click="(someVar: SomeType<ThisNot>) => openReadmeInEditor"><code>README.md</code></a>.
+    <a href="javascript:void(0)" @click="(someVar: SomeType<ThisNot>) => openReadmeInEditor"
+      ><code>README.md</code></a
+    >.
   </WelcomeItem>
 
   <WelcomeItem>
     <template #icon>
-      <v-date-input
-        some-prop="someValue"
-        :another-prop="anotherValue"
-      />
+      <v-date-input some-prop="someValue" :another-prop="anotherValue" />
       <EcosystemIcon
         class="cursor-pointer"
         clas1="cursor-pointer"
@@ -59,13 +58,12 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md')
             otherVar: Type,
             anotherVar: AnotherType,
             thirdVar: AnotherType<any>
-          ) =>
-            openReadmeInEditor
+          ) => openReadmeInEditor
         "
-        @click2="
-          (someVar: SomeType<Type>) => openReadmeInEditor
-        "
-        @click3="(someVar: SomeType<Type>) => openReadmeInEditor" />
+        @click2="(someVar: SomeType<Type>) => openReadmeInEditor"
+        @click3="(someVar: SomeType<Type>) => openReadmeInEditor"
+      />
+      <EcosystemIcon></EcosystemIcon>
     </template>
     <template #heading>Ecosystem</template>
 

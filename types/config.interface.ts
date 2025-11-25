@@ -2,11 +2,12 @@ export interface VAIC_Config {
   componentsFile: string;
   projectPath: string;
   customTags: string[];
+  noHtml?: boolean;
+  noSvg?: boolean;
+  noVue?: boolean;
+  noVueRouter?: boolean;
   vuetify?: boolean;
-  html?: boolean;
-  svg?: boolean;
-  vue?: boolean;
   vueUse?: boolean;
-  vueRouter?: boolean;
   quiet?: boolean;
+  basePath: string;
 }

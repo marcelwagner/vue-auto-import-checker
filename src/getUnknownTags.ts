@@ -1,25 +1,67 @@
-import fs from 'node:fs/promises';
+import fs from 'node:fs';
+import fsPromise from 'node:fs/promises';
 import path from 'node:path';
 
+import type { VAIC_Config } from '../types/config.interface.ts';
 import { componentList } from './plugins/componentList.ts';
 import { htmlTags } from './plugins/htmlTags.ts';
 import { svgTags } from './plugins/svgTags.ts';
-import { vuetifyTags } from './plugins/vuetifyTags.ts';
-import { vueTags } from './plugins/vueTags.ts';
-import { vueUseTags } from './plugins/vueUseTags.ts';
-import { vueRouterTags } from './plugins/vueRouterTags.ts';
-import type { VAIC_Config } from '../types/config.interface.ts';
+import { default as vueRouterTags } from './plugins/vueRouterTags.json';
+import { default as vueTags } from './plugins/vueTags.json';
 
-export default async function ({componentsFile, projectPath, html, svg, vue, vueUse, vueRouter, vuetify, customTags, quiet}: VAIC_Config): Promise<ComponentSearch> {
-  const getUnknownTagsFromFile = async (fullPath: string): Promise<boolean> => {
+export default async function ({
+  componentsFile,
+  projectPath,
+  noHtml,
+  noSvg,
+  noVue,
+  noVueRouter,
+  vueUse,
+  vuetify,
+  customTags,
+  quiet,
+  basePath
+}: VAIC_Config): Promise<ComponentSearch> {
+  const localVueUsePluginExists = fs.existsSync(
+    path.join(basePath, './.plugincache/vueUseTags.json')
+  );
+  const localVuetifyPluginExists = fs.existsSync(
+    path.join(basePath, './.plugincache/vuetifyTags.json')
+  );
+
+  let vueUseTags = [] as string[];
+  let vuetifyTags = [] as string[];
+
+  if (localVueUsePluginExists) {
+    vueUseTags = JSON.parse(
+      await fsPromise.readFile(path.join(basePath, './.plugincache/vueUseTags.json'), 'utf8')
+    );
+  } else {
+    vueUseTags = JSON.parse(
+      await fsPromise.readFile(path.join(basePath, './src/plugins/vueUseTags.json'), 'utf8')
+    );
+  }
+
+  if (localVuetifyPluginExists) {
+    vuetifyTags = JSON.parse(
+      await fsPromise.readFile(path.join(basePath, './.plugincache/vuetifyTags.json'), 'utf8')
+    );
+  } else {
+    vuetifyTags = JSON.parse(
+      await fsPromise.readFile(path.join(basePath, './src/plugins/vuetifyTags.json'), 'utf8')
+    );
+  }
+
+  const getUnknownTagsFromFile = async (fullPath: string) => {
     stats.fileCounter++;
 
-    const fileContent = await fs.readFile(fullPath, 'utf8');
+    const fileContent = await fsPromise.readFile(fullPath, 'utf8');
 
+    // Is it a template file?
     const isTemplate = fileContent.includes('<template>');
 
     if (!isTemplate) {
-      return true;
+      return;
     }
 
     stats.templateFiles++;
@@ -29,6 +71,7 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
     let script = false;
     let style = false;
 
+    // Get lines of file
     const linesOfFile = fileContent.split(/\n/);
 
     linesOfFile.forEach((line: string, index: number) => {
@@ -49,79 +92,95 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
       }
 
       if (script || style) {
-        return false; // Skip lines within <script> or <style> blocks
+        return;
       }
 
-      const lineMatchesTag = line.match(/<([\w-]+)/);
-      const possibleSelfClosingTag = line.match(/<([\S]+)>/);
-      const possibleTypeInEventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)>/);
+      // No script or style section, must be a template section
+      const startTag = line.match(/<([\w-]+)/);
+      const completeTag = line.match(/<([\w]+[\W\w]+[\w]+)>/);
+      const multipleTags = completeTag?.[1].includes('>') && completeTag?.[1].includes('<');
+      const endTag = line.match(/<\/([\w-]+)>/);
+      const eventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)>/);
 
-      if (lineMatchesTag === null) {
-        return false;
+      // No matching tag found in line
+      if (startTag === null) {
+        return;
       }
 
+      // Event property as tag or quirks tag found
       if (
-        possibleTypeInEventProperty !== null && possibleTypeInEventProperty?.[1] === lineMatchesTag?.[1]
-        || possibleSelfClosingTag !== null && possibleSelfClosingTag?.[1] !== lineMatchesTag?.[1]
+        (completeTag !== null &&
+          startTag?.[1] !== completeTag?.[1] &&
+          !multipleTags &&
+          endTag === null) ||
+        (completeTag !== null &&
+          startTag?.[1] === completeTag?.[1] &&
+          startTag?.[1] === eventProperty?.[1])
       ) {
-        return false;
+        return;
       }
 
-      const cleanedTag = lineMatchesTag?.[1].trim();
+      const cleanedTag = startTag?.[1].trim();
       const pureTag = cleanedTag.replace(/-/g, '').toLowerCase();
 
       const isTagInList = (tagList: string[], tag: string): boolean => {
         return tagList.some(tagFromListRaw => {
           const tagFromList = tagFromListRaw.replace(/-/g, '').toLowerCase();
           return tagFromList === tag;
-        })
+        });
       };
 
+      // Which tags to ignore
       const ignoredTags = [
-        ...( html ? htmlTags as string[] : [] ),
-        ...( svg ? svgTags : [] ),
-        ...( vuetify ? vuetifyTags : [] ),
-        ...( vue ? vueTags : [] ),
-        ...( vueUse ? vueUseTags : [] ),
-        ...( vueRouter ? vueRouterTags : [] ),
-        ...( customTags.length >= 1 ? customTags : [] )
+        ...(!noHtml ? (htmlTags as string[]) : []),
+        ...(!noSvg ? svgTags : []),
+        ...(!noVue ? vueTags : []),
+        ...(!noVueRouter ? vueRouterTags : []),
+        ...(vuetify ? vuetifyTags : []),
+        ...(vueUse ? vueUseTags : []),
+        ...(customTags.length >= 1 ? customTags : [])
       ];
 
+      // Is tag in ignore list?
       if (ignoredTags.length >= 1) {
         const isTagIgnored = isTagInList(ignoredTags, pureTag);
 
         if (isTagIgnored) {
-          return false;
+          return;
         }
       }
 
       const componentTagList = componentsList.map(component => component.tag);
 
+      // Is tag in component list?
       if (componentTagList.includes(pureTag)) {
-        return false;
+        return;
       }
 
+      // Tag is unknown!
       unknownTagsOfFile.push({
         line: index + 1,
         tagName: cleanedTag,
         lines: [
-          ...(linesOfFile[index - 1] ? [linesOfFile[index - 1]] : []),
-          linesOfFile[index],
-          ...(linesOfFile[index + 1] ? [linesOfFile[index + 1]] : [])]
+          ...(linesOfFile[index - 1] ? [{ text: linesOfFile[index - 1], index: index }] : []),
+          { text: linesOfFile[index], index: index + 1 },
+          ...(linesOfFile[index + 1] ? [{ text: linesOfFile[index + 1], index: index + 2 }] : [])
+        ]
       });
     });
 
+    // save tags of file for later
     unknownTagsOfFile.forEach(({ tagName, line, lines }) => {
       unknownTags.push({ tagName: tagName, file: fullPath, line: line, lines });
     });
 
-    return false;
-  }
+    return;
+  };
 
-  const getUnknownTagsFromDirectory = async (directoryPath: string, indent = 0): Promise<void> => {
+  const getUnknownTagsFromDirectory = async (directoryPath: string, indent = 0) => {
     stats.dirCounter++;
 
-    const entries = await fs.readdir(directoryPath, { withFileTypes: true });
+    const entries = await fsPromise.readdir(directoryPath, { withFileTypes: true });
 
     for (const entry of entries) {
       const fullPath = path.join(directoryPath, entry.name);
@@ -132,7 +191,9 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
           await getUnknownTagsFromFile(fullPath);
         } catch (error) {
           if (!quiet) {
-            return Promise.reject({ errorText: `Error reading file ${directoryPath}: ${JSON.stringify(error)}` });
+            return Promise.reject({
+              errorText: `Error reading file ${fullPath}: ${JSON.stringify(error)}`
+            });
           }
         }
       } else if (entry.isDirectory()) {
@@ -141,7 +202,9 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
           await getUnknownTagsFromDirectory(fullPath, indent + 1);
         } catch (error) {
           if (!quiet) {
-            return Promise.reject({ errorText: `Error reading path ${directoryPath}: ${JSON.stringify(error)}` });
+            return Promise.reject({
+              errorText: `Error reading path ${fullPath}: ${JSON.stringify(error)}`
+            });
           }
         }
       } else {
@@ -160,7 +223,7 @@ export default async function ({componentsFile, projectPath, html, svg, vue, vue
 
   const unknownTags: UnknownTags[] = [];
 
-  const componentsList = await componentList(componentsFile);
+  const componentsList = await componentList(path.join(basePath, componentsFile));
 
   await getUnknownTagsFromDirectory(projectPath);
 

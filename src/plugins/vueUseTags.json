@@ -1,4 +1,4 @@
-export const vueUseTags: string[] = [
+[
   "OnClickOutside",
   "OnLongPress",
   "UseActiveElement",
@@ -43,4 +43,4 @@ export const vueUseTags: string[] = [
   "UseVirtualList",
   "UseWindowFocus",
   "UseWindowSize"
-];
+]

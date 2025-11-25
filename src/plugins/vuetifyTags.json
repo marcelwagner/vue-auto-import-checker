@@ -1,4 +1,4 @@
-export const vuetifyTags: string[] = [
+[
   "VAlert",
   "VAlertTitle",
   "VApp",
@@ -143,4 +143,4 @@ export const vuetifyTags: string[] = [
   "VVirtualScroll",
   "VWindow",
   "VWindowItem"
-];
+]
