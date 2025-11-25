@@ -92,7 +92,7 @@ const basePath = path.dirname(__filename);
   // If only components file is provided, list components and exit
   if (componentsFile && !projectPath) {
     try {
-      const componentsList = await componentList(path.join(basePath, componentsFile));
+      const componentsList = await componentList(path.join(process.env?.PWD || '', componentsFile));
 
       if (componentsList.length >= 1) {
         writeComponents(componentsList);

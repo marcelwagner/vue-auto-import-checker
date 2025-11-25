@@ -223,9 +223,9 @@ export default async function ({
 
   const unknownTags: UnknownTags[] = [];
 
-  const componentsList = await componentList(path.join(basePath, componentsFile));
+  const componentsList = await componentList(path.join(process.env?.PWD || '', componentsFile));
 
-  await getUnknownTagsFromDirectory(projectPath);
+  await getUnknownTagsFromDirectory(path.join(process.env?.PWD || '', projectPath));
 
   stats.endTime = Date.now();
 
