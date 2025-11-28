@@ -147,23 +147,23 @@ This allows you to easily break builds when auto-imports are missing.
 
 # Options
 
-| Option                         | Alias | Description                                          | Default             |
-|--------------------------------|-------|------------------------------------------------------|---------------------|
-| `--components-file <file>`     | `-c`  | Path to the `components.d.ts` file (relative to CWD) | `./components.d.ts` |
-| `--project-path <path>`        | `-p`  | Path to the Vue source directory (relative to CWD)   | `""`                |
-| `--stats`                      | `-s`  | Print a summary of the check                         | `false`             |
-| `--result`                     | `-r`  | Print detailed results                               | `false`             |
-| `--quiet`                      | `-q`  | Suppress all output                                  | `false`             |
-| `--customtags [customtags...]` | —     | Ignore these component tags                          | `[]`                |
-| `--vuetify`                    | —     | Ignore Vuetify component tags                        | `false`             |
-| `--vueuse`                     | —     | Ignore VueUse component tags                         | `false`             |
-| `--novue`                      | —     | Do not ignore Vue component tags                     | `false`             |
-| `--novuerouter`                | —     | Do not ignore VueRouter component tags               | `false`             |
-| `--nosvg`                      | —     | Do not ignore svg element tags                       | `false`             |
-| `--nohtml`                     | —     | Do not ignore HTML element tags                      | `false`             |
-| `--tools [tools...]`           | `-t`  | use tools to customize your checker                  | `[]`                |
-| `--version`                    | `-v`  | Show the currently installed version                 | —                   |
-| `--help`                       | `-h`  | Display help information                             | —                   |
+| Option                          | Alias | Description                                          | Default             |
+|---------------------------------|-------|------------------------------------------------------|---------------------|
+| `--components-file <file>`      | `-c`  | Path to the `components.d.ts` file (relative to CWD) | `./components.d.ts` |
+| `--project-path <path>`         | `-p`  | Path to the Vue source directory (relative to CWD)   | `""`                |
+| `--stats`                       | `-s`  | Print a summary of the check                         | `false`             |
+| `--result`                      | `-r`  | Print detailed results                               | `false`             |
+| `--quiet`                       | `-q`  | Suppress all output                                  | `false`             |
+| `--customtags [customtags...]`  | —     | Ignore these component tags                          | `[]`                |
+| `--vuetify`                     | —     | Ignore Vuetify component tags                        | `false`             |
+| `--vueuse`                      | —     | Ignore VueUse component tags                         | `false`             |
+| `--novue`                       | —     | Do not ignore Vue component tags                     | `false`             |
+| `--novuerouter`                 | —     | Do not ignore VueRouter component tags               | `false`             |
+| `--nosvg`                       | —     | Do not ignore svg element tags                       | `false`             |
+| `--nohtml`                      | —     | Do not ignore HTML element tags                      | `false`             |
+| `--tool <tool>`                 | `-t`  | use a tool to customize your checker                 | `""`                |
+| `--version`                     | `-v`  | Show the currently installed version                 | —                   |
+| `--help`                        | `-h`  | Display help information                             | —                   |
 
 # Feedback & Contributions
 

@@ -1,14 +1,13 @@
-type UnknownTagsOfFile = {
+type UnknownTags = {
   line: number;
   tagName: string;
-  lines: {
-    text: string;
-    index: number;
-  }[];
+  lines: UnknownTagLine[];
+  file: string;
 };
 
-type UnknownTags = UnknownTagsOfFile & {
-  file: string;
+type UnknownTagLine = {
+  text: string;
+  index: number;
 };
 
 type Stats = {
@@ -28,4 +27,14 @@ type ComponentSearch = {
   stats: Stats;
   unknownTags: UnknownTags[];
   componentsList: ComponentList[];
+};
+
+type IgnoreListConfig = {
+  noHtml: boolean;
+  noSvg: boolean;
+  noVue: boolean;
+  noVueRouter: boolean;
+  vuetifyTags: string[];
+  vueUseTags: string[];
+  customTags: string[];
 };

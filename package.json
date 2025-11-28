@@ -1,9 +1,11 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.7.5",
-  "description": "Check if the used vue components in templates are all registered with unplugin",
+  "version": "0.8.0",
+  "description": "Check if the used components in templates are all registered within your components.d.ts",
   "main": "index.ts",
   "scripts": {
+    "test": "vitest --reporter=tree",
+    "test:github": "vitest run --reporter=tree",
     "lint": "oxlint --tsconfig=tsconfig.json"
   },
   "engines": {
@@ -15,15 +17,19 @@
   },
   "keywords": [
     "vue",
+    "vuetify",
+    "vuuse",
+    "vue-router",
     "unplugin",
-    "vue3",
-    "vue2"
+    "auto-import",
+    "components.d.ts",
+    "tags"
   ],
   "author": "Marcel Wagner <marcel.wagner@email.de>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/marcelwagner/vue-auto-import-checker"
+    "url": "git+https://github.com/marcelwagner/vue-auto-import-checker.git"
   },
   "type": "module",
   "devDependencies": {
@@ -31,6 +37,7 @@
     "oxlint": "^1.28.0",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
+    "vitest": "^4.0.14",
     "vuetify": "3.8.3"
   },
   "dependencies": {

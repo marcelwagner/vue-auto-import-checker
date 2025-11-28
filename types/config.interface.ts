@@ -3,12 +3,12 @@ export interface VAIC_Config {
   projectPath: string;
   userGeneratedPath: string;
   customTags: string[];
-  noHtml?: boolean;
-  noSvg?: boolean;
-  noVue?: boolean;
-  noVueRouter?: boolean;
-  vuetify?: boolean;
-  vueUse?: boolean;
-  quiet?: boolean;
+  noHtml: boolean;
+  noSvg: boolean;
+  noVue: boolean;
+  noVueRouter: boolean;
+  vuetify: boolean;
+  vueUse: boolean;
   basePath: string;
+  quiet?: boolean;
 }

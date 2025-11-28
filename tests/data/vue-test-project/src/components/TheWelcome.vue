@@ -97,6 +97,7 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
     X account for latest news in the Vue world.
   </WelcomeItem>
 
+  <WelcomeItemDialog />
   <WelcomeItem>
     <template #icon>
       <SupportIcon />

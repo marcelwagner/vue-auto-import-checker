@@ -1,14 +1,15 @@
 {
   "exclude": [
+    "tests/data",
     "node_modules",
-    "tests",
     "tsconfig.json"
   ],
   "include": [
     "./*.ts",
     "./src/**/*.ts",
     "./types/**/*.ts",
-    "./tests/**/*.ts"
+    "./tests/**/*.ts",
+    "node_modules/vitest/globals.d.ts"
   ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
@@ -39,7 +40,7 @@
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
 
     /* Modules */
-    "module": "nodenext",
+    "module": "esnext",
     /* Specify what module code is generated. */
     // "rootDir": "./",                                  /* Specify the root folder within your source files. */
     "moduleResolution": "Node",

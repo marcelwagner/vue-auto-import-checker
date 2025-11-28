@@ -1,13 +1,11 @@
-import fs from 'node:fs';
 import fsPromise from 'node:fs/promises';
 import path from 'node:path';
 
 import type { VAIC_Config } from '../types/config.interface.ts';
-import { componentList } from './plugins/componentList.ts';
-import { htmlTags } from './plugins/htmlTags.ts';
-import { svgTags } from './plugins/svgTags.ts';
-import { default as vueRouterTags } from './plugins/vueRouterTags.json';
-import { default as vueTags } from './plugins/vueTags.json';
+import { getFileContent } from './utils/fileUtils.ts';
+import { getComponentList } from './utils/getComponentList.ts';
+import { getCustomTagList } from './utils/getCustomTagList.ts';
+import { addToUnknownTags, getTagFromLine, isTagInIgnoreList } from './utils/tagUtils.ts';
 
 export default async function ({
   componentsFile,
@@ -23,36 +21,10 @@ export default async function ({
   quiet,
   basePath
 }: VAIC_Config): Promise<ComponentSearch> {
-  const localVueUsePluginExists = fs.existsSync(path.join(userGeneratedPath, 'vueUseTags.json'));
-  const localVuetifyPluginExists = fs.existsSync(path.join(userGeneratedPath, 'vuetifyTags.json'));
-
-  let vueUseTags = [] as string[];
-  let vuetifyTags = [] as string[];
-
-  if (localVueUsePluginExists) {
-    vueUseTags = JSON.parse(
-      await fsPromise.readFile(path.join(userGeneratedPath, 'vueUseTags.json'), 'utf8')
-    );
-  } else {
-    vueUseTags = JSON.parse(
-      await fsPromise.readFile(path.join(basePath, 'src/plugins/vueUseTags.json'), 'utf8')
-    );
-  }
-
-  if (localVuetifyPluginExists) {
-    vuetifyTags = JSON.parse(
-      await fsPromise.readFile(path.join(userGeneratedPath, 'vuetifyTags.json'), 'utf8')
-    );
-  } else {
-    vuetifyTags = JSON.parse(
-      await fsPromise.readFile(path.join(basePath, 'src/plugins/vuetifyTags.json'), 'utf8')
-    );
-  }
-
-  const getUnknownTagsFromFile = async (fullPath: string) => {
+  const getUnknownTagsFromFile = async (file: string, stats: Stats, unknownTags: UnknownTags[]) => {
     stats.fileCounter++;
 
-    const fileContent = await fsPromise.readFile(fullPath, 'utf8');
+    const fileContent = await getFileContent(file);
 
     // Is it a template file?
     const isTemplate = fileContent.includes('<template>');
@@ -63,8 +35,6 @@ export default async function ({
 
     stats.templateFiles++;
 
-    const unknownTagsOfFile: UnknownTagsOfFile[] = [];
-
     let script = false;
     let style = false;
 
@@ -74,6 +44,10 @@ export default async function ({
     linesOfFile.forEach((line: string, index: number) => {
       if (line.match(/<script[\w\W]*/)) {
         script = true;
+
+        if (style) {
+          style = false;
+        }
       }
 
       if (line.match(/<\/script>/)) {
@@ -82,6 +56,10 @@ export default async function ({
 
       if (line.match(/<style[\w\W]*/)) {
         style = true;
+
+        if (script) {
+          script = false;
+        }
       }
 
       if (line.match(/<\/style>/)) {
@@ -93,91 +71,49 @@ export default async function ({
       }
 
       // No script or style section, must be a template section
-      const startTag = line.match(/<([\w-]+)/);
-      const completeTag = line.match(/<([\w]+[\W\w]+[\w]+)>/);
-      const multipleTags = completeTag?.[1].includes('>') && completeTag?.[1].includes('<');
-      const endTag = line.match(/<\/([\w-]+)>/);
-      const eventProperty = line.match(/[\w-]+:[ ]*[\w-]+<([\w-]+)[<\S>]*>/);
-      const propertyTyping = line.match(/[\w-]+="[\w- ]+<([\w-]+)[<\S>]*>/);
+      const tagListRaw = getTagFromLine(line);
 
       // No matching tag found in line
-      if (startTag === null) {
+      if (tagListRaw.length <= 0) {
         return;
       }
 
-      // Event property as tag or quirks tag found
-      if (
-        // Quirks Tags, Links, etc...
-        (completeTag !== null &&
-          startTag?.[1] !== completeTag?.[1] &&
-          !multipleTags &&
-          endTag === null) ||
-        // Event properts typeing looks like a tag
-        startTag?.[1] === eventProperty?.[1] ||
-        // Typing inside a property looks like a tag
-        startTag?.[1] === propertyTyping?.[1]
-      ) {
-        return;
-      }
+      tagListRaw.forEach((tagRaw: string) => {
+        const tag = tagRaw.replace(/-/g, '').toLowerCase();
 
-      const cleanedTag = startTag?.[1].trim();
-      const pureTag = cleanedTag.replace(/-/g, '').toLowerCase();
+        const ignoreListConfig: IgnoreListConfig = {
+          noHtml,
+          noSvg,
+          noVue,
+          noVueRouter,
+          vuetifyTags,
+          vueUseTags,
+          customTags
+        };
 
-      const isTagInList = (tagList: string[], tag: string): boolean => {
-        return tagList.some(tagFromListRaw => {
-          const tagFromList = tagFromListRaw.replace(/-/g, '').toLowerCase();
-          return tagFromList === tag;
-        });
-      };
-
-      // Which tags to ignore
-      const ignoredTags = [
-        ...(!noHtml ? (htmlTags as string[]) : []),
-        ...(!noSvg ? svgTags : []),
-        ...(!noVue ? vueTags : []),
-        ...(!noVueRouter ? vueRouterTags : []),
-        ...(vuetify ? vuetifyTags : []),
-        ...(vueUse ? vueUseTags : []),
-        ...(customTags.length >= 1 ? customTags : [])
-      ];
-
-      // Is tag in ignore list?
-      if (ignoredTags.length >= 1) {
-        const isTagIgnored = isTagInList(ignoredTags, pureTag);
-
-        if (isTagIgnored) {
+        // Is tag in any ignore list?
+        if (isTagInIgnoreList(tag, ignoreListConfig)) {
           return;
         }
-      }
 
-      const componentTagList = componentsList.map(component => component.tag);
+        // Is tag in component list?
+        if (componentsList.map(component => component.tag).includes(tag)) {
+          return;
+        }
 
-      // Is tag in component list?
-      if (componentTagList.includes(pureTag)) {
-        return;
-      }
-
-      // Tag is unknown!
-      unknownTagsOfFile.push({
-        line: index + 1,
-        tagName: cleanedTag,
-        lines: [
-          ...(linesOfFile[index - 1] ? [{ text: linesOfFile[index - 1], index: index }] : []),
-          { text: linesOfFile[index], index: index + 1 },
-          ...(linesOfFile[index + 1] ? [{ text: linesOfFile[index + 1], index: index + 2 }] : [])
-        ]
+        // Tag is unknown!
+        addToUnknownTags(unknownTags, index, tagRaw, linesOfFile, file);
       });
-    });
-
-    // save tags of file for later
-    unknownTagsOfFile.forEach(({ tagName, line, lines }) => {
-      unknownTags.push({ tagName: tagName, file: fullPath, line: line, lines });
     });
 
     return;
   };
 
-  const getUnknownTagsFromDirectory = async (directoryPath: string, indent = 0) => {
+  const getUnknownTagsFromDirectory = async (
+    directoryPath: string,
+    stats: Stats,
+    unknownTags: UnknownTags[]
+  ) => {
     stats.dirCounter++;
 
     const entries = await fsPromise.readdir(directoryPath, { withFileTypes: true });
@@ -188,7 +124,7 @@ export default async function ({
       if (entry.isFile()) {
         // Process file
         try {
-          await getUnknownTagsFromFile(fullPath);
+          await getUnknownTagsFromFile(fullPath, stats, unknownTags);
         } catch (error) {
           if (!quiet) {
             return Promise.reject({
@@ -199,7 +135,7 @@ export default async function ({
       } else if (entry.isDirectory()) {
         // Recursive call for subfolders
         try {
-          await getUnknownTagsFromDirectory(fullPath, indent + 1);
+          await getUnknownTagsFromDirectory(fullPath, stats, unknownTags);
         } catch (error) {
           if (!quiet) {
             return Promise.reject({
@@ -213,19 +149,29 @@ export default async function ({
     }
   };
 
+  const startTime = Date.now();
+
   const stats: Stats = {
     fileCounter: 0,
     dirCounter: 0,
     templateFiles: 0,
-    startTime: Date.now(),
-    endTime: Date.now()
+    startTime,
+    endTime: startTime
   };
 
   const unknownTags: UnknownTags[] = [];
 
-  const componentsList = await componentList(componentsFile);
+  const vueUseTags = vueUse
+    ? await getCustomTagList(userGeneratedPath, basePath, 'vueUseTags')
+    : ([] as string[]);
 
-  await getUnknownTagsFromDirectory(projectPath);
+  const vuetifyTags = vuetify
+    ? await getCustomTagList(userGeneratedPath, basePath, 'vuetifyTags')
+    : ([] as string[]);
+
+  const componentsList = await getComponentList(componentsFile);
+
+  await getUnknownTagsFromDirectory(projectPath, stats, unknownTags);
 
   stats.endTime = Date.now();
 

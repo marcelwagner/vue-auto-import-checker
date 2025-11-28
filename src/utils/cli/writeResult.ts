@@ -1,4 +1,6 @@
-export const writeResult = (unknownTags: UnknownTags[]) => {
+import { getLineIndexAsString } from '../getLineIndexAsString.ts';
+
+export function writeResult(unknownTags: UnknownTags[]) {
   let currentFile = '';
 
   unknownTags.forEach(({ file, line, tagName, lines }) => {
@@ -11,11 +13,13 @@ export const writeResult = (unknownTags: UnknownTags[]) => {
 
     console.log('');
 
-    lines.forEach(({ text, index }) => console.log(`${index <= 9 ? '0' : ''}${index}: ${text}`));
+    lines.forEach(({ text, index }) =>
+      console.log(`${getLineIndexAsString(index, lines[lines.length - 1].index)}: ${text}`)
+    );
 
     console.log('');
-    console.log(`Line: ${line}, Tag: <${tagName}>`);
+    console.log(`Line: ${line}, Tag: ${tagName}`);
   });
 
   console.log('');
-};
+}

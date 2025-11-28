@@ -1,9 +1,7 @@
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-export async function componentList(
-  componentsFilePath: string
-): Promise<ComponentTag[]> {
+export async function getComponentList(componentsFilePath: string): Promise<ComponentTag[]> {
   try {
     const componentsFile = path.join(componentsFilePath);
     const componentsFileContent = await fs.readFile(componentsFile, 'utf8');
