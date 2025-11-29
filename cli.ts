@@ -41,10 +41,10 @@ program
   .option('--customtagsfile <customtagsfile>', 'Ignore tags listed in this json file', '')
   .option('--vuetify', 'ignore vuetify tags', false)
   .option('--vueuse', 'ignore vueUse tags', false)
-  .option('--nohtml', 'ignore html tags', false)
-  .option('--nosvg', 'ignore svg tags', false)
-  .option('--novue', 'ignore vue tags', false)
-  .option('--novuerouter', 'ignore vueRouter tags', true)
+  .option('--nohtml', "don't ignore html tags", false)
+  .option('--nosvg', "don't ignore svg tags", false)
+  .option('--novue', "don't ignore vue tags", false)
+  .option('--novuerouter', "don't ignore vueRouter tags", false)
   .version(packageJson.version, '-v, --version', 'output the current version');
 
 program.parse();
@@ -150,7 +150,7 @@ const tool: string = options.tool;
       vuetify,
       vueUse,
       customTags,
-      customTagsFile: path.join(process.env?.PWD || '', customTagsFile),
+      customTagsFile: customTagsFile ? path.join(process.env?.PWD || '', customTagsFile) : '',
       basePath
     });
 

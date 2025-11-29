@@ -10,8 +10,8 @@ const basePath = path.dirname(__filename);
 
 describe('vue-auto-import-checker', async () => {
   const config: VAIC_Config = {
-    componentsFile: path.join(basePath, 'data/vue-test-project/components.d.ts'),
-    projectPath: path.join(basePath, 'data/vue-test-project/src'),
+    componentsFile: path.join(basePath, '../tests/data/vue-test-project/components.d.ts'),
+    projectPath: path.join(basePath, '../tests/data/vue-test-project/src'),
     userGeneratedPath: path.join(basePath, '../', 'node_modules/.cache'),
     customTags: ['v-date-input'],
     customTagsFile: '',

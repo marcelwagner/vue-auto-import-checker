@@ -5,32 +5,18 @@ import { default as vueTags } from '../plugins/vueTags.json';
 import { default as vuetifyTags } from '../plugins/vuetifyTags.json';
 import { default as vueUseTags } from '../plugins/vueUseTags.json';
 
-/**
- * Determine whether a given tag should be ignored according to the provided configuration.
- *
- * Behavior:
- * - Build a combined ignore list from multiple sources (HTML, SVG, Vue, router, Vuetify, vue-use, custom lists).
- * - Normalize entries by removing dashes and lowercasing when comparing.
- *
- * @param tag - the tag name to check (expected to be already normalized, e.g. lowercase)
- * @param config - configuration object containing toggles and tag lists to include/exclude
- * @returns boolean - true if the tag is present in the computed ignore list
- */
-export function isTagInIgnoreList(
-  tag: string,
-  {
-    noHtml,
-    noSvg,
-    noVue,
-    noVueRouter,
-    customVuetifyTags,
-    customVueUseTags,
-    customTags,
-    customTagsFileContent
-  }: IgnoreListConfig
-) {
-  // Compose the final ignored tags list from the enabled sources.
-  const ignoredTagsList = [
+export function getIgnoreList({
+  noHtml,
+  noSvg,
+  noVue,
+  noVueRouter,
+  customVuetifyTags,
+  customVueUseTags,
+  customTags,
+  customTagsFileContent
+}: IgnoreListConfig) {
+  // Return composed final ignored tags list from the enabled sources.
+  return [
     ...(!noHtml ? (htmlTags as string[]) : []),
     ...(!noSvg ? svgTags : []),
     ...(!noVue ? vueTags : []),
@@ -40,7 +26,20 @@ export function isTagInIgnoreList(
     ...customTags,
     ...customTagsFileContent
   ];
+}
 
+/**
+ * Determine whether a given tag should be ignored according to the provided configuration.
+ *
+ * Behavior:
+ * - Build a combined ignore list from multiple sources (HTML, SVG, Vue, router, Vuetify, vue-use, custom lists).
+ * - Normalize entries by removing dashes and lowercasing when comparing.
+ *
+ * @param tag - the tag name to check (expected to be already normalized, e.g. lowercase)
+ * @param ignoredTagsList - configuration object containing toggles and tag lists to include/exclude
+ * @returns boolean - true if the tag is present in the computed ignore list
+ */
+export function isTagInIgnoreList(tag: string, ignoredTagsList: string[]) {
   if (ignoredTagsList.length >= 1) {
     // Compare each candidate after removing hyphens and lowercasing.
     return ignoredTagsList.some(tagFromList => tagFromList.replace(/-/g, '').toLowerCase() === tag);

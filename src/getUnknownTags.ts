@@ -7,6 +7,7 @@ import {
   addToUnknownTags,
   getCustomTagList,
   getFileContent,
+  getIgnoreList,
   getJsonFileContent,
   getTagFromLine,
   isTagInIgnoreList
@@ -115,19 +116,8 @@ export default async function ({
         // Normalize for comparison by removing hyphens and lowercasing
         const tag = tagRaw.replace(/-/g, '').toLowerCase();
 
-        const ignoreListConfig: IgnoreListConfig = {
-          noHtml,
-          noSvg,
-          noVue,
-          noVueRouter,
-          customVuetifyTags,
-          customVueUseTags,
-          customTags,
-          customTagsFileContent
-        };
-
         // If the tag is present in the computed ignore lists, skip it
-        if (isTagInIgnoreList(tag, ignoreListConfig)) {
+        if (isTagInIgnoreList(tag, ignoredTagsList)) {
           return;
         }
 
@@ -215,6 +205,17 @@ export default async function ({
 
   // Load a custom tags JSON file if provided
   const customTagsFileContent = customTagsFile ? await getJsonFileContent(customTagsFile) : [];
+
+  const ignoredTagsList = getIgnoreList({
+    noHtml,
+    noSvg,
+    noVue,
+    noVueRouter,
+    customVuetifyTags,
+    customVueUseTags,
+    customTags,
+    customTagsFileContent
+  });
 
   // Build the list of registered components to exclude them from unknowns
   const componentsList = await getComponentList(componentsFile);

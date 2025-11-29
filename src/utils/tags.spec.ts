@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { getTagFromLine } from './tag.ts';
+import { getTagFromLine } from './tags.ts';
 
 describe('tagUtils.ts', () => {
   describe('getTagFromLine', () => {

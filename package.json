@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "description": "Check if the used components in templates are all registered within your components.d.ts",
   "main": "index.ts",
   "scripts": {

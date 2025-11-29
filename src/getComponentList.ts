@@ -36,7 +36,7 @@ export async function getComponentList(componentsFilePath: string): Promise<Comp
       componentsListRaw[0]
         .replace(/[\W]*export interface GlobalComponents \{\W/, '')
         .replace(/[\W]*\}/, '')
-        .split(/[\n\r]+}/)
+        .split(/\n/)
         .forEach(line => {
           // Trim whitespace and remove the TypeScript type suffix that looks like:
           // ": typeof import('...')"
