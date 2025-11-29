@@ -2,11 +2,29 @@ import fsPromise from 'node:fs/promises';
 import path from 'node:path';
 
 import type { VAIC_Config } from '../types/config.interface.ts';
-import { getFileContent } from './utils/fileUtils.ts';
-import { getComponentList } from './utils/getComponentList.ts';
-import { getCustomTagList } from './utils/getCustomTagList.ts';
-import { addToUnknownTags, getTagFromLine, isTagInIgnoreList } from './utils/tagUtils.ts';
+import { getComponentList } from './getComponentList.ts';
+import {
+  addToUnknownTags,
+  getCustomTagList,
+  getFileContent,
+  getJsonFileContent,
+  getTagFromLine,
+  isTagInIgnoreList
+} from './utils/index.ts';
 
+/**
+ * Scan a project directory for unknown component tags used inside template blocks.
+ *
+ * Workflow:
+ * - Read configuration and prepare auxiliary lists (components, custom tags, tags from plugins).
+ * - Walk the project directory recursively and inspect each file.
+ * - For files containing a `<template>` section, parse line-by-line while skipping `<script>` and `<style>` regions.
+ * - Extract candidate tags from each line, normalize them and check against ignore lists and registered components.
+ * - Collect and return a summary including stats, found unknown tags and the component list.
+ *
+ * @param config - configuration object adhering to `VAIC_Config`
+ * @returns Promise resolving to `ComponentSearch` containing `stats`, `unknownTags` and `componentsList`
+ */
 export default async function ({
   componentsFile,
   projectPath,
@@ -18,15 +36,24 @@ export default async function ({
   vueUse,
   vuetify,
   customTags,
+  customTagsFile,
   quiet,
   basePath
 }: VAIC_Config): Promise<ComponentSearch> {
+  /**
+   * Process a single file: read content, detect template sections and collect unknown tags.
+   *
+   * - Increments file counters on each invocation.
+   * - Skips files without a `<template>` section.
+   * - Tracks whether current parsing position is inside `<script>` or `<style>` blocks to avoid false positives.
+   * - Uses `getTagFromLine` to find candidate tags and validates them against ignore lists and known components.
+   */
   const getUnknownTagsFromFile = async (file: string, stats: Stats, unknownTags: UnknownTags[]) => {
     stats.fileCounter++;
 
     const fileContent = await getFileContent(file);
 
-    // Is it a template file?
+    // Quick check whether this file contains a template at all.
     const isTemplate = fileContent.includes('<template>');
 
     if (!isTemplate) {
@@ -35,13 +62,15 @@ export default async function ({
 
     stats.templateFiles++;
 
+    // Track whether the current line is inside a script or style block to skip them.
     let script = false;
     let style = false;
 
-    // Get lines of file
+    // Split file into lines for indexed reporting.
     const linesOfFile = fileContent.split(/\n/);
 
     linesOfFile.forEach((line: string, index: number) => {
+      // Enter script block
       if (line.match(/<script[\w\W]*/)) {
         script = true;
 
@@ -50,10 +79,12 @@ export default async function ({
         }
       }
 
+      // Exit script block
       if (line.match(/<\/script>/)) {
         script = false;
       }
 
+      // Enter style block
       if (line.match(/<style[\w\W]*/)) {
         style = true;
 
@@ -62,15 +93,17 @@ export default async function ({
         }
       }
 
+      // Exit style block
       if (line.match(/<\/style>/)) {
         style = false;
       }
 
+      // Skip lines that are inside script or style sections
       if (script || style) {
         return;
       }
 
-      // No script or style section, must be a template section
+      // Extract candidate tags from the template line
       const tagListRaw = getTagFromLine(line);
 
       // No matching tag found in line
@@ -79,6 +112,7 @@ export default async function ({
       }
 
       tagListRaw.forEach((tagRaw: string) => {
+        // Normalize for comparison by removing hyphens and lowercasing
         const tag = tagRaw.replace(/-/g, '').toLowerCase();
 
         const ignoreListConfig: IgnoreListConfig = {
@@ -86,22 +120,23 @@ export default async function ({
           noSvg,
           noVue,
           noVueRouter,
-          vuetifyTags,
-          vueUseTags,
-          customTags
+          customVuetifyTags,
+          customVueUseTags,
+          customTags,
+          customTagsFileContent
         };
 
-        // Is tag in any ignore list?
+        // If the tag is present in the computed ignore lists, skip it
         if (isTagInIgnoreList(tag, ignoreListConfig)) {
           return;
         }
 
-        // Is tag in component list?
+        // If tag matches any known component tag, skip it
         if (componentsList.map(component => component.tag).includes(tag)) {
           return;
         }
 
-        // Tag is unknown!
+        // Otherwise the tag is unknown — record it with context
         addToUnknownTags(unknownTags, index, tagRaw, linesOfFile, file);
       });
     });
@@ -109,6 +144,13 @@ export default async function ({
     return;
   };
 
+  /**
+   * Recursively traverse a directory, invoking `getUnknownTagsFromFile` for each file.
+   *
+   * - Updates directory counters.
+   * - Recurses into subdirectories.
+   * - Handles file system errors by rejecting unless `quiet` is enabled.
+   */
   const getUnknownTagsFromDirectory = async (
     directoryPath: string,
     stats: Stats,
@@ -144,11 +186,12 @@ export default async function ({
           }
         }
       } else {
-        // Symlinks, nothing to do here
+        // Other entry types (symlinks, sockets) are ignored
       }
     }
   };
 
+  // Record start time for stats and performance measurement
   const startTime = Date.now();
 
   const stats: Stats = {
@@ -161,20 +204,28 @@ export default async function ({
 
   const unknownTags: UnknownTags[] = [];
 
-  const vueUseTags = vueUse
-    ? await getCustomTagList(userGeneratedPath, basePath, 'vueUseTags')
-    : ([] as string[]);
-
-  const vuetifyTags = vuetify
+  // Load optional tag lists (vue-use and vuetify) from user or fallback plugin locations
+  const customVuetifyTags = vuetify
     ? await getCustomTagList(userGeneratedPath, basePath, 'vuetifyTags')
-    : ([] as string[]);
+    : null;
 
+  const customVueUseTags = vueUse
+    ? await getCustomTagList(userGeneratedPath, basePath, 'vueUseTags')
+    : null;
+
+  // Load a custom tags JSON file if provided
+  const customTagsFileContent = customTagsFile ? await getJsonFileContent(customTagsFile) : [];
+
+  // Build the list of registered components to exclude them from unknowns
   const componentsList = await getComponentList(componentsFile);
 
+  // Start recursive scan of the project directory
   await getUnknownTagsFromDirectory(projectPath, stats, unknownTags);
 
+  // Finalize timing
   stats.endTime = Date.now();
 
+  // Return aggregated results
   return {
     stats,
     unknownTags,

@@ -3,6 +3,7 @@ export interface VAIC_Config {
   projectPath: string;
   userGeneratedPath: string;
   customTags: string[];
+  customTagsFile: string;
   noHtml: boolean;
   noSvg: boolean;
   noVue: boolean;

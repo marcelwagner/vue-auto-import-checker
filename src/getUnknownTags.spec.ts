@@ -1,9 +1,9 @@
 import path from 'node:path';
 import url from 'node:url';
 import { describe, expect, test } from 'vitest';
-import checkForUnknownTags from '../index.ts';
-import { getUniqueFromList } from '../src/utils/reportUtils';
 import { type VAIC_Config } from '../types/config.interface.ts';
+import getUnknownTags from './getUnknownTags.ts';
+import { getUniqueFromList } from './utils/index.ts';
 
 const __filename = url.fileURLToPath(import.meta.url);
 const basePath = path.dirname(__filename);
@@ -14,6 +14,7 @@ describe('vue-auto-import-checker', async () => {
     projectPath: path.join(basePath, 'data/vue-test-project/src'),
     userGeneratedPath: path.join(basePath, '../', 'node_modules/.cache'),
     customTags: ['v-date-input'],
+    customTagsFile: '',
     noHtml: false,
     noSvg: false,
     noVue: false,
@@ -23,7 +24,7 @@ describe('vue-auto-import-checker', async () => {
     basePath: path.join(basePath, '../')
   };
 
-  const result = await checkForUnknownTags(config);
+  const result = await getUnknownTags(config);
   const uniqueTags = getUniqueFromList(result.unknownTags.map((tag: UnknownTags) => tag.tagName));
   const uniqueFiles = getUniqueFromList(result.unknownTags.map((tag: UnknownTags) => tag.file));
 

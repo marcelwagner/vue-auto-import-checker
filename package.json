@@ -1,12 +1,13 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Check if the used components in templates are all registered within your components.d.ts",
   "main": "index.ts",
   "scripts": {
     "test": "vitest --reporter=tree",
     "test:github": "vitest run --reporter=tree",
-    "lint": "oxlint --tsconfig=tsconfig.json"
+    "lint": "oxlint --tsconfig=tsconfig.json",
+    "tsc": "tsc"
   },
   "engines": {
     "node": ">=20.18.1",
@@ -25,8 +26,12 @@
     "components.d.ts",
     "tags"
   ],
-  "author": "Marcel Wagner <marcel.wagner@email.de>",
+  "author": "Marcel Wagner (https://github.com/marcelwagner)",
   "license": "MIT",
+  "homepage": "https://github.com/marcelwagner/vue-auto-import-checker#readme",
+  "bugs": {
+    "url": "https://github.com/marcelwagner/vue-auto-import-checker/issues"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marcelwagner/vue-auto-import-checker.git"
