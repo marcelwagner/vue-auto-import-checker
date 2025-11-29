@@ -30,7 +30,7 @@ You can also use the importer tools to use your own list of tags, currently only
 
 We recommend using:
 
-- Node.js >= 23.5.0
+- Node.js >= 24.0.0 (minimum required 20.19.1)
 
 \*See the *[Usage](#usage)* section for a workaround on Node.js <= 23.4.0.
 
@@ -102,15 +102,9 @@ This will add a folder (.cache) to your node_modules folder.
 
 Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which version the importer works.
 
-### Node.js <= 23.4.0
+### Node.js
 
-If you're running **Node.js <= 23.4.0**, you can use:
-
-``` bash
- tsx cli.ts -h
-```
-
-Tested with Node.js v22.18.1
+Tested with Node.js 20.19.1, 22.15.1, 22.18.1 & 24.11.1
 
 Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/9), for which version the cli works.
 
