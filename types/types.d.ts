@@ -34,8 +34,11 @@ type IgnoreListConfig = {
   noSvg: boolean;
   noVue: boolean;
   noVueRouter: boolean;
-  customVuetifyTags: string[] | null;
-  customVueUseTags: string[] | null;
+  vuetify: boolean;
+  vueUse: boolean;
+  quasar: boolean;
   customTags: string[];
   customTagsFileContent: string[];
+  userGeneratedPath: string;
+  basePath: string;
 };

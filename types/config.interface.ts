@@ -10,6 +10,7 @@ export interface VAIC_Config {
   noVueRouter: boolean;
   vuetify: boolean;
   vueUse: boolean;
+  quasar: boolean;
   basePath: string;
   quiet?: boolean;
 }

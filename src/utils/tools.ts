@@ -1,4 +1,8 @@
-import { vuetifyComponentsImporter, vueUseComponentsImporter } from '../tools/index.ts';
+import {
+  quasarComponentsImporter,
+  vuetifyComponentsImporter,
+  vueUseComponentsImporter
+} from '../tools/index.ts';
 
 /**
  * List of CLI option values that represent supported tool runners.
@@ -6,7 +10,7 @@ import { vuetifyComponentsImporter, vueUseComponentsImporter } from '../tools/in
  * Each entry is expected as the full tool name passed by the user (e.g. "vuetify-importer").
  * The code uses this array to validate CLI input before attempting to resolve a tool.
  */
-export const possibleTools = ['vuetify-importer', 'vueuse-importer'];
+export const possibleTools = ['vuetify-importer', 'vueuse-importer', 'quasar-importer'];
 
 /**
  * Check if a provided tool string is one of the supported `possibleTools`.
@@ -40,5 +44,6 @@ export function getToolName(tool: string) {
  */
 export const tools = {
   vuetify: vuetifyComponentsImporter,
-  vueuse: vueUseComponentsImporter
+  vueuse: vueUseComponentsImporter,
+  quasar: quasarComponentsImporter
 };

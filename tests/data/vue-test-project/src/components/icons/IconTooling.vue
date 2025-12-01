@@ -16,4 +16,5 @@
       fill="currentColor"
     ></path>
   </svg>
+  <q-avatar></q-avatar>
 </template>

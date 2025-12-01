@@ -41,6 +41,7 @@ program
   .option('--customtagsfile <customtagsfile>', 'Ignore tags listed in this json file', '')
   .option('--vuetify', 'ignore vuetify tags', false)
   .option('--vueuse', 'ignore vueUse tags', false)
+  .option('--quasar', 'ignore quasar tags', false)
   .option('--nohtml', "don't ignore html tags", false)
   .option('--nosvg', "don't ignore svg tags", false)
   .option('--novue', "don't ignore vue tags", false)
@@ -55,6 +56,7 @@ const options = program.opts();
 const quiet = Boolean(options.quiet);
 const vuetify = Boolean(options.vuetify);
 const vueUse = Boolean(options.vueuse);
+const quasar = Boolean(options.quasar);
 const noHtml = Boolean(options.nohtml);
 const noSvg = Boolean(options.nosvg);
 const noVue = Boolean(options.novue);
@@ -149,6 +151,7 @@ const tool: string = options.tool;
       noVueRouter,
       vuetify,
       vueUse,
+      quasar,
       customTags,
       customTagsFile: customTagsFile ? path.join(process.env?.PWD || '', customTagsFile) : '',
       basePath

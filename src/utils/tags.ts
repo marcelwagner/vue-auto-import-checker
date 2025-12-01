@@ -1,28 +1,44 @@
 import { htmlTags } from '../plugins/htmlTags.ts';
+import { default as quasarTags } from '../plugins/quasarTags.json';
 import { svgTags } from '../plugins/svgTags.ts';
 import { default as vueRouterTags } from '../plugins/vueRouterTags.json';
 import { default as vueTags } from '../plugins/vueTags.json';
 import { default as vuetifyTags } from '../plugins/vuetifyTags.json';
 import { default as vueUseTags } from '../plugins/vueUseTags.json';
+import { getCustomTagList } from './getCustomTagList.ts';
 
-export function getIgnoreList({
+export async function getIgnoreList({
   noHtml,
   noSvg,
   noVue,
   noVueRouter,
-  customVuetifyTags,
-  customVueUseTags,
+  vuetify,
+  vueUse,
+  quasar,
   customTags,
-  customTagsFileContent
+  customTagsFileContent,
+  userGeneratedPath,
+  basePath
 }: IgnoreListConfig) {
+  const customVuetifyTags = vuetify
+    ? await getCustomTagList(userGeneratedPath, basePath, 'vuetifyTags')
+    : null;
+  const customVueUseTags = vueUse
+    ? await getCustomTagList(userGeneratedPath, basePath, 'vueUseTags')
+    : null;
+  const customQuasarTags = quasar
+    ? await getCustomTagList(userGeneratedPath, basePath, 'quasar')
+    : null;
+
   // Return composed final ignored tags list from the enabled sources.
   return [
     ...(!noHtml ? (htmlTags as string[]) : []),
     ...(!noSvg ? svgTags : []),
     ...(!noVue ? vueTags : []),
     ...(!noVueRouter ? vueRouterTags : []),
-    ...(customVuetifyTags ? customVuetifyTags : vuetifyTags),
-    ...(customVueUseTags ? customVueUseTags : vueUseTags),
+    ...(vuetify ? (customVuetifyTags ? customVuetifyTags : vuetifyTags) : []),
+    ...(vueUse ? (customVueUseTags ? customVueUseTags : vueUseTags) : []),
+    ...(quasar ? (customQuasarTags ? customQuasarTags : quasarTags) : []),
     ...customTags,
     ...customTagsFileContent
   ];

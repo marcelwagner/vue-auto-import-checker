@@ -5,7 +5,6 @@ import type { VAIC_Config } from '../types/config.interface.ts';
 import { getComponentList } from './getComponentList.ts';
 import {
   addToUnknownTags,
-  getCustomTagList,
   getFileContent,
   getIgnoreList,
   getJsonFileContent,
@@ -36,6 +35,7 @@ export default async function ({
   noVueRouter,
   vueUse,
   vuetify,
+  quasar,
   customTags,
   customTagsFile,
   quiet,
@@ -194,27 +194,22 @@ export default async function ({
 
   const unknownTags: UnknownTags[] = [];
 
-  // Load optional tag lists (vue-use and vuetify) from user or fallback plugin locations
-  const customVuetifyTags = vuetify
-    ? await getCustomTagList(userGeneratedPath, basePath, 'vuetifyTags')
-    : null;
-
-  const customVueUseTags = vueUse
-    ? await getCustomTagList(userGeneratedPath, basePath, 'vueUseTags')
-    : null;
-
   // Load a custom tags JSON file if provided
   const customTagsFileContent = customTagsFile ? await getJsonFileContent(customTagsFile) : [];
 
-  const ignoredTagsList = getIgnoreList({
+  // Load optional tag lists (vue-use, vuetify and quasar) from user or fallback plugin locations
+  const ignoredTagsList = await getIgnoreList({
     noHtml,
     noSvg,
     noVue,
     noVueRouter,
-    customVuetifyTags,
-    customVueUseTags,
+    vuetify,
+    vueUse,
+    quasar,
     customTags,
-    customTagsFileContent
+    customTagsFileContent,
+    userGeneratedPath,
+    basePath
   });
 
   // Build the list of registered components to exclude them from unknowns

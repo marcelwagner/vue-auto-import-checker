@@ -3,6 +3,7 @@
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker)
 
 <!-- TOC -->
+
 * [Description](#description)
 * [Requirements](#requirements)
 * [Installation](#installation)
@@ -12,19 +13,29 @@
 * [CI/CD Integration](#cicd-integration)
 * [Security](#security)
 * [Feedback & Contributions](#feedback--contributions)
+
 <!-- TOC -->
 
 ## Description
 
 A CLI tool that checks whether every non-HTML tag used in your Vue templates is properly registered in `components.d.ts`
-when using unplugin-vue-components (or similar auto-import setups).
+when using [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) (or similar auto-import setups).
 
-You can configure which tag-sets the checker should ignore. `HTML`, `Vue`, `VueRouter` and `SVG` tags are ignored by default.
+You can configure which tag-sets the checker should ignore. `HTML`, `Vue`, `VueRouter` and `SVG` tags are ignored by
+default. You can remove them from the ignore list if needed.
 
-You can also use the importer tools to use your own list of tags, currently only for `vuetify` (currently v3.8.3)* and
-`VueUse` (currently v13.5.0)*.
+Choose also if the checker should ignore other tags of famous frameworks. Currently, we support:
 
-\*See the *[Usage](#usage)* section for more `vuetify` & `VueUse` related information.
+- `vuetify` (currently v3.8.3)*
+- `VueUse` (currently v13.5.0)*
+- `quasar` (currently v1.15.8)*
+- others are work in progress ...
+
+But you can provide your own list by passing a `customtagsfile` in json format with your individual ignore tags.
+
+You can also use the importer tools to use your own list of tags for `vuetify`, `VueUse` & `quasars`.
+
+\*See the *[Usage](#usage)* section for more `vuetify`, `VueUse` & `quasar` related information.
 
 ## Requirements
 
@@ -61,8 +72,9 @@ We recommend using:
 | `--version`                         | `-v`  | Show the currently installed version                 | —                   |
 | `--help`                            | `-h`  | Display help information                             | —                   |
 
-
 ## Usage
+
+The help of the cli tool is a good starting point, but you can also start with an example from our [examples](#examples).
 
 ``` bash
  npx vue-auto-import-checker -h
@@ -70,7 +82,7 @@ We recommend using:
 
 ### Vuetify >= 3.8.4
 
-We provide a list of vuetify tags from version `3.8.3` out of the box.
+We provide a list of `vuetify` tags from version `3.8.3` out of the box.
 
 But you can import your own set of tags by using the `vuetify-importer` tool.
 
@@ -78,16 +90,17 @@ But you can import your own set of tags by using the `vuetify-importer` tool.
  npx vue-auto-import-checker -t vuetify-importer
 ```
 
-This will add a new vuetify tag-list from your actual vuetify implementation, so that the checker ignores all vuetify
-tags from your current vuetify version. (tested with vuetify v3.8.3 and v3.11.1)
+This will add a new `vuetify` tag-list from your actual `vuetify` implementation, so that the checker ignores all `vuetify`
+tags from your current `vuetify` version. (tested with vuetify v3.8.3 and v3.11.1)
 
 This will add a folder (.cache) to your node_modules folder.
 
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/10), for which version the importer works.
+Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/10), for which
+version the importer works.
 
-### VueUse >= 13.5.0
+### VueUse >= 13.6.0
 
-We provide a list of VueUse tags from version `13.5.0` out of the box.
+We provide a list of `VueUse` tags from version `13.5.0` out of the box.
 
 But you can import your own set of tags by using the `vueuse-importer` tool.
 
@@ -95,28 +108,48 @@ But you can import your own set of tags by using the `vueuse-importer` tool.
  npx vue-auto-import-checker -t vueuse-importer
 ```
 
-This will add a new vueUse tag-list from your actual vueUse implementation, so that the checker ignores all vueUse tags
-from your current vueUse version. (tested with @vueuse/components v13.5.0 and v14.0.0)
+This will add a new `vueUse` tag-list from your actual `vueUse` implementation, so that the checker ignores all `vueUse` tags
+from your current `vueUse` version. (tested with @vueuse/components v13.5.0 and v14.0.0)
 
 This will add a folder (.cache) to your node_modules folder.
 
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which version the importer works.
+Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which
+version the importer works.
+
+### Quasar >= 1.16.0
+
+We provide a list of `quasar` tags from version `1.15.8` out of the box.
+
+But you can import your own set of tags by using the `quasar-importer` tool.
+
+``` bash
+ npx vue-auto-import-checker -t quasar-importer
+```
+
+This will add a new `quasar` tag-list from your actual `quasar` implementation, so that the checker ignores all `quasar` tags
+from your current `quasar` version. (tested with quasar v1.15.8)
+
+This will add a folder (.cache) to your node_modules folder.
+
+Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which
+version the importer works.
 
 ### Node.js
 
 Tested with Node.js 20.19.1, 22.15.1, 22.18.1 & 24.11.1
 
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/9), for which version the cli works.
+Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/9), for which
+version the cli works.
 
 ## Examples
 
-### 1. Assumption
+### 1. Example
 
 - Your `components.d.ts` file lives at: \
   `./tests/data/vue-test-project/components.d.ts`
 - Vue component files are located in: \
   `./tests/data/vue-test-project/src/`
-- You are using Vuetify and a custom component named `ToolingIcon`
+- You are using Vuetify, VueUse and a custom component named `ToolingIcon`
 - And you want to see a report and a statistical output
 
 ``` bash
@@ -124,6 +157,7 @@ Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   --vuetify \
+  --vueuse \
   --customtags ToolingIcon EcosystemIcon \
   -r \
   -s
@@ -131,7 +165,7 @@ Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-
 
 or
 
-### 2. Assumption
+### 2. Example
 
 - Your `components.d.ts` file lives at: \
   `./tests/data/vue-test-project/components.d.ts`
@@ -150,7 +184,7 @@ or
 
 or
 
-### 3. Assumption
+### 3. Example
 
 - Your `components.d.ts` file lives at: \
   `./tests/data/vue-test-project/components.d.ts`
@@ -175,21 +209,21 @@ The tool will need some read and write permissions on your local hard disc.
 
 To use the tool without any custom file (vuetify, vueUse, customTagFile), the tool needs:
 
-  - `read`-permission to the files and folders of `project-path`
-  - `read`-permission for the `components-file`-path
+- `read`-permission to the files and folders of `project-path`
+- `read`-permission for the `components-file`-path
 
 If you want to use a customTagFile, the tool needs additionally:
 
-  - `read`-permission for the `customtagsfile`-path
+- `read`-permission for the `customtagsfile`-path
 
 If you want to use custom vuetify or VueUse tag-lists, the tool needs additionally:
 
-  - `read`-permission for the `node_modules`-path and its subfolders
-  - `write`-permission for the `node_modules`-path and its subfolders
-  - `read`-permission for the `node_modules`-path and the subfolders
-  
-The tool will add a folder `.cache` as a subfolder to the `node_modules`-folder for your custom vuetify or VueUse tag-lists.
+- `read`-permission for the `node_modules`-path and its subfolders
+- `write`-permission for the `node_modules`-path and its subfolders
+- `read`-permission for the `node_modules`-path and the subfolders
 
+The tool will add a folder `.cache` as a subfolder to the `node_modules`-folder for your custom vuetify or VueUse
+tag-lists.
 
 ## Feedback & Contributions
 

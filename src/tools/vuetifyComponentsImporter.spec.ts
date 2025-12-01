@@ -7,7 +7,7 @@ const __filename = url.fileURLToPath(import.meta.url);
 const basePath = path.dirname(__filename);
 
 describe('vuetify-importer tool', () => {
-  test('should return scanned 11 template files of 13 total files in 5 dirs', async () => {
+  test('should return 144 vuetify tags', async () => {
     const result = await vuetifyComponentsImporter(path.join(basePath, '../../'));
 
     expect(result.length).to.equal(144);

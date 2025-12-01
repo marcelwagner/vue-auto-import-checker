@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.9.2",
+  "version": "0.10.0",
   "description": "Check if the used components in templates are all registered within your components.d.ts",
   "main": "index.ts",
   "scripts": {
@@ -20,13 +20,19 @@
     "vue",
     "vuetify",
     "vuuse",
+    "quasar",
     "vue-router",
-    "unplugin",
-    "auto-import",
+    "unplugin-auto-import",
     "components.d.ts",
     "tags"
   ],
   "author": "Marcel Wagner (https://github.com/marcelwagner)",
+  "contributors": [
+    {
+      "name": "Chi Nguyen",
+      "url": "https://github.com/cnguyen-de"
+    }
+  ],
   "license": "MIT",
   "homepage": "https://github.com/marcelwagner/vue-auto-import-checker#readme",
   "bugs": {
@@ -42,6 +48,7 @@
     "oxlint": "^1.28.0",
     "prettier": "^3.6.2",
     "prettier-plugin-organize-imports": "^4.3.0",
+    "quasar": "1.15.8",
     "vitest": "^4.0.14",
     "vuetify": "3.8.3"
   },
