@@ -43,8 +43,6 @@ We recommend using:
 
 - Node.js >= 24.0.0 (minimum required 20.19.1)
 
-\*See the *[Usage](#usage)* section for a workaround on Node.js <= 23.4.0.
-
 ## Installation
 
 ``` bash
@@ -64,6 +62,7 @@ We recommend using:
 | `--customtagsfile <customtagsfile>` | —     | Ignore tags listed in this json file                 | `""`                |
 | `--vuetify`                         | —     | Ignore Vuetify tags                                  | `false`             |
 | `--vueuse`                          | —     | Ignore VueUse tags                                   | `false`             |
+| `--quasar`                          | —     | Ignore quasar tags                                   | `false`             |
 | `--novue`                           | —     | Do not ignore Vue tags                               | `false`             |
 | `--novuerouter`                     | —     | Do not ignore VueRouter tags                         | `false`             |
 | `--nosvg`                           | —     | Do not ignore svg element tags                       | `false`             |
