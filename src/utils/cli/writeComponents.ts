@@ -1,15 +1,20 @@
 export function writeComponents(componentsList: ComponentTag[]) {
+  logger.debug('');
+  logger.debug('-----------------------------------');
+  logger.debug('Show Components list:');
+  logger.debug('');
+
   if (componentsList.length >= 1) {
-    console.log('');
-    console.log(`Found component${componentsList.length >= 2 ? 's' : ''}:`);
-    console.log('');
+    logger.info('');
+    logger.info(`Found component${componentsList.length >= 2 ? 's' : ''}:`);
+    logger.info('');
 
-    componentsList.forEach(component => console.log(component.rawTag));
+    componentsList.forEach(component => logger.info(component.rawTag));
 
-    console.log('');
-    console.log(`Total : ${componentsList.length}`);
-    console.log('');
+    logger.info('');
+    logger.info(`Total : ${componentsList.length}`);
+    logger.info('');
   } else {
-    console.log('No components found.');
+    logger.info('No components found.');
   }
 }

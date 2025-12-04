@@ -1,47 +1,36 @@
-import { htmlTags } from '../plugins/htmlTags.ts';
-import { default as quasarTags } from '../plugins/quasarTags.json';
-import { svgTags } from '../plugins/svgTags.ts';
+import { htmlTags } from '../plugins/htmlTags';
+import { svgTags } from '../plugins/svgTags';
 import { default as vueRouterTags } from '../plugins/vueRouterTags.json';
 import { default as vueTags } from '../plugins/vueTags.json';
-import { default as vuetifyTags } from '../plugins/vuetifyTags.json';
-import { default as vueUseTags } from '../plugins/vueUseTags.json';
-import { getCustomTagList } from './getCustomTagList.ts';
+import { getFrameworkTags } from './frameworks';
 
 export async function getIgnoreList({
   noHtml,
   noSvg,
   noVue,
   noVueRouter,
-  vuetify,
-  vueUse,
-  quasar,
+  frameworks,
   customTags,
   customTagsFileContent,
-  userGeneratedPath,
-  basePath
+  userGeneratedPath
 }: IgnoreListConfig) {
-  const customVuetifyTags = vuetify
-    ? await getCustomTagList(userGeneratedPath, basePath, 'vuetifyTags')
-    : null;
-  const customVueUseTags = vueUse
-    ? await getCustomTagList(userGeneratedPath, basePath, 'vueUseTags')
-    : null;
-  const customQuasarTags = quasar
-    ? await getCustomTagList(userGeneratedPath, basePath, 'quasar')
-    : null;
+  const frameworkTags = await getFrameworkTags(frameworks, userGeneratedPath);
 
-  // Return composed final ignored tags list from the enabled sources.
-  return [
+  const ignoreList = [
     ...(!noHtml ? (htmlTags as string[]) : []),
     ...(!noSvg ? svgTags : []),
     ...(!noVue ? vueTags : []),
     ...(!noVueRouter ? vueRouterTags : []),
-    ...(vuetify ? (customVuetifyTags ? customVuetifyTags : vuetifyTags) : []),
-    ...(vueUse ? (customVueUseTags ? customVueUseTags : vueUseTags) : []),
-    ...(quasar ? (customQuasarTags ? customQuasarTags : quasarTags) : []),
+    ...frameworkTags,
     ...customTags,
     ...customTagsFileContent
   ];
+
+  logger.debug(`tags.ts -> getIgnoreList - ignoreList`);
+  logger.debug(JSON.stringify(ignoreList));
+
+  // Return composed final ignored tags list from the enabled sources.
+  return ignoreList;
 }
 
 /**
@@ -58,8 +47,17 @@ export async function getIgnoreList({
 export function isTagInIgnoreList(tag: string, ignoredTagsList: string[]) {
   if (ignoredTagsList.length >= 1) {
     // Compare each candidate after removing hyphens and lowercasing.
-    return ignoredTagsList.some(tagFromList => tagFromList.replace(/-/g, '').toLowerCase() === tag);
+    const isTagInIgnoreList = ignoredTagsList.some(
+      tagFromList => tagFromList.replace(/-/g, '').toLowerCase() === tag
+    );
+
+    logger.debug(`tags.ts -> isTagInIgnoreList - tag ${tag} is`);
+    logger.debug(`${isTagInIgnoreList ? '' : 'not '}in the ignore list`);
+
+    return isTagInIgnoreList;
   }
+
+  logger.debug(`tags.ts -> isTagInIgnoreList - tag ${tag} is not in the ignore list`);
 
   // No ignore patterns configured
   return false;
@@ -95,6 +93,8 @@ export function getTagFromLine(line: string) {
 
   // No tag-like token present
   if (tagListRaw === null) {
+    logger.debug(`tags.ts -> getTagFromLine - no tags found in line`);
+
     return [];
   }
 
@@ -127,8 +127,15 @@ export function getTagFromLine(line: string) {
         // Candidate matches a property/event typing capture (false positive)
         matchesOneOf(tag, propertyTyping)
       ) {
+        logger.debug(`tags.ts -> getTagFromLine - tag is not valide ${tag}`);
+
         return false;
       }
+
+      logger.debug(`tags.ts -> getTagFromLine - tag is valide`);
+      logger.debug('');
+      logger.debug(`----------------------------------- tag: ${tag}`);
+      logger.debug('');
 
       // Candidate looks like a valid tag
       return true;
@@ -176,4 +183,10 @@ export function addToUnknownTags(
     lines: getLinesForReport(linesOfFile, index),
     file
   });
+
+  logger.debug(`tags.ts -> addToUnknownTags - Added`);
+  logger.debug(`line: ${index + 1}`);
+  logger.debug(`tagName: ${tag}`);
+  logger.debug(`lines: ${getLinesForReport(linesOfFile, index)}`);
+  logger.debug(` to unknownTags`);
 }

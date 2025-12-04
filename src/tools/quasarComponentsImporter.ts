@@ -1,19 +1,19 @@
-import fs from 'node:fs';
-import fsPromise from 'node:fs/promises';
-import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 export async function quasarComponentsImporter(pwd: string) {
   try {
     // index.d.mts for quasar 1.15.8
-    const componentsFile = path.join(pwd, 'node_modules/quasar/src/components.js');
+    const componentsFile = join(pwd, 'node_modules/quasar/src/components.js');
 
-    const componentsFileExists = fs.existsSync(componentsFile);
+    const componentsFileExists = existsSync(componentsFile);
 
     if (!componentsFileExists) {
       return Promise.reject({ errorText: 'No components.js found' });
     }
 
-    const listOfComponents = await fsPromise.readFile(componentsFile, 'utf8');
+    const listOfComponents = await readFile(componentsFile, 'utf8');
 
     const componentsList = [];
 
@@ -27,16 +27,16 @@ export async function quasarComponentsImporter(pwd: string) {
       }
     }
 
-    const vueUseTagsFile = path.join(pwd, 'node_modules/.cache/quasarTags.json');
+    const vueUseTagsFile = join(pwd, 'node_modules/.cache/quasarTags.json');
 
-    const localVueUseTagsFileExists = fs.existsSync(vueUseTagsFile);
-    const localDirExists = fs.existsSync(path.join(pwd, 'node_modules/.cache'));
+    const localVueUseTagsFileExists = existsSync(vueUseTagsFile);
+    const localDirExists = existsSync(join(pwd, 'node_modules/.cache'));
 
     if (!localDirExists) {
-      await fsPromise.mkdir(path.join(pwd, 'node_modules/.cache'));
+      await mkdir(join(pwd, 'node_modules/.cache'));
     }
 
-    await fsPromise[localVueUseTagsFileExists ? 'writeFile' : 'appendFile'](
+    await (localVueUseTagsFileExists ? writeFile : appendFile)(
       vueUseTagsFile,
       `${JSON.stringify(componentsList, null, 2)}\n`,
       'utf8'

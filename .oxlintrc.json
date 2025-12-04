@@ -17,6 +17,7 @@
     "no-constant-binary-expression": "warn",
     "no-constant-condition": "warn",
     "no-control-regex": "warn",
+    "no-console": "warn",
     "no-debugger": "warn",
     "no-delete-var": "warn",
     "no-dupe-class-members": "warn",

@@ -12,6 +12,7 @@
 * [Examples](#examples)
 * [CI/CD Integration](#cicd-integration)
 * [Security](#security)
+* [Contributors](#contributors)
 * [Feedback & Contributions](#feedback--contributions)
 
 <!-- TOC -->
@@ -51,25 +52,26 @@ We recommend using:
 
 ## CLI Options
 
-| Option                              | Alias | Description                                          | Default             |
-|-------------------------------------|-------|------------------------------------------------------|---------------------|
-| `--components-file <file>`          | `-c`  | Path to the `components.d.ts` file (relative to CWD) | `./components.d.ts` |
-| `--project-path <path>`             | `-p`  | Path to the Vue source directory (relative to CWD)   | `""`                |
-| `--stats`                           | `-s`  | Print a summary of the check                         | `false`             |
-| `--result`                          | `-r`  | Print detailed results                               | `false`             |
-| `--quiet`                           | `-q`  | Suppress all output                                  | `false`             |
-| `--customtags [customtags...]`      | —     | Ignore these tags                                    | `[]`                |
-| `--customtagsfile <customtagsfile>` | —     | Ignore tags listed in this json file                 | `""`                |
-| `--vuetify`                         | —     | Ignore Vuetify tags                                  | `false`             |
-| `--vueuse`                          | —     | Ignore VueUse tags                                   | `false`             |
-| `--quasar`                          | —     | Ignore quasar tags                                   | `false`             |
-| `--novue`                           | —     | Do not ignore Vue tags                               | `false`             |
-| `--novuerouter`                     | —     | Do not ignore VueRouter tags                         | `false`             |
-| `--nosvg`                           | —     | Do not ignore svg element tags                       | `false`             |
-| `--nohtml`                          | —     | Do not ignore HTML element tags                      | `false`             |
-| `--tool <tool>`                     | `-t`  | use a tool to customize your checker                 | `""`                |
-| `--version`                         | `-v`  | Show the currently installed version                 | —                   |
-| `--help`                            | `-h`  | Display help information                             | —                   |
+| Option                              | Alias | Description                                          | Default                |
+|-------------------------------------|-------|------------------------------------------------------|------------------------|
+| `--components-file <file>`          | `-c`  | Path to the `components.d.ts` file (relative to CWD) | `"./components.d.ts"`  |
+| `--project-path <path>`             | `-p`  | Path to the Vue source directory (relative to CWD)   | `""`                   |
+| `--stats`                           | `-s`  | Print a summary of the check                         | `false`                |
+| `--result`                          | `-r`  | Print detailed results                               | `false`                |
+| `--quiet`                           | `-q`  | Suppress all output                                  | `false`                |
+| `--customtags [customtags...]`      | —     | Ignore these tags                                    | `[]`                   |
+| `--customtagsfile <customtagsfile>` | —     | Ignore tags listed in this json file                 | `""`                   |
+| `--vuetify`                         | —     | Ignore Vuetify tags                                  | `false`                |
+| `--vueuse`                          | —     | Ignore VueUse tags                                   | `false`                |
+| `--quasar`                          | —     | Ignore quasar tags                                   | `false`                |
+| `--novue`                           | —     | Do not ignore Vue tags                               | `false`                |
+| `--novuerouter`                     | —     | Do not ignore VueRouter tags                         | `false`                |
+| `--nosvg`                           | —     | Do not ignore svg element tags                       | `false`                |
+| `--nohtml`                          | —     | Do not ignore HTML element tags                      | `false`                |
+| `--tool <tool>`                     | `-t`  | use a tool to customize your checker                 | `""`                   |
+| `--version`                         | `-v`  | Show the currently installed version                 | —                      |
+| `--debug`                           | —     | Show debug log                                       | `false`                |
+| `--help`                            | `-h`  | Display help information                             | —                      |
 
 ## Usage
 
@@ -223,6 +225,16 @@ If you want to use custom vuetify or VueUse tag-lists, the tool needs additional
 
 The tool will add a folder `.cache` as a subfolder to the `node_modules`-folder for your custom vuetify or VueUse
 tag-lists.
+
+## Contributors
+
+Thanks for the contribution of code, ideas and motivation to:
+
+[![GitHub Profile](https://github.com/marcelwagner.png?size=50)](https://github.com/marcelwagner)
+[![GitHub Profile](https://github.com/cnguyen-de.png?size=50)](https://github.com/cnguyen-de)
+[![GitHub Profile](https://github.com/mreise.png?size=50)](https://github.com/mreise)
+
+Special thanks to **Matthias** for the idea.
 
 ## Feedback & Contributions
 

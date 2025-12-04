@@ -1,3 +1,3 @@
-export * from './quasarComponentsImporter.ts';
-export * from './vuetifyComponentsImporter.ts';
-export * from './vueUseComponentsImporter.ts';
+export * from './quasarComponentsImporter';
+export * from './vuetifyComponentsImporter';
+export * from './vueUseComponentsImporter';

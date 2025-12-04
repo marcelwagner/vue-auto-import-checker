@@ -1,13 +1,14 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "description": "Check if the used components in templates are all registered within your components.d.ts",
   "main": "index.ts",
   "scripts": {
     "test": "vitest run --reporter=tree",
     "test:watch": "vitest --reporter=tree",
     "lint": "oxlint --tsconfig=tsconfig.json",
-    "tsc": "tsc"
+    "tsc": "tsc --noEmit",
+    "build": "tsc --outDir ./dist"
   },
   "engines": {
     "node": ">=20.19.1",
@@ -22,7 +23,7 @@
     "vuuse",
     "quasar",
     "vue-router",
-    "unplugin-auto-import",
+    "unplugin",
     "components.d.ts",
     "tags"
   ],
@@ -31,6 +32,10 @@
     {
       "name": "Chi Nguyen",
       "url": "https://github.com/cnguyen-de"
+    },
+    {
+      "name": "Marcus Moedinger",
+      "url": "https://github.com/mreise"
     }
   ],
   "license": "MIT",
@@ -59,6 +64,7 @@
     "html-tags": "5.1.0",
     "svg-tag-names": "3.0.1",
     "tsx": "4.20.6",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "winston": "3.18.3"
   }
 }

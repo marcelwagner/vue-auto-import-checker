@@ -11,42 +11,47 @@ export function writeStats(
   const durationNumber = durationAboveSecond ? durationInSeconds : duration;
   const durationUnit = durationAboveSecond ? 's' : 'ms';
 
+  logger.debug('');
+  logger.debug('-----------------------------------');
+  logger.debug('Show Stats:');
+  logger.debug('');
+
   // Print line between stats & results
   if (showResult) {
-    console.log('....................................');
-    console.log('');
-    console.log(`Files                     : ${files.length}`);
-    console.log(
+    logger.info('....................................');
+    logger.info('');
+    logger.info(`Files                     : ${files.length}`);
+    logger.info(
       `Line${unknownTags.length >= 2 ? 's' : ' '}                     : ${unknownTags.length}`
     );
-    console.log('');
-    console.log('....................................');
-    console.log('');
+    logger.info('');
+    logger.info('....................................');
+    logger.info('');
   }
 
-  console.log(`Scan stats`);
-  console.log('');
-  console.log(`Directorie${stats.dirCounter >= 2 ? 's' : ' '}               : ${stats.dirCounter}`);
-  console.log(
+  logger.info(`Scan stats`);
+  logger.info('');
+  logger.info(`Directorie${stats.dirCounter >= 2 ? 's' : ' '}               : ${stats.dirCounter}`);
+  logger.info(
     `File${stats.fileCounter >= 2 ? 's' : ' '}                     : ${stats.fileCounter}`
   );
-  console.log(
+  logger.info(
     `Template file${stats.templateFiles >= 2 ? 's' : ' '}            : ${stats.templateFiles}`
   );
-  console.log(`Duration                  : ${durationNumber}${durationUnit}`);
+  logger.info(`Duration                  : ${durationNumber}${durationUnit}`);
 
-  console.log('');
-  console.log('....................................');
-  console.log('');
+  logger.info('');
+  logger.info('....................................');
+  logger.info('');
 
-  console.log(`Unique unknown tags found`);
-  console.log('');
-  uniqueTags.map(tag => console.log(` - ${tag}`));
+  logger.info(`Unique unknown tags found`);
+  logger.info('');
+  uniqueTags.map(tag => logger.info(` - ${tag}`));
 
-  console.log('');
-  console.log(`Total                     : ${uniqueTags.length}`);
+  logger.info('');
+  logger.info(`Total                     : ${uniqueTags.length}`);
 
-  console.log('');
-  console.log('....................................');
-  console.log('');
+  logger.info('');
+  logger.info('....................................');
+  logger.info('');
 }

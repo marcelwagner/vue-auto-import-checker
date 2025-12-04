@@ -1,5 +1,9 @@
-import { describe, expect, test } from 'vitest';
-import { getTagFromLine } from './tags.ts';
+import { describe, expect, test, vi } from 'vitest';
+import { getTagFromLine } from './tags';
+
+vi.stubGlobal('logger', {
+  debug: vi.fn()
+});
 
 describe('tagUtils.ts', () => {
   describe('getTagFromLine', () => {

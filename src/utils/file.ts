@@ -1,4 +1,4 @@
-import fsPromise from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 
 /**
  * Read a file as UTF-8 text.
@@ -13,7 +13,7 @@ import fsPromise from 'node:fs/promises';
 export async function getFileContent(filePath: string) {
   try {
     // Read the file using UTF-8 encoding and return the resulting string.
-    return fsPromise.readFile(filePath, 'utf8');
+    return readFile(filePath, 'utf8');
   } catch (error) {
     // Normalize the rejection to a readable string so callers get a consistent error shape.
     return Promise.reject('Error getting file content ' + error);

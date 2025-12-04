@@ -1,11 +1,11 @@
-import fs from 'node:fs';
-import fsPromise from 'node:fs/promises';
-import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { appendFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 export async function vuetifyComponentsImporter(pwd: string) {
   try {
-    const vuetifyDirectory = path.join(pwd, 'node_modules/vuetify/lib/components');
-    const listOfDirectories = await fsPromise.readdir(vuetifyDirectory);
+    const vuetifyDirectory = join(pwd, 'node_modules/vuetify/lib/components');
+    const listOfDirectories = await readdir(vuetifyDirectory);
 
     const componentsList = [];
 
@@ -13,8 +13,8 @@ export async function vuetifyComponentsImporter(pwd: string) {
       const componentDir = dir.match(/^V[A-Z][a-zA-Z0-9]+/);
 
       if (componentDir) {
-        const indexFile = path.join(vuetifyDirectory, dir, `index.d.ts`);
-        const listOfComponents = await fsPromise.readFile(indexFile, 'utf8');
+        const indexFile = join(vuetifyDirectory, dir, `index.d.ts`);
+        const listOfComponents = await readFile(indexFile, 'utf8');
 
         for (const componentExport of listOfComponents.split('\n')) {
           const component = componentExport.match(/export \{ ([\w]+) \} [ ./a-zA-Z';]*/);
@@ -26,16 +26,16 @@ export async function vuetifyComponentsImporter(pwd: string) {
       }
     }
 
-    const vuetifyTagsFile = path.join(pwd, 'node_modules/.cache/vuetifyTags.json');
+    const vuetifyTagsFile = join(pwd, 'node_modules/.cache/vuetifyTags.json');
 
-    const localVuetifyTagsFileExists = fs.existsSync(vuetifyTagsFile);
-    const localDirExists = fs.existsSync(path.join(pwd, 'node_modules/.cache'));
+    const localVuetifyTagsFileExists = existsSync(vuetifyTagsFile);
+    const localDirExists = existsSync(join(pwd, 'node_modules/.cache'));
 
     if (!localDirExists) {
-      await fsPromise.mkdir(path.join(pwd, 'node_modules/.cache'));
+      await mkdir(join(pwd, 'node_modules/.cache'));
     }
 
-    await fsPromise[localVuetifyTagsFileExists ? 'writeFile' : 'appendFile'](
+    await (localVuetifyTagsFileExists ? writeFile : appendFile)(
       vuetifyTagsFile,
       `${JSON.stringify(componentsList, null, 2)}\n`,
       'utf8'

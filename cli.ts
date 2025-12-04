@@ -1,24 +1,24 @@
 #!/usr/bin/env -S npx tsx
 
 import { program } from 'commander';
-import path from 'node:path';
-import url from 'node:url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import checkForUnknownTags, {
+  createLogger,
+  frameworksTools,
   getComponentList,
-  getToolName,
+  getFrameworkList,
   getUniqueFromList,
-  isPossibleTool,
-  tools,
   writeComponents,
   writeFinalState,
   writeResult,
   writeStats,
   writeToolsResult
-} from './index.ts';
+} from './index';
 import packageJson from './package.json';
 
-const __filename = url.fileURLToPath(import.meta.url);
-const basePath = path.dirname(__filename);
+const __filename = fileURLToPath(import.meta.url);
+const basePath = dirname(__filename);
 
 // Configure CLI options with commander. Each option is documented in English
 // so users and maintainers can quickly understand expected inputs.
@@ -46,6 +46,7 @@ program
   .option('--nosvg', "don't ignore svg tags", false)
   .option('--novue', "don't ignore vue tags", false)
   .option('--novuerouter', "don't ignore vueRouter tags", false)
+  .option('--debug', 'show debug log', false)
   .version(packageJson.version, '-v, --version', 'output the current version');
 
 program.parse();
@@ -68,6 +69,9 @@ const showResult = Boolean(options.result);
 const componentsFile = String(options.componentsFile);
 const projectPath = String(options.projectPath);
 const tool: string = options.tool;
+const debug = Boolean(options.debug);
+
+createLogger(debug);
 
 // Main async entry: decide between running a tool, listing components or scanning a project.
 (async () => {
@@ -75,16 +79,16 @@ const tool: string = options.tool;
   // Tools are user-facing helpers that return tag lists (e.g. for frameworks/libraries).
   if (tool.length >= 1) {
     try {
-      if (!isPossibleTool(tool)) {
+      const possibleTool = frameworksTools[tool as Frameworks];
+
+      if (!possibleTool) {
         // commander will print a helpful error and exit
-        return program.error(`No tool found with the name ${tool} found.`, { exitCode: -1 });
+        return program.error(`No tool found with the name ${tool}.`, { exitCode: -1 });
       }
 
-      const toolName = getToolName(tool);
-      const toolFunction = tools[toolName as keyof typeof tools];
-
       // Execute the tool, passing current working directory as context.
-      const toolTags = await toolFunction(process.env?.PWD || '');
+      const toolTags = await possibleTool.tool(process.env?.PWD || '');
+      const toolName = tool.split('-')[1];
 
       if (!quiet) {
         // Print tool results unless quiet mode is enabled.
@@ -113,9 +117,7 @@ const tool: string = options.tool;
   if (componentsFile && !projectPath) {
     try {
       // Get the component list, passing current working directory & componentFile.
-      const componentsList = await getComponentList(
-        path.join(process.env?.PWD || '', componentsFile)
-      );
+      const componentsList = await getComponentList(join(process.env?.PWD || '', componentsFile));
 
       if (!quiet) {
         // Print components results unless quiet mode is enabled.
@@ -141,20 +143,21 @@ const tool: string = options.tool;
 
   // Otherwise run the full unknown-tag scan using provided project path and options.
   try {
+    const frameworks = getFrameworkList(vuetify, vueUse, quasar);
+
     const { unknownTags, stats } = await checkForUnknownTags({
-      componentsFile: path.join(process.env?.PWD || '', componentsFile),
-      projectPath: path.join(process.env?.PWD || '', projectPath),
-      userGeneratedPath: path.join(process.env?.PWD || '', 'node_modules/.cache'),
+      componentsFile: join(process.env?.PWD || '', componentsFile),
+      projectPath: join(process.env?.PWD || '', projectPath),
+      userGeneratedPath: join(process.env?.PWD || '', 'node_modules/.cache'),
       noHtml,
       noSvg,
       noVue,
       noVueRouter,
-      vuetify,
-      vueUse,
-      quasar,
+      frameworks,
       customTags,
-      customTagsFile: customTagsFile ? path.join(process.env?.PWD || '', customTagsFile) : '',
-      basePath
+      customTagsFile: customTagsFile ? join(process.env?.PWD || '', customTagsFile) : '',
+      basePath,
+      debug
     });
 
     // Aggregate unique tags and files for summary and optional reporting.

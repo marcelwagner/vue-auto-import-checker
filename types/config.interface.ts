@@ -8,9 +8,8 @@ export interface VAIC_Config {
   noSvg: boolean;
   noVue: boolean;
   noVueRouter: boolean;
-  vuetify: boolean;
-  vueUse: boolean;
-  quasar: boolean;
+  frameworks: Frameworks[];
   basePath: string;
   quiet?: boolean;
+  debug?: boolean;
 }

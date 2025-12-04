@@ -1,15 +1,20 @@
 export function writeToolsResult(toolName: string, toolTags: string[]) {
+  logger.debug('');
+  logger.debug('-----------------------------------');
+  logger.debug('Show Tool Result:');
+  logger.debug('');
+
   if (toolTags.length >= 1) {
-    console.log('');
-    console.log(`Found ${toolName} tag${toolTags.length ? 's' : ''}:`);
-    console.log('');
+    logger.info('');
+    logger.info(`Found ${toolName} tag${toolTags.length ? 's' : ''}:`);
+    logger.info('');
 
-    toolTags.forEach(tag => console.log(tag));
+    toolTags.forEach(tag => logger.info(tag));
 
-    console.log('');
-    console.log(`Found ${toolName} tag${toolTags.length ? 's' : ''}: ${toolTags.length}`);
-    console.log('');
+    logger.info('');
+    logger.info(`Found ${toolName} tag${toolTags.length ? 's' : ''}: ${toolTags.length}`);
+    logger.info('');
   } else {
-    console.log(`No ${toolName} tags found.`);
+    logger.info(`No ${toolName} tags found.`);
   }
 }

@@ -1,14 +1,14 @@
 {
   "exclude": [
-    "tests/data",
+    "tests",
     "node_modules",
-    "tsconfig.json"
+    "tsconfig.json",
+    "vitest.config.ts"
   ],
   "include": [
     "./*.ts",
     "./src/**/*.ts",
     "./types/**/*.ts",
-    "./tests/**/*.ts",
     "node_modules/vitest/globals.d.ts"
   ],
   "compilerOptions": {

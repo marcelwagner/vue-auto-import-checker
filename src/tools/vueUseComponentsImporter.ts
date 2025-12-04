@@ -1,24 +1,24 @@
-import fs from 'node:fs';
-import fsPromise from 'node:fs/promises';
-import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 export async function vueUseComponentsImporter(pwd: string) {
   try {
     // index.d.mts for vuetify 13.5.0
-    const indexMFile = path.join(pwd, 'node_modules/@vueuse/components/index.d.mts');
+    const indexMFile = join(pwd, 'node_modules/@vueuse/components/index.d.mts');
     // index.d.mts for vuetify 14.0.0
-    const indexFile = path.join(pwd, 'node_modules/@vueuse/components/dist/index.d.ts');
+    const indexFile = join(pwd, 'node_modules/@vueuse/components/dist/index.d.ts');
 
-    const indexMFileExists = fs.existsSync(indexMFile);
-    const indexFileExists = fs.existsSync(indexFile);
+    const indexMFileExists = existsSync(indexMFile);
+    const indexFileExists = existsSync(indexFile);
 
     if (!indexMFileExists && !indexFileExists) {
       return Promise.reject({ errorText: 'No index.d.ts or index.d.mts found' });
     }
 
     const listOfComponents = indexMFileExists
-      ? await fsPromise.readFile(indexMFile, 'utf8')
-      : await fsPromise.readFile(indexFile, 'utf8');
+      ? await readFile(indexMFile, 'utf8')
+      : await readFile(indexFile, 'utf8');
 
     const componentsList = [];
 
@@ -32,16 +32,16 @@ export async function vueUseComponentsImporter(pwd: string) {
       }
     }
 
-    const vueUseTagsFile = path.join(pwd, 'node_modules/.cache/vueUseTags.json');
+    const vueUseTagsFile = join(pwd, 'node_modules/.cache/vueUseTags.json');
 
-    const localVueUseTagsFileExists = fs.existsSync(vueUseTagsFile);
-    const localDirExists = fs.existsSync(path.join(pwd, 'node_modules/.cache'));
+    const localVueUseTagsFileExists = existsSync(vueUseTagsFile);
+    const localDirExists = existsSync(join(pwd, 'node_modules/.cache'));
 
     if (!localDirExists) {
-      await fsPromise.mkdir(path.join(pwd, 'node_modules/.cache'));
+      await mkdir(join(pwd, 'node_modules/.cache'));
     }
 
-    await fsPromise[localVueUseTagsFileExists ? 'writeFile' : 'appendFile'](
+    await (localVueUseTagsFileExists ? writeFile : appendFile)(
       vueUseTagsFile,
       `${JSON.stringify(componentsList, null, 2)}\n`,
       'utf8'

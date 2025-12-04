@@ -1,16 +1,16 @@
-import fsPromise from 'node:fs/promises';
-import path from 'node:path';
-
-import type { VAIC_Config } from '../types/config.interface.ts';
-import { getComponentList } from './getComponentList.ts';
+import { readdir } from 'node:fs/promises';
+import { join } from 'node:path';
+import type { VAIC_Config } from '../types/config.interface';
+import { getComponentList } from './getComponentList';
 import {
   addToUnknownTags,
+  createLogger,
   getFileContent,
   getIgnoreList,
   getJsonFileContent,
   getTagFromLine,
   isTagInIgnoreList
-} from './utils/index.ts';
+} from './utils/index';
 
 /**
  * Scan a project directory for unknown component tags used inside template blocks.
@@ -33,13 +33,12 @@ export default async function ({
   noSvg,
   noVue,
   noVueRouter,
-  vueUse,
-  vuetify,
-  quasar,
+  frameworks,
   customTags,
   customTagsFile,
   quiet,
-  basePath
+  basePath,
+  debug
 }: VAIC_Config): Promise<ComponentSearch> {
   /**
    * Process a single file: read content, detect template sections and collect unknown tags.
@@ -64,8 +63,10 @@ export default async function ({
     stats.templateFiles++;
 
     // Track whether the current line is inside a script or style block to skip them.
-    let script = false;
-    let style = false;
+    let scriptOpen = false;
+    let scriptClose = false;
+    let styleOpen = false;
+    let styleClose = false;
 
     // Split file into lines for indexed reporting.
     const linesOfFile = fileContent.split(/\n/);
@@ -73,39 +74,54 @@ export default async function ({
     linesOfFile.forEach((line: string, index: number) => {
       // Enter script block
       if (line.match(/<script[\w\W]*/)) {
-        script = true;
+        scriptOpen = true;
 
-        if (style) {
-          style = false;
+        if (styleOpen) {
+          styleClose = true;
         }
+
+        return;
       }
 
       // Exit script block
       if (line.match(/<\/script>/)) {
-        script = false;
+        scriptClose = true;
+        return;
       }
 
       // Enter style block
       if (line.match(/<style[\w\W]*/)) {
-        style = true;
+        styleOpen = true;
 
-        if (script) {
-          script = false;
+        if (scriptOpen) {
+          scriptClose = true;
         }
+
+        return;
       }
 
       // Exit style block
       if (line.match(/<\/style>/)) {
-        style = false;
-      }
-
-      // Skip lines that are inside script or style sections
-      if (script || style) {
+        styleClose = true;
         return;
       }
 
+      // Skip lines that are inside script or style sections
+      if ((scriptOpen && !scriptClose) || (styleOpen && !styleClose)) {
+        return;
+      }
+
+      logger.debug('');
+      logger.debug('----------------------------------- new line');
+      logger.debug('');
+      logger.debug(`getUnknownTags.ts -> default - getUnknownTagsFromFile line will be processed`);
+      logger.debug(`line: "${line}"`);
+      logger.debug('');
+
       // Extract candidate tags from the template line
       const tagListRaw = getTagFromLine(line);
+
+      logger.debug(`getUnknownTags.ts -> getUnknownTagsFromFile - tagListRaw ${tagListRaw}`);
 
       // No matching tag found in line
       if (tagListRaw.length <= 0) {
@@ -148,10 +164,10 @@ export default async function ({
   ) => {
     stats.dirCounter++;
 
-    const entries = await fsPromise.readdir(directoryPath, { withFileTypes: true });
+    const entries = await readdir(directoryPath, { withFileTypes: true });
 
     for (const entry of entries) {
-      const fullPath = path.join(directoryPath, entry.name);
+      const fullPath = join(directoryPath, entry.name);
 
       if (entry.isFile()) {
         // Process file
@@ -181,6 +197,10 @@ export default async function ({
     }
   };
 
+  if (!global?.logger) {
+    createLogger(Boolean(debug));
+  }
+
   // Record start time for stats and performance measurement
   const startTime = Date.now();
 
@@ -203,9 +223,7 @@ export default async function ({
     noSvg,
     noVue,
     noVueRouter,
-    vuetify,
-    vueUse,
-    quasar,
+    frameworks,
     customTags,
     customTagsFileContent,
     userGeneratedPath,

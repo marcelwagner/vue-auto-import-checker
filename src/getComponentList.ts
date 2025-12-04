@@ -1,5 +1,5 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 /**
  * Read a TypeScript declaration file and extract component tags from the
@@ -17,10 +17,10 @@ import path from 'node:path';
 export async function getComponentList(componentsFilePath: string): Promise<ComponentTag[]> {
   try {
     // Ensure the provided path is normalized and ready for reading.
-    const componentsFile = path.join(componentsFilePath);
+    const componentsFile = join(componentsFilePath);
 
     // Read file content as text.
-    const componentsFileContent = await fs.readFile(componentsFile, 'utf8');
+    const componentsFileContent = await readFile(componentsFile, 'utf8');
 
     // Find the exported GlobalComponents interface block. The regex targets:
     // "export interface GlobalComponents { <anything until matching closing brace> }"
@@ -45,6 +45,9 @@ export async function getComponentList(componentsFilePath: string): Promise<Comp
           componentsList.push({ tag: rawMatch.toLowerCase(), rawTag: rawMatch });
         });
     }
+
+    logger.debug(`getComponentList.ts -> getComponentList - componentsList`);
+    logger.debug(JSON.stringify(componentsList, null, 2));
 
     // Return the extracted list (caller expects ComponentTag[]).
     return componentsList;

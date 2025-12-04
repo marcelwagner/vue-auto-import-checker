@@ -34,11 +34,23 @@ type IgnoreListConfig = {
   noSvg: boolean;
   noVue: boolean;
   noVueRouter: boolean;
-  vuetify: boolean;
-  vueUse: boolean;
-  quasar: boolean;
+  frameworks: Frameworks[];
   customTags: string[];
   customTagsFileContent: string[];
   userGeneratedPath: string;
   basePath: string;
 };
+
+type FrameworkTools = {
+  [name: string]: FrameworkToolItem;
+};
+
+type FrameworkToolItem = {
+  name: string;
+  file: string;
+  toolName: string;
+  tool: (pwd: string) => Promise<string[]>;
+  tags: string[];
+};
+
+type Frameworks = 'vuetify' | 'vueUse' | 'quasar';
