@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import checkForUnknownTags, {
   createLogger,
-  frameworksTools,
+  findFrameworkByToolName,
   getComponentList,
   getFrameworkList,
   getUniqueFromList,
@@ -42,6 +42,7 @@ program
   .option('--vuetify', 'ignore vuetify tags', false)
   .option('--vueuse', 'ignore vueUse tags', false)
   .option('--quasar', 'ignore quasar tags', false)
+  .option('--nuxt', 'ignore nuxt tags', false)
   .option('--nohtml', "don't ignore html tags", false)
   .option('--nosvg', "don't ignore svg tags", false)
   .option('--novue', "don't ignore vue tags", false)
@@ -58,6 +59,7 @@ const quiet = Boolean(options.quiet);
 const vuetify = Boolean(options.vuetify);
 const vueUse = Boolean(options.vueuse);
 const quasar = Boolean(options.quasar);
+const nuxt = Boolean(options.nuxt);
 const noHtml = Boolean(options.nohtml);
 const noSvg = Boolean(options.nosvg);
 const noVue = Boolean(options.novue);
@@ -77,9 +79,9 @@ createLogger(debug);
 (async () => {
   // If a tool was requested, run the tool flow.
   // Tools are user-facing helpers that return tag lists (e.g. for frameworks/libraries).
-  if (tool.length >= 1) {
+  if (tool) {
     try {
-      const possibleTool = frameworksTools[tool as Frameworks];
+      const possibleTool = findFrameworkByToolName(tool);
 
       if (!possibleTool) {
         // commander will print a helpful error and exit
@@ -88,7 +90,7 @@ createLogger(debug);
 
       // Execute the tool, passing current working directory as context.
       const toolTags = await possibleTool.tool(process.env?.PWD || '');
-      const toolName = tool.split('-')[1];
+      const toolName = tool.split('-')[0];
 
       if (!quiet) {
         // Print tool results unless quiet mode is enabled.
@@ -143,7 +145,7 @@ createLogger(debug);
 
   // Otherwise run the full unknown-tag scan using provided project path and options.
   try {
-    const frameworks = getFrameworkList(vuetify, vueUse, quasar);
+    const frameworks = getFrameworkList(vuetify, vueUse, quasar, nuxt);
 
     const { unknownTags, stats } = await checkForUnknownTags({
       componentsFile: join(process.env?.PWD || '', componentsFile),

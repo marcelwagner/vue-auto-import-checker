@@ -1,6 +1,6 @@
-import { existsSync } from 'node:fs';
-import { appendFile, mkdir, readdir, readFile, writeFile } from 'node:fs/promises';
+import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { writeCustomPluginFile } from '../utils';
 
 export async function vuetifyComponentsImporter(pwd: string) {
   try {
@@ -26,19 +26,10 @@ export async function vuetifyComponentsImporter(pwd: string) {
       }
     }
 
-    const vuetifyTagsFile = join(pwd, 'node_modules/.cache/vuetifyTags.json');
-
-    const localVuetifyTagsFileExists = existsSync(vuetifyTagsFile);
-    const localDirExists = existsSync(join(pwd, 'node_modules/.cache'));
-
-    if (!localDirExists) {
-      await mkdir(join(pwd, 'node_modules/.cache'));
-    }
-
-    await (localVuetifyTagsFileExists ? writeFile : appendFile)(
-      vuetifyTagsFile,
-      `${JSON.stringify(componentsList, null, 2)}\n`,
-      'utf8'
+    await writeCustomPluginFile(
+      join(pwd, 'node_modules/.cache'),
+      'vuetifyTags.json',
+      componentsList
     );
 
     return componentsList;

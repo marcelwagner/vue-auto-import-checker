@@ -1,9 +1,11 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
+import { default as nuxtTags } from '../plugins/nuxtTags.json';
 import { default as quasarTags } from '../plugins/quasarTags.json';
 import { default as vuetifyTags } from '../plugins/vuetifyTags.json';
 import { default as vueUseTags } from '../plugins/vueUseTags.json';
 import {
+  nuxtComponentsImporter,
   quasarComponentsImporter,
   vuetifyComponentsImporter,
   vueUseComponentsImporter
@@ -14,12 +16,12 @@ export async function getFrameworkTags(frameworks: Frameworks[], userGeneratedPa
   const allLists = await Promise.all(
     frameworks.map(framework => {
       return new Promise(resolve => {
-        const isFramework = frameworks.includes(frameworksTools[framework].name as Frameworks);
+        const isFramework = frameworks.includes(findFrameworkByName(framework)?.name as Frameworks);
         resolve(
           isFramework
             ? getCustomTagList(
                 framework,
-                join(userGeneratedPath, `${frameworksTools[framework].file}${toolsFileExt}`)
+                join(userGeneratedPath, `${findFrameworkByName(framework)?.file}${toolsFileExt}`)
               )
             : []
         );
@@ -30,11 +32,17 @@ export async function getFrameworkTags(frameworks: Frameworks[], userGeneratedPa
   return allLists.flat() as string[];
 }
 
-export function getFrameworkList(vuetify: boolean, vueUse: boolean, quasar: boolean) {
+export function getFrameworkList(
+  vuetify: boolean,
+  vueUse: boolean,
+  quasar: boolean,
+  nuxt: boolean
+) {
   return [
-    ...((vuetify ? [frameworksTools['vuetify'].name] : []) as Frameworks[]),
-    ...((vueUse ? [frameworksTools['vueUse'].name] : []) as Frameworks[]),
-    ...((quasar ? [frameworksTools['quasar'].name] : []) as Frameworks[])
+    ...((vuetify ? ['vuetify'] : []) as Frameworks[]),
+    ...((vueUse ? ['vueUse'] : []) as Frameworks[]),
+    ...((quasar ? ['quasar'] : []) as Frameworks[]),
+    ...((nuxt ? ['nuxt'] : []) as Frameworks[])
   ];
 }
 
@@ -60,7 +68,7 @@ export async function getCustomTagList(framework: Frameworks, file: string) {
   // If a user file exists, load and return it; otherwise return null
   return localPluginFileExists
     ? await getJsonFileContent(localPluginFile)
-    : frameworksTools[framework].tags;
+    : findFrameworkByName(framework)?.tags || [];
 }
 
 /**
@@ -70,28 +78,43 @@ export async function getCustomTagList(framework: Frameworks, file: string) {
  * perform tool-specific operations. Keys must match the values produced by
  * `getToolName`.
  */
-export const frameworksTools: FrameworkTools = {
-  vuetify: {
+export const frameworksTools: FrameworkToolItem[] = [
+  {
     name: 'vuetify',
     file: 'vuetifyTags',
     toolName: 'vuetify-importer',
     tool: vuetifyComponentsImporter,
     tags: vuetifyTags
   },
-  vueUse: {
+  {
     name: 'vueUse',
     file: 'vueUseTags',
     toolName: 'vueuse-importer',
     tool: vueUseComponentsImporter,
     tags: vueUseTags
   },
-  quasar: {
+  {
     name: 'quasar',
     file: 'quasarTags',
     toolName: 'quasar-importer',
     tool: quasarComponentsImporter,
     tags: quasarTags
+  },
+  {
+    name: 'nuxt',
+    file: 'nuxtTags',
+    toolName: 'nuxt-importer',
+    tool: nuxtComponentsImporter,
+    tags: nuxtTags
   }
-};
+];
+
+export function findFrameworkByName(name: string) {
+  return frameworksTools.find(framework => framework.name === name);
+}
+
+export function findFrameworkByToolName(toolName: string) {
+  return frameworksTools.find(framework => framework.toolName === toolName);
+}
 
 export const toolsFileExt = '.json';

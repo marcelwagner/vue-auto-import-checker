@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
-import { appendFile, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { writeCustomPluginFile } from '../utils';
 
 export async function vueUseComponentsImporter(pwd: string) {
   try {
@@ -32,23 +33,14 @@ export async function vueUseComponentsImporter(pwd: string) {
       }
     }
 
-    const vueUseTagsFile = join(pwd, 'node_modules/.cache/vueUseTags.json');
-
-    const localVueUseTagsFileExists = existsSync(vueUseTagsFile);
-    const localDirExists = existsSync(join(pwd, 'node_modules/.cache'));
-
-    if (!localDirExists) {
-      await mkdir(join(pwd, 'node_modules/.cache'));
-    }
-
-    await (localVueUseTagsFileExists ? writeFile : appendFile)(
-      vueUseTagsFile,
-      `${JSON.stringify(componentsList, null, 2)}\n`,
-      'utf8'
+    await writeCustomPluginFile(
+      join(pwd, 'node_modules/.cache'),
+      'vueUseTags.json',
+      componentsList
     );
 
     return componentsList;
   } catch (error) {
-    return Promise.reject({ errorText: 'Error importing Vuetify components:' + error });
+    return Promise.reject({ errorText: 'Error importing VueUse components:' + error });
   }
 }

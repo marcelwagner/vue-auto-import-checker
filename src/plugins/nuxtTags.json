@@ -1,0 +1,22 @@
+[
+  "NuxtClientFallback",
+  "NuxtClientFallback",
+  "ClientOnly",
+  "DevOnly",
+  "error-404",
+  "error-500",
+  "IslandRenderer",
+  "nuxt-error-boundary",
+  "nuxt-error-page",
+  "NuxtIsland",
+  "LayoutLoader",
+  "NuxtLoadingIndicator",
+  "nuxt-root",
+  "NuxtRouteAnnouncer",
+  "NuxtTeleportIslandComponent",
+  "NuxtTeleportIslandSlot",
+  "nuxt-time",
+  "ServerPlaceholder",
+  "NuxtTestComponentWrapper",
+  "welcome"
+]

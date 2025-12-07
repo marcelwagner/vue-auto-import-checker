@@ -1,4 +1,6 @@
-import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 
 /**
  * Read a file as UTF-8 text.
@@ -40,4 +42,29 @@ export async function getJsonFileContent(filePath: string): Promise<string[]> {
     // Provide a consistent rejection message for callers to handle.
     return Promise.reject('Error getting json file content ' + error);
   }
+}
+
+export async function writeCustomPluginFile(
+  dir: string,
+  tagsFile: string,
+  componentsList: string[]
+) {
+  const localDirExists = existsSync(dir);
+
+  logger.debug(`localDir ${dir} exists ${localDirExists}`);
+
+  if (!localDirExists) {
+    logger.debug(`localDir ${dir} will be made`);
+
+    await mkdir(dir);
+  }
+
+  const localTagsFile = join(dir, tagsFile);
+
+  logger.debug('localTagsFile', localTagsFile);
+
+  await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
+    flag: 'w+',
+    encoding: 'utf-8'
+  });
 }

@@ -30,13 +30,14 @@ Choose also if the checker should ignore other tags of famous frameworks. Curren
 - `vuetify` (currently v3.8.3)*
 - `VueUse` (currently v13.5.0)*
 - `quasar` (currently v1.15.8)*
+- `nuxt` (currently v4.2.1)*
 - others are work in progress ...
 
 But you can provide your own list by passing a `customtagsfile` in json format with your individual ignore tags.
 
-You can also use the importer tools to use your own list of tags for `vuetify`, `VueUse` & `quasars`.
+You can also use the importer tools to use your own list of tags for `vuetify`, `VueUse`, `quasars` & `nuxt`.
 
-\*See the *[Usage](#usage)* section for more `vuetify`, `VueUse` & `quasar` related information.
+\*See the *[Usage](#usage)* section for more `vuetify`, `VueUse`, `quasar` & `nuxt` related information.
 
 ## Requirements
 
@@ -64,6 +65,7 @@ We recommend using:
 | `--vuetify`                         | —     | Ignore Vuetify tags                                  | `false`                |
 | `--vueuse`                          | —     | Ignore VueUse tags                                   | `false`                |
 | `--quasar`                          | —     | Ignore quasar tags                                   | `false`                |
+| `--nuxt`                            | —     | Ignore nuxt tags                                     | `false`                |
 | `--novue`                           | —     | Do not ignore Vue tags                               | `false`                |
 | `--novuerouter`                     | —     | Do not ignore VueRouter tags                         | `false`                |
 | `--nosvg`                           | —     | Do not ignore svg element tags                       | `false`                |
@@ -133,6 +135,24 @@ from your current `quasar` version. (tested with quasar v1.15.8)
 This will add a folder (.cache) to your node_modules folder.
 
 Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which
+version the importer works.
+
+### Nuxt >= 4.2.1
+
+We provide a list of `nuxt` tags from version `4.2.1` out of the box.
+
+But you can import your own set of tags by using the `nuxt-importer` tool.
+
+``` bash
+ npx vue-auto-import-checker -t nuxt-importer
+```
+
+This will add a new `nuxt` tag-list from your actual `nuxt` implementation, so that the checker ignores all `nuxt` tags
+from your current `nuxt` version. (tested with Nuxt v4.2.1)
+
+This will add a folder (.cache) to your node_modules folder.
+
+Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/12), for which
 version the importer works.
 
 ### Node.js

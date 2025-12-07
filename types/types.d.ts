@@ -41,10 +41,6 @@ type IgnoreListConfig = {
   basePath: string;
 };
 
-type FrameworkTools = {
-  [name: string]: FrameworkToolItem;
-};
-
 type FrameworkToolItem = {
   name: string;
   file: string;
@@ -53,4 +49,4 @@ type FrameworkToolItem = {
   tags: string[];
 };
 
-type Frameworks = 'vuetify' | 'vueUse' | 'quasar';
+type Frameworks = 'vuetify' | 'vueUse' | 'quasar' | 'nuxt';
