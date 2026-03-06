@@ -1,7 +1,15 @@
-type UnknownTags = {
+type Tag = {
   line: number;
   tagName: string;
   lines: UnknownTagLine[];
+  file: string;
+  known: boolean;
+  knownSource: KnownSource[];
+};
+
+type KnownSource = {
+  source: Source;
+  known: boolean;
   file: string;
 };
 
@@ -18,35 +26,78 @@ type Stats = {
   endTime: number;
 };
 
-type ComponentTag = {
-  tag: string;
-  rawTag: string;
+type WriteStatsProps = {
+  stats: Stats;
+  filesList: string[];
+  tagsList: Tag[];
+  uniqueTagsList: string[];
+  showResult: boolean;
+  unknownTagsList?: Tag[];
+};
+
+type ComponentImport = {
+  component: string[];
+  path: string;
 };
 
 type ComponentSearch = {
   stats: Stats;
-  unknownTags: UnknownTags[];
+  tagsList: Tags[];
+  unknownTagsList: Tag[];
   componentsList: ComponentList[];
 };
 
-type IgnoreListConfig = {
-  noHtml: boolean;
-  noSvg: boolean;
-  noVue: boolean;
-  noVueRouter: boolean;
-  frameworks: Frameworks[];
-  customTags: string[];
-  customTagsFileContent: string[];
-  userGeneratedPath: string;
-  basePath: string;
+type KnownListConfig = {
+  negateKnown: NoIgnore[];
+  knownFrameworks: Framework[];
+  knownTags: string[];
+  knownTagsFile: string;
+  cachePath: string;
+};
+
+type KnownList = {
+  name: Source;
+  tags: string[];
+  known: boolean;
+  file: string;
 };
 
 type FrameworkToolItem = {
   name: string;
   file: string;
-  toolName: string;
-  tool: (pwd: string) => Promise<string[]>;
+  tool: (pwd: string, userGeneratedPath: string) => Promise<string[]>;
   tags: string[];
+  source: string;
 };
 
-type Frameworks = 'vuetify' | 'vueUse' | 'quasar' | 'nuxt';
+type BaseTags = {
+  name: string;
+  tags: string[];
+  source: string;
+};
+
+type CommanderInit = {
+  knownFrameworks: string[];
+  negateKnown: string[];
+  knownTags: string[];
+  knownTagsFile: string;
+
+  showStats: boolean;
+  showResult: boolean;
+  componentsFile: string;
+  projectPath: string;
+
+  tool: string;
+  cachePath: string;
+
+  kafka: boolean;
+
+  importsKnown: boolean;
+  quiet: boolean;
+  debug: boolean;
+};
+
+type Framework = 'vuetify' | 'vueuse' | 'quasar' | 'nuxt' | 'primevue' | 'naiveui';
+type Known = 'html' | 'svg' | 'vue' | 'vuerouter';
+type UserGenerated = 'cli' | 'file';
+type Source = Framework | Known | UserGenerated | 'import' | 'components' | 'unknown';

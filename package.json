@@ -1,21 +1,21 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Check if the used components in templates are all registered within your components.d.ts",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "vitest run --reporter=tree",
     "test:watch": "vitest --reporter=tree",
     "lint": "oxlint --tsconfig=tsconfig.json",
     "tsc": "tsc --noEmit",
-    "build": "tsc --outDir ./dist"
+    "build": "tsc --build"
   },
   "engines": {
     "node": ">=20.19.1",
     "npm": ">=10.8.2"
   },
   "bin": {
-    "vue-auto-import-checker": "cli.ts"
+    "vue-auto-import-checker": "cli.js"
   },
   "keywords": [
     "vue",
@@ -23,6 +23,8 @@
     "vuuse",
     "quasar",
     "nuxt",
+    "naive-ui",
+    "primevue",
     "vue-router",
     "unplugin",
     "components.d.ts",
@@ -50,23 +52,25 @@
   },
   "type": "module",
   "devDependencies": {
-    "@vueuse/components": "13.5.0",
-    "nuxt": "^4.2.1",
-    "oxlint": "^1.28.0",
-    "prettier": "^3.6.2",
+    "@types/node": "^20.19.1",
+    "oxlint": "^1.51.0",
+    "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
-    "quasar": "1.15.8",
-    "vitest": "^4.0.14",
-    "vuetify": "3.8.3"
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@types/node": "24.10.1",
-    "commander": "14.0.2",
-    "dotenv": "17.2.3",
+    "commander": "14.0.3",
     "html-tags": "5.1.0",
     "svg-tag-names": "3.0.1",
-    "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "winston": "3.18.3"
+    "winston": "3.19.0"
+  },
+  "optionalDependencies": {
+    "primevue": "^4.5.4",
+    "quasar": "^2.18.6",
+    "vuetify": "^4.0.1",
+    "naive-ui": "^2.43.2",
+    "nuxt": "^4.3.1",
+    "@vueuse/components": "^14.2.1"
   }
 }

@@ -1,0 +1,66 @@
+import { existsSync } from 'node:fs';
+import { readFile } from 'node:fs/promises';
+import { join } from 'node:path';
+
+/**
+ * Read a TypeScript declaration file and extract component tags from the
+ * exported `GlobalComponents` interface.
+ *
+ * Behavior:
+ * - Resolve the provided path to the components file and read it as UTF-8 text.
+ * - Use a regular expression to locate the `export interface GlobalComponents { ... }` block.
+ * - Strip the surrounding interface boilerplate and split the block into lines.
+ * - For each line, normalize and extract the tag name (both raw and lowercased).
+ *
+ * @param basePath - path to the project root
+ * @param componentsFile - path pointing to the components declaration file
+ * @returns promise resolving to an array of objects with `tag` (lowercased) and `rawTag`
+ */
+export async function getKnownComponentList(
+  basePath: string,
+  componentsFile: string
+): Promise<string[]> {
+  const componentsFilePath = join(basePath, componentsFile);
+
+  if (!existsSync(componentsFilePath)) {
+    return Promise.reject({ errorText: `Components file not found: ${componentsFilePath}` });
+  }
+
+  try {
+    // Read file content as text.
+    const componentsFileContent: string = await readFile(componentsFilePath, 'utf8');
+
+    // Find the exported GlobalComponents interface block. The regex targets:
+    // "export interface GlobalComponents { <anything until matching closing brace> }"
+    const componentsListRaw: RegExpMatchArray | null = componentsFileContent.match(
+      /[\W]*export interface GlobalComponents \{\W[\w\W][^}]+\W  \}/m
+    );
+
+    // Accumulator for parsed component entries.
+    const componentsList: string[] = [];
+
+    if (componentsListRaw?.[0]) {
+      // Remove the interface header and trailing brace, then split into lines.
+      componentsListRaw[0]
+        .replace(/[\W]*export interface GlobalComponents \{\W/, '')
+        .replace(/[\W]*\}/, '')
+        .split(/\n/)
+        .forEach((line: string): void => {
+          // Trim whitespace and remove the TypeScript type suffix that looks like:
+          // ": typeof import('...')"
+          const rawMatch = line.trim().replace(/: typeof import\('[a-zA-Z0-9-./'[\]()",]+/, '');
+          // Store both the raw tag and a normalized lowercased version.
+          componentsList.push(rawMatch);
+        });
+    }
+
+    logger.debug(`Componentlist from file ${componentsFilePath}:`);
+    logger.debug(JSON.stringify(componentsList, null, 2));
+
+    // Return the extracted list (caller expects ComponentTag[]).
+    return componentsList;
+  } catch (error) {
+    // Propagate a structured rejection so callers can handle errors consistently.
+    return Promise.reject({ errorText: `Error in getComponentList: ${error}` });
+  }
+}

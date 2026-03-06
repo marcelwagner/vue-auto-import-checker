@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import ToolingIcon from '@/components/icons/IconTooling.vue';
+import {
+  default as ToolingIcon1,
+  default as ToolingIcon2,
+  default as ToolingIcon3
+} from '@/components/icons/IconTooling.vue';
+import { default as ToolingIcon4 } from '@/components/icons/IconTooling.vue';
 
 const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
 </script>
@@ -19,6 +25,10 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
   <WelcomeItem>
     <template #icon>
       <ToolingIcon />
+      <ToolingIcon1 />
+      <ToolingIcon2 />
+      <ToolingIcon3 />
+      <ToolingIcon4 />
     </template>
     <template #heading>Tooling</template>
 

@@ -18,7 +18,9 @@ export async function getFileContent(filePath: string) {
     return readFile(filePath, 'utf8');
   } catch (error) {
     // Normalize the rejection to a readable string so callers get a consistent error shape.
-    return Promise.reject('Error getting file content ' + error);
+    return Promise.reject(
+      `Error getting file content from file ${filePath} ` + JSON.stringify(error)
+    );
   }
 }
 
@@ -40,7 +42,9 @@ export async function getJsonFileContent(filePath: string): Promise<string[]> {
     return JSON.parse(jsonFileContent);
   } catch (error) {
     // Provide a consistent rejection message for callers to handle.
-    return Promise.reject('Error getting json file content ' + error);
+    return Promise.reject(
+      `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
+    );
   }
 }
 
@@ -49,22 +53,21 @@ export async function writeCustomPluginFile(
   tagsFile: string,
   componentsList: string[]
 ) {
-  const localDirExists = existsSync(dir);
+  if (componentsList.length >= 1) {
+    const localDirExists = existsSync(dir);
 
-  logger.debug(`localDir ${dir} exists ${localDirExists}`);
+    if (!localDirExists) {
+      logger.debug(`localDir ${dir} will be made`);
+      await mkdir(dir);
+    }
 
-  if (!localDirExists) {
-    logger.debug(`localDir ${dir} will be made`);
+    const localTagsFile = join(dir, tagsFile);
 
-    await mkdir(dir);
+    logger.debug('localTagsFile', localTagsFile);
+
+    await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
+      flag: 'w+',
+      encoding: 'utf-8'
+    });
   }
-
-  const localTagsFile = join(dir, tagsFile);
-
-  logger.debug('localTagsFile', localTagsFile);
-
-  await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
-    flag: 'w+',
-    encoding: 'utf-8'
-  });
 }

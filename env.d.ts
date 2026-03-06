@@ -5,4 +5,6 @@ declare global {
   // eslint-disable-next-line no-var
   var debug: boolean;
   var logger: Logger;
+  var stats: Stats;
+  var quiet: boolean;
 }

@@ -1,0 +1,10 @@
+export { htmlTags } from "./htmlTags.js";
+export { default as naiveuiTags } from './naiveuiTags.json' with { type: 'json' };
+export { default as nuxtTags } from './nuxtTags.json' with { type: 'json' };
+export { default as primevueTags } from './primevueTags.json' with { type: 'json' };
+export { default as quasarTags } from './quasarTags.json' with { type: 'json' };
+export { svgTags } from "./svgTags.js";
+export { default as vueRouterTags } from './vueRouterTags.json' with { type: 'json' };
+export { default as vueTags } from './vueTags.json' with { type: 'json' };
+export { default as vuetifyTags } from './vuetifyTags.json' with { type: 'json' };
+export { default as vueUseTags } from './vueUseTags.json' with { type: 'json' };

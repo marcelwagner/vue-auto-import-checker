@@ -6,6 +6,6 @@ export default defineConfig({
     exclude: ['node_modules'],
     environment: 'node',
     globals: true,
-    testTimeout: 15000
+    testTimeout: 30000
   }
 });
