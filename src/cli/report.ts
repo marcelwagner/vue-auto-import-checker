@@ -1,3 +1,8 @@
+/**
+ * Format the line index for better readability.
+ * @param index
+ * @param lastIndex
+ */
 export function getLineIndexAsString(index: number, lastIndex: number) {
   const lastDiff10 = Math.floor(lastIndex / 10);
   const lastDiff100 = Math.floor(lastIndex / 100);

@@ -6,8 +6,8 @@
 * [Description](#description)
 * [Requirements](#requirements)
 * [Installation](#installation)
-* [CLI Options](#cli-options)
 * [Usage](#usage)
+* [CLI Options](#cli-options)
 * [Known Framework tags](#known-framework-tags)
 * [Examples](#examples)
 * [CI/CD Integration](#cicd-integration)
@@ -19,13 +19,13 @@
 
 ## Description
 
-A CLI tool that checks whether every tag used in your Vue templates is either properly registered in `components.d.ts`
+A CLI tool that checks if every tag used in your Vue templates is either properly registered in `components.d.ts`
 when using [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) (or similar auto-import setups), 
 is a tag from a standard library like `HTML`, `SVG`, `Vue`, `VueRouter` or a tag from a framework like `Vuetify`, `Nuxt` 
-or else.
+or similar.
 
 You can configure which tag-sets the checker should handle like they are known. `HTML`, `Vue`, `VueRouter` and `SVG` 
-tags are known by default. You can remove them from the known list if needed.
+tags are known by default, but you can remove them from the known list if needed.
 
 To have a framework on the known list, you only need to provide the name. Lookup what we support at the moment (nuxt, 
 primevue, vuetify, ...) in the section [Known Framework tags](#known-framework-tags).
@@ -34,7 +34,7 @@ It is also possible to provide your own list of known tags by having a `customta
 of tags.
 
 You can also use the importer tools to use your own list of tags for `vuetify`, `VueUse`, `quasars`, `nuxt`, `naive-UI` 
-and `primevVue` if your version is not yet supported by the tool.
+and `primevVue`, if your version is not yet supported by the tool.
 
 ## Requirements
 

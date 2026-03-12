@@ -12,7 +12,7 @@ Currently, we support:
 ## Usage
 
 ``` bash
- npx vue-auto-import-checker -t primevue-importer
+ npx vue-auto-import-checker -t primevue
 ```
 
 Use your tags from the specific version, that your project is using by using an importer.
@@ -35,5 +35,5 @@ Depending on, which framework you are using in project, add the strings to the c
  npx vue-auto-import-checker \
  -c ./tests/data/vue-test-project/components.d.ts \
  -p ./tests/data/vue-test-project/src/ \
- --ignore primevue
+ --f primevue
 ```

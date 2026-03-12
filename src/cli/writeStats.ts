@@ -1,3 +1,11 @@
+/**
+ * Write the stats to the console.
+ * @param stats
+ * @param filesList
+ * @param tagsList
+ * @param uniqueTagsList
+ * @param showResult
+ */
 export function writeStats({
   stats,
   filesList,

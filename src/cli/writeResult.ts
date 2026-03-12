@@ -1,5 +1,10 @@
 import { getLineIndexAsString } from './index.ts';
 
+/**
+ * Write the result to the console.
+ * @param tags
+ * @param kafka
+ */
 export function writeResult(tags: Tag[], kafka: boolean) {
   let currentFile = '';
 

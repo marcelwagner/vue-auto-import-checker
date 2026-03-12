@@ -11,7 +11,7 @@ Currently, we support:
 ## Usage
 
 ``` bash
- npx vue-auto-import-checker -t naiveui-importer
+ npx vue-auto-import-checker -t naiveui
 ```
 
 Use your tags from the specific version, that your project is using by using this importer.
@@ -34,5 +34,5 @@ Depending on, which framework you are using in project, add the strings to the c
  npx vue-auto-import-checker \
  -c ./tests/data/vue-test-project/components.d.ts \
  -p ./tests/data/vue-test-project/src/ \
- --ignore naiveui
+ --f naiveui
 ```

@@ -3,6 +3,11 @@ import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
+/**
+ * Imports all naiveui components from the naive-ui library
+ * @param basePath
+ * @param cachePath
+ */
 export async function naiveuiComponentsImporter(basePath: string, cachePath: string) {
   try {
     const naiveuiDirectory = join(basePath, 'node_modules/naive-ui/lib');

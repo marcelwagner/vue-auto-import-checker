@@ -3,6 +3,11 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
+/**
+ * Imports all nuxt components from the nuxt library
+ * @param basePath
+ * @param cachePath
+ */
 export async function nuxtComponentsImporter(basePath: string, cachePath: string) {
   try {
     const nuxtDirectory = join(basePath, 'node_modules/nuxt/dist/app/components');

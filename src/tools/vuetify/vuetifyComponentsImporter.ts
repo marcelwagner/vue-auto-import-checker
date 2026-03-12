@@ -3,6 +3,11 @@ import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
+/**
+ * Imports all vuetify components from the vuetify library
+ * @param basePath
+ * @param cachePath
+ */
 export async function vuetifyComponentsImporter(basePath: string, cachePath: string) {
   try {
     const vuetifyDirectory = join(basePath, 'node_modules/vuetify/lib/components');

@@ -3,6 +3,11 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
+/**
+ * Imports all quasar components from the quasar library
+ * @param basePath
+ * @param cachePath
+ */
 export async function quasarComponentsImporter(basePath: string, cachePath: string) {
   try {
     const componentsFile = join(basePath, 'node_modules/quasar/src/components.js');

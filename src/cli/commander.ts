@@ -1,12 +1,11 @@
 import { program } from 'commander';
 import { defaultCachePath, packageJson } from '../config/index.ts';
 
+/**
+ * Initialize and parse command-line arguments.
+ * @returns an object containing parsed CLI options
+ **/
 export function prepareCommander(): CommanderInit {
-  // Configure CLI with commander. Each option declaration includes a helpful
-  // English description so users and maintainers understand expected inputs.
-  //
-  // Note: commander converts kebab-case option names to camelCase properties on
-  // the parsed `options` object (e.g. `--custom-tags` -> `options.customTags`).
   program
     .option(
       '-c, --components-file <file>',

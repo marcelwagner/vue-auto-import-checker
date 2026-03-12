@@ -1,3 +1,7 @@
+/**
+ * Write the list of components to the console.
+ * @param componentsList
+ */
 export function writeComponents(componentsList: string[]) {
   if (componentsList.length >= 1) {
     logger.info('');

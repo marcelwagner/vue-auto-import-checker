@@ -3,6 +3,11 @@ import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
+/**
+ * Imports all primevue components from the primevue library
+ * @param basePath
+ * @param cachePath
+ */
 export async function primevueComponentsImporter(basePath: string, cachePath: string) {
   try {
     const primevueDirectory = join(basePath, 'node_modules/primevue');

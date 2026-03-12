@@ -3,6 +3,11 @@ import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
+/**
+ * Imports all vueUse components from the vueUse library
+ * @param basePath
+ * @param cachePath
+ */
 export async function vueUseComponentsImporter(basePath: string, cachePath: string) {
   try {
     // index.d.mts for vuetify 13.5.0

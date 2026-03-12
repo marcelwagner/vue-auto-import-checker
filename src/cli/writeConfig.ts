@@ -1,5 +1,10 @@
 import type { VAIC_Config } from '../../types/config.interface.ts';
 
+/**
+ * Write the config to the console.
+ * @param config
+ * @param showResult
+ */
 export function writeConfig(config: VAIC_Config, showResult: boolean) {
   if (showResult) {
     logger.info('....................................');

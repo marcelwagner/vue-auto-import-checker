@@ -1,3 +1,8 @@
+/**
+ * Write the tool result to the console.
+ * @param toolName
+ * @param toolTags
+ */
 export function writeToolsResult(toolName: string, toolTags: string[]) {
   if (toolTags.length >= 1) {
     logger.info('');
