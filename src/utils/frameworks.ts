@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 
-import { frameworksTools, toolsFileExt } from '../../config.ts';
+import { frameworksTools, toolsFileExt } from '../config/index.ts';
 import { getJsonFileContent } from './index.ts';
 
 export async function getFrameworkTools(knownFrameworks: Framework[], cachePath: string) {

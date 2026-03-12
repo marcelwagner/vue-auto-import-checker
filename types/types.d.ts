@@ -40,19 +40,20 @@ type ComponentImport = {
   path: string;
 };
 
-type ComponentSearch = {
-  stats: Stats;
-  tagsList: Tags[];
-  unknownTagsList: Tag[];
-  componentsList: ComponentList[];
-};
-
-type KnownListConfig = {
-  negateKnown: NoIgnore[];
+type KnownListProps = {
+  negateKnown: Known[];
   knownFrameworks: Framework[];
   knownTags: string[];
   knownTagsFile: string;
   cachePath: string;
+};
+
+type IdentifiedTagsListProps = {
+  knownTagsList: KnownList[];
+  componentsList: string[];
+  componentsFile: string;
+  tags: Tag[];
+  importsKnown: boolean;
 };
 
 type KnownList = {

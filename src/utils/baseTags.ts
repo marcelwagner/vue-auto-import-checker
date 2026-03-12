@@ -1,4 +1,4 @@
-import { baseTags } from '../../config.ts';
+import { baseTags } from '../config/index.ts';
 
 export function getBaseTags(negateKnown: Known[]): KnownList[] {
   return baseTags.map(base => ({

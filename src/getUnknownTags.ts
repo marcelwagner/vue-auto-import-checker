@@ -1,9 +1,9 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { VAIC_Config } from '../types/config.interface.ts';
+import type { VAIC_ComponentSearch, VAIC_Config } from '../types/config.interface.ts';
 import {
   createLogger,
-  getIdentifiedTags,
+  getIdentifiedTagsList,
   getKnownComponentList,
   getKnownLists,
   getTagsFromDirectory,
@@ -14,16 +14,16 @@ import {
  * Scan a project directory for unknown component tags used inside template blocks.
  *
  * High-level workflow:
- *  - Read configuration and prepare auxiliary ignore/component lists.
+ *  - Read configuration and prepare auxiliary known/unknown lists.
  *  - Recursively traverse `projectPath` and inspect each file.
  *  - For files that contain a `<template>` section analyze lines while skipping
  *    `<script>` and `<style>` regions to avoid false positives.
  *  - Extract candidate tags from template lines, normalize them and check
- *    against computed ignore lists and registered components.
- *  - Return aggregated `stats`, found `unknownTags` and the `componentsList`.
+ *    against computed known/unknown lists and registered components.
+ *  - Return aggregated `stats`, found `tagList` and `unknownTags` and the `componentsList`.
  *
  * @param {VAIC_Config} config - configuration object adhering to `VAIC_Config`
- * @returns {Promise<ComponentSearch>} Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
+ * @returns {Promise<VAIC_ComponentSearch>} Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
  */
 export async function getUnknownTags({
   componentsFile,
@@ -35,9 +35,11 @@ export async function getUnknownTags({
   cachePath,
   basePath,
   importsKnown,
-  debug
-}: VAIC_Config): Promise<ComponentSearch> {
-  const base = basePath ? basePath : dirname(fileURLToPath(import.meta.url));
+  debug,
+  skipReturnUnknown
+}: VAIC_Config): Promise<VAIC_ComponentSearch> {
+  // Base path for resolving relative paths if not provided.
+  const base: string = basePath ? basePath : dirname(fileURLToPath(import.meta.url));
 
   // Ensure a global logger exists (created with the provided debug flag).
   if (!global?.logger) {
@@ -58,7 +60,7 @@ export async function getUnknownTags({
   // Start the recursive scan of the project directory.
   const rawTagsList: Tag[] = await getTagsFromDirectory(base, projectPath, []);
 
-  // Build the aggregated ignore list from framework plugins, user-supplied tags and the JSON file.
+  // Build the aggregated known list from framework plugins, base tags, user-supplied tags and user-supplied JSON file.
   const knownTagsList: KnownList[] = await getKnownLists({
     negateKnown,
     knownFrameworks,
@@ -72,21 +74,20 @@ export async function getUnknownTags({
     ? await getKnownComponentList(base, componentsFile)
     : [];
 
-  const tagsList: Tag[] = await getIdentifiedTags(
+  // Run the actual tag identification logic.
+  const tagsList: Tag[] = await getIdentifiedTagsList({
     knownTagsList,
     componentsList,
     componentsFile,
-    rawTagsList,
+    tags: rawTagsList,
     importsKnown
-  );
+  });
 
   // Run the actual unknown tag detection logic.
-  const unknownTagsList: Tag[] = await getUnknownTagsList(tagsList);
+  const unknownTagsList: Tag[] = skipReturnUnknown ? [] : await getUnknownTagsList(tagsList);
 
-  // Finalize timing.
   stats.endTime = Date.now();
 
-  // Return aggregated results to the caller.
   return {
     stats,
     tagsList,

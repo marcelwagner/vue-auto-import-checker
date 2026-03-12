@@ -1,4 +1,4 @@
-import { baseTags } from "../../config.js";
+import { baseTags } from "../config/index.js";
 export function getBaseTags(negateKnown) {
     return baseTags.map(base => ({
         tags: base.tags,

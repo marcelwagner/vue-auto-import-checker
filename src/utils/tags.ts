@@ -1,7 +1,7 @@
 import type { Dirent } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { vueTemplateEnd, vueTemplateStart } from '../../config.ts';
+import { vueTemplateEnd, vueTemplateStart } from '../config/index.ts';
 import { getBaseTags, getFileContent, getFrameworkTools, getJsonFileContent } from './index.ts';
 
 /**
@@ -51,7 +51,7 @@ export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]>
     templateEndIndex
   );
 
-  const imports: ComponentImport[] = getImportsFromFile(fileContent);
+  const imports: ComponentImport[] = getImportsListFromFile(fileContent);
 
   tagList.forEach((tagListRaw: string[], index: number): void => {
     tagListRaw.forEach((tagRaw: string): void => {
@@ -151,15 +151,60 @@ export async function getUnknownTagsList(tags: Tag[]): Promise<Tag[]> {
   });
 }
 
-export async function getIdentifiedTags(
-  knownTagsList: KnownList[],
-  componentsList: string[],
-  componentsFile: string,
-  tags: Tag[],
-  importsKnown: boolean
-): Promise<Tag[]> {
+export async function getIdentifiedTagsList({
+  knownTagsList,
+  componentsList,
+  componentsFile,
+  tags,
+  importsKnown
+}: IdentifiedTagsListProps): Promise<Tag[]> {
   return tags.map((tag: Tag): Tag => {
-    return identifyTag(knownTagsList, componentsList, componentsFile, tag, importsKnown);
+    const tagName: string = normalizeTag(tag.tagName);
+
+    if (knownTagsList.length >= 1) {
+      // Compare each candidate after removing hyphens and lowercasing.
+      const knownLists: KnownList[] = knownTagsList.filter((list: KnownList): boolean =>
+        list.tags.some((tagFromList: string): boolean => normalizeTag(tagFromList) === tagName)
+      );
+
+      if (tag.knownSource.length >= 1) {
+        tag.knownSource.forEach((knownSource: KnownSource): void => {
+          if (knownSource.source === 'import' && importsKnown) {
+            knownSource.known = true;
+            tag.known = true;
+          }
+        });
+      }
+
+      if (knownLists.length >= 1) {
+        knownLists.forEach((list: KnownList): void => {
+          tag.knownSource.push({ source: list.name, known: list.known, file: list.file });
+
+          if (list.known) {
+            tag.known = true;
+          }
+        });
+
+        logger.debug(`tag ${tagName} is in known list`);
+      }
+    }
+
+    if (componentsList.length >= 1) {
+      if (componentsList.some((rawTag: string): boolean => normalizeTag(rawTag) === tagName)) {
+        tag.knownSource.push({ source: 'components', known: true, file: componentsFile });
+        tag.known = true;
+
+        logger.debug(`tag ${tagName} is in components list`);
+      }
+    }
+
+    if (tag.knownSource.length <= 0) {
+      tag.knownSource.push({ source: 'unknown', known: false, file: '' });
+
+      logger.debug(`tag ${tagName} is not in components list or in a known list`);
+    }
+
+    return tag;
   });
 }
 
@@ -179,7 +224,7 @@ export async function getKnownLists({
   knownTags,
   knownTagsFile,
   cachePath
-}: KnownListConfig): Promise<KnownList[]> {
+}: KnownListProps): Promise<KnownList[]> {
   const knownTagsFileContent: string[] = knownTagsFile
     ? await getJsonFileContent(knownTagsFile)
     : [];
@@ -222,70 +267,6 @@ export function normalizeTag(tag: string): string {
 }
 
 /**
- * Check whether a tag matches one of the known lists and set its `source` and `known` flags accordingly.
- *
- * @param listOfKnownLists - configuration object containing toggles and tag lists to include/exclude
- * @param componentsList - list of registered component tags
- * @param componentsFile - path to the JSON file containing component tags
- * @param tag - the tag name to check
- * @returns Tag - the input tag with updated `knownSource` field
- */
-export function identifyTag(
-  listOfKnownLists: KnownList[],
-  componentsList: string[],
-  componentsFile: string,
-  tag: Tag,
-  importsKnown: boolean
-): Tag {
-  const tagName: string = normalizeTag(tag.tagName);
-
-  if (listOfKnownLists.length >= 1) {
-    // Compare each candidate after removing hyphens and lowercasing.
-    const knownLists: KnownList[] = listOfKnownLists.filter((list: KnownList): boolean =>
-      list.tags.some((tagFromList: string): boolean => normalizeTag(tagFromList) === tagName)
-    );
-
-    if (tag.knownSource.length >= 1) {
-      tag.knownSource.forEach(knownSource => {
-        if (knownSource.source === 'import' && importsKnown) {
-          knownSource.known = true;
-          tag.known = true;
-        }
-      });
-    }
-
-    if (knownLists.length >= 1) {
-      knownLists.forEach((list: KnownList): void => {
-        tag.knownSource.push({ source: list.name, known: list.known, file: list.file });
-
-        if (list.known) {
-          tag.known = true;
-        }
-      });
-
-      logger.debug(`tag ${tagName} is in known list`);
-    }
-  }
-
-  if (componentsList.length >= 1) {
-    if (componentsList.some((rawTag: string): boolean => normalizeTag(rawTag) === tagName)) {
-      tag.knownSource.push({ source: 'components', known: true, file: componentsFile });
-      tag.known = true;
-
-      logger.debug(`tag ${tagName} is in components list`);
-    }
-  }
-
-  if (tag.knownSource.length <= 0) {
-    tag.knownSource.push({ source: 'unknown', known: false, file: '' });
-
-    logger.debug(`tag ${tagName} is not in components list or in a known list`);
-  }
-
-  return tag;
-}
-
-/**
  * Check whether a tag matches one of the capture groups from a regex match result.
  *
  * @param tag - the tag to compare
@@ -302,8 +283,8 @@ export function matchesOneOf(tag: string, regexMatchResult: RegExpMatchArray | n
  * @returns ComponentImport[] - an array of objects containing component names and paths
  * @example getImportsFromFile('import { Button } from "@/components/Button.vue";') // [{ component: ['Button'], path: '@/components/Button.vue' }]
  */
-export function getImportsFromFile(fileContent: string): ComponentImport[] {
-  const imports: ComponentImport[] = [];
+export function getImportsListFromFile(fileContent: string): ComponentImport[] {
+  const importsList: ComponentImport[] = [];
 
   const importMatches: RegExpExecArray[] = [
     ...fileContent.matchAll(
@@ -323,10 +304,10 @@ export function getImportsFromFile(fileContent: string): ComponentImport[] {
 
     logger.debug(`Found import: ${component.join(', ')} ${path}.`);
 
-    imports.push({ component, path });
+    importsList.push({ component, path });
   }
 
-  return imports;
+  return importsList;
 }
 
 /**

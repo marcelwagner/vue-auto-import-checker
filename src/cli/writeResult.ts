@@ -11,7 +11,7 @@ export function writeResult(tags: Tag[], kafka: boolean) {
     if (currentFile !== file) {
       logger.info('----------------------');
       logger.info('');
-      logger.info(`File path   :${file} (${line})`);
+      logger.info(`File path   : ${file} (${line})`);
 
       currentFile = file;
     } else {
@@ -25,26 +25,28 @@ export function writeResult(tags: Tag[], kafka: boolean) {
     );
 
     logger.info('');
-    logger.info(`Tag name    :${tagName}`);
+    logger.info(`Tag name    : ${tagName}`);
 
     const isImport = knownSource.every(({ source }) => source === 'import');
     const isUnknown = knownSource.every(({ source }) => source === 'unknown');
     const isComponent = knownSource.every(({ source }) => source === 'components');
 
     if (isImport) {
-      logger.info(`Import      :'${knownSource.map(({ file }) => file).join(', ')}'`);
+      logger.info(`Import      : ${knownSource.map(({ file }) => file).join(', ')}`);
     }
 
     if (isComponent && kafka) {
-      logger.info(`Components  :'${knownSource.map(({ file }) => file).join(', ')}'`);
+      logger.info(`Components  : ${knownSource.map(({ file }) => file).join(', ')}`);
     }
 
     if (!isImport && !isComponent && (kafka || !isUnknown)) {
-      logger.info(`Framework   :${knownSource.map(({ source }) => source).join(', ')}`);
+      logger.info(
+        `Framework${knownSource.length >= 2 ? 's' : ' '}  : ${knownSource.map(({ source, file }) => `${source}` + (file ? ` (${file})` : '')).join(', ')}`
+      );
     }
 
     if (kafka) {
-      logger.info(`Is known    :${knownSource.some(({ known }) => known) ? 'yes' : 'no'}`);
+      logger.info(`Is known    : ${knownSource.some(({ known }) => known) ? 'yes' : 'no'}`);
     }
   });
 

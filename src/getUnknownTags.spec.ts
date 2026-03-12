@@ -2,14 +2,14 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
+import type { VAIC_Config } from '../types/config.interface.ts';
+import { getUnknownTags } from './getUnknownTags.ts';
 import {
   nuxtComponentsImporter,
   quasarComponentsImporter,
   vuetifyComponentsImporter,
   vueUseComponentsImporter
-} from '../tools/index.ts';
-import type { VAIC_Config } from '../types/config.interface.ts';
-import { getUnknownTags } from './getUnknownTags.ts';
+} from './tools/index.ts';
 import { getUniqueFromList } from './utils/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -960,6 +960,84 @@ describe('getUnknownTags', async () => {
 
     test(`should return unknown tags in ${lines} lines`, () => {
       expect(unknownTagsList).toHaveLength(lines);
+    });
+    test(`should return unknown tags ${uniqueTags.sort().join(', ')}`, () => {
+      expect(uniqueTags.sort()).toEqual(tags);
+    });
+    test(`should return ${tags.length} unknown tags`, () => {
+      expect(uniqueTags).toHaveLength(tags.length);
+    });
+    test(`should return unknown tags in ${files} file`, () => {
+      expect(uniqueFiles).toHaveLength(files);
+    });
+  });
+
+  describe('kafka', async () => {
+    const config: VAIC_Config = {
+      componentsFile: 'tests/data/vue-test-project/components.d.ts',
+      projectPath: 'tests/data/vue-test-project/src',
+      knownTags: [],
+      knownTagsFile: '',
+      negateKnown: [],
+      knownFrameworks: [],
+      cachePath,
+      importsKnown: false,
+      basePath,
+      skipReturnUnknown: true
+    };
+
+    const { tagsList } = await getUnknownTags(config);
+    const uniqueTags = getUniqueFromList(tagsList.map((tag: Tag) => tag.tagName));
+    const uniqueFiles = getUniqueFromList(tagsList.map((tag: Tag) => tag.file));
+
+    // Expected result
+    const { lines, tags, files } = {
+      lines: 96,
+      tags: [
+        'v-responsive',
+        'v-app',
+        'v-main',
+        'div',
+        'img',
+        'HelloWorld',
+        'nav',
+        'RouterLink',
+        'RouterView',
+        'v-bottom-navigation',
+        'v-btn',
+        'v-icon',
+        'span',
+        'h1',
+        'h3',
+        'a',
+        'WelcomeItem',
+        'template',
+        'DocumentationIcon',
+        'ToolingIcon',
+        'ToolingIcon1',
+        'ToolingIcon2',
+        'ToolingIcon3',
+        'ToolingIcon4',
+        'br',
+        'code',
+        'v-date-input',
+        'EcosystemIcon',
+        'CommunityIcon',
+        'WelcomeItemDialog',
+        'SupportIcon',
+        'i',
+        'slot',
+        'svg',
+        'path',
+        'q-avatar',
+        'p',
+        'TheWelcome'
+      ].sort(),
+      files: 11
+    };
+
+    test(`should return unknown tags in ${lines} lines`, () => {
+      expect(tagsList).toHaveLength(lines);
     });
     test(`should return unknown tags ${uniqueTags.sort().join(', ')}`, () => {
       expect(uniqueTags.sort()).toEqual(tags);

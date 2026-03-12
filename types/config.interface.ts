@@ -9,4 +9,12 @@ export interface VAIC_Config {
   importsKnown: boolean;
   basePath?: string;
   debug?: boolean;
+  skipReturnUnknown?: boolean;
+}
+
+export interface VAIC_ComponentSearch {
+  stats: Stats;
+  tagsList: Tag[];
+  unknownTagsList: Tag[];
+  componentsList: string[];
 }

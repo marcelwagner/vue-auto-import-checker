@@ -128,12 +128,12 @@ Use a tag list from the specific version that your project is using by using a s
 
 Every Importer has its own Readme.md file, so you can look up your specific use case.
 
-- Vuetify -> [README.md](tools/vuetify/README.md)
-- VueUse -> [README.md](tools/vueuse/README.md)
-- Quasar -> [README.md](tools/quasar/README.md)
-- Nuxt -> [README.md](tools/nuxt/README.md)
-- Naive-UI -> [README.md](tools/naiveui/README.md)
-- PrimeVue -> [README.md](tools/primevue/README.md)
+- Vuetify -> [README.md](src/tools/vuetify/README.md)
+- VueUse -> [README.md](src/tools/vueuse/README.md)
+- Quasar -> [README.md](src/tools/quasar/README.md)
+- Nuxt -> [README.md](src/tools/nuxt/README.md)
+- Naive-UI -> [README.md](src/tools/naiveui/README.md)
+- PrimeVue -> [README.md](src/tools/primevue/README.md)
 
 ## Contributors
 

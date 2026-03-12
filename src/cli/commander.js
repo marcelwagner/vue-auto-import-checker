@@ -1,11 +1,11 @@
 import { program } from 'commander';
-import { defaultCachePath, packageJson } from "../../config.js";
+import { defaultCachePath, packageJson } from "../config/index.js";
 export function prepareCommander() {
     program
         .option('-c, --components-file <file>', 'path to a file exporting registered components (relative to current working directory)', '')
         .option('-p, --project-path <path>', 'directory path containing Vue project files to scan (relative to current working directory)', '')
         .option('-a, --cache-path <path>', 'directory for storing and looking up cached/custom known files (relative to current working directory)', defaultCachePath)
-        .option('-t, --tool <tool>', 'run a specific helper tool (e.g., nuxt, primevue, quasar, vueuse, vuetify) to generate customized tag lists', '')
+        .option('-t, --tool <tool>', 'run a specific helper tool (e.g., naiveui, nuxt, primevue, quasar, vuetify, vueuse) to generate customized tag lists', '')
         .option('-s, --stats', 'output aggregated scan statistics', false)
         .option('-r, --result', 'output detailed result entries for each found component', false)
         .option('-q, --quiet', 'suppress all standard output', false)

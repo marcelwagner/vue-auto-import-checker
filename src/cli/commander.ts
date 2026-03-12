@@ -1,5 +1,5 @@
 import { program } from 'commander';
-import { defaultCachePath, packageJson } from '../../config.ts';
+import { defaultCachePath, packageJson } from '../config/index.ts';
 
 export function prepareCommander(): CommanderInit {
   // Configure CLI with commander. Each option declaration includes a helpful
@@ -25,7 +25,7 @@ export function prepareCommander(): CommanderInit {
     )
     .option(
       '-t, --tool <tool>',
-      'run a specific helper tool (e.g., nuxt, primevue, quasar, vueuse, vuetify) to generate customized tag lists',
+      'run a specific helper tool (e.g., naiveui, nuxt, primevue, quasar, vuetify, vueuse) to generate customized tag lists',
       ''
     )
     .option('-s, --stats', 'output aggregated scan statistics', false)

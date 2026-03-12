@@ -2,7 +2,6 @@
 import { program } from 'commander';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { frameworksTools } from "./config.js";
 import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, getBaseTagsList, getFrameworkList, getKnownComponentList, getUniqueFromList, prepareCommander, writeComponents, writeConfig, writeFinalState, writeResult, writeStats, writeToolsResult } from "./index.js";
 (async () => {
     const basePath = process.cwd() || '';
@@ -19,13 +18,12 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
                 logger.info(`Running tool ${possibleTool.name}...`);
             }
             const toolTags = await possibleTool.tool(basePath, cachePath);
-            const toolName = tool.split('-')[0];
             if (!quiet) {
-                writeToolsResult(toolName, toolTags);
+                writeToolsResult(possibleTool.name, toolTags);
             }
             const foundText = toolTags.length >= 1
-                ? `Found ${toolTags.length} ${toolName} tag${toolTags.length >= 2 ? 's' : ''}`
-                : `No ${toolName} tags found`;
+                ? `Found ${toolTags.length} ${possibleTool.name} tag${toolTags.length >= 2 ? 's' : ''}`
+                : `No ${possibleTool.name} tags found`;
             writeFinalState(false, `${currentDateTime()}: ${foundText}`, 0);
         }
         catch (error) {
@@ -62,28 +60,33 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
         logger.end();
         return;
     }
-    if (projectPath && kafka) {
+    const knownFrameworkList = knownFrameworks.length >= 1 ? getFrameworkList(knownFrameworks) : [];
+    const baseTagsList = negateKnown.length >= 1 ? getBaseTagsList(negateKnown) : [];
+    const config = {
+        componentsFile,
+        projectPath,
+        negateKnown: baseTagsList,
+        knownFrameworks: knownFrameworkList,
+        knownTags,
+        knownTagsFile,
+        cachePath,
+        basePath,
+        importsKnown,
+        debug,
+        skipReturnUnknown: kafka
+    };
+    if (kafka) {
         try {
-            const config = {
-                componentsFile,
-                projectPath,
-                negateKnown: [],
-                knownFrameworks: frameworksTools.map(framework => framework.name),
-                knownTags,
-                knownTagsFile,
-                cachePath,
-                basePath,
-                importsKnown,
-                debug
-            };
             const { tagsList, stats } = await getUnknownTags(config);
-            const uniqueTagsList = getUniqueFromList(tagsList.map(tag => tag.tagName));
-            const filesList = getUniqueFromList(tagsList.map(tag => tag.file));
+            const uniqueTagsList = getUniqueFromList(tagsList.map((tag) => tag.tagName));
+            const filesList = getUniqueFromList(tagsList.map((tag) => tag.file));
             if (!quiet) {
                 if (showResult) {
                     writeResult(tagsList, kafka);
                 }
-                writeConfig(config, showResult);
+                if (debug) {
+                    writeConfig(config, showResult);
+                }
                 if (showStats) {
                     writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult });
                 }
@@ -102,28 +105,16 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
         return;
     }
     try {
-        const knownFrameworkList = knownFrameworks.length >= 1 ? getFrameworkList(knownFrameworks) : [];
-        const baseTagsList = negateKnown.length >= 1 ? getBaseTagsList(negateKnown) : [];
-        const config = {
-            componentsFile,
-            projectPath,
-            negateKnown: baseTagsList,
-            knownFrameworks: knownFrameworkList,
-            knownTags,
-            knownTagsFile,
-            cachePath,
-            basePath,
-            importsKnown,
-            debug
-        };
         const { unknownTagsList, stats } = await getUnknownTags(config);
-        const uniqueTagsList = getUniqueFromList(unknownTagsList.map(tag => tag.tagName));
-        const filesList = getUniqueFromList(unknownTagsList.map(tag => tag.file));
+        const uniqueTagsList = getUniqueFromList(unknownTagsList.map((tag) => tag.tagName));
+        const filesList = getUniqueFromList(unknownTagsList.map((tag) => tag.file));
         if (!quiet) {
             if (showResult) {
                 writeResult(unknownTagsList, kafka);
             }
-            writeConfig(config, showResult);
+            if (debug) {
+                writeConfig(config, showResult);
+            }
             if (showStats) {
                 writeStats({ stats, filesList, tagsList: unknownTagsList, uniqueTagsList, showResult });
             }
