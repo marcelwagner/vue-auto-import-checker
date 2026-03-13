@@ -42,7 +42,7 @@
     }
   ],
   "license": "MIT",
-  "homepage": "https://github.com/marcelwagner/vue-auto-import-checker#readme",
+  "homepage": "https://www.npmjs.com/package/vue-auto-import-checker",
   "bugs": {
     "url": "https://github.com/marcelwagner/vue-auto-import-checker/issues"
   },

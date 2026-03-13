@@ -1,5 +1,7 @@
 # Vue auto-import checker
 
+npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-checker)
+
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker)
 
 <!-- TOC -->
