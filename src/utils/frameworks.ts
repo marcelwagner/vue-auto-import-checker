@@ -4,7 +4,16 @@ import { join } from 'node:path';
 import { frameworksTools, toolsFileExt } from '../config/index.ts';
 import { getJsonFileContent } from './index.ts';
 
-export async function getFrameworkTools(knownFrameworks: Framework[], cachePath: string) {
+/**
+ * Load the list of known frameworks and their tags from the user-provided JSON files.
+ * @param knownFrameworks
+ * @param cachePath
+ * @returns Promise of KnownList[]
+ */
+export async function getFrameworkTools(
+  knownFrameworks: Framework[],
+  cachePath: string
+): Promise<KnownList[]> {
   return Promise.all(
     frameworksTools.map(frameworkTool => {
       const known = knownFrameworks.includes(frameworkTool.name as Framework);
@@ -13,6 +22,10 @@ export async function getFrameworkTools(knownFrameworks: Framework[], cachePath:
   );
 }
 
+/** Convert the list of known frameworks to a list of FrameworkToolItem
+ * @param knownFrameworks
+ * @returns array of FrameworkToolItem
+ */
 export function getFrameworkList(knownFrameworks: string[]): Framework[] {
   const frameworks: Framework[] = [];
 
@@ -39,7 +52,7 @@ export function getFrameworkList(knownFrameworks: string[]): Framework[] {
  * @param userGeneratedPath - basePath of the JSON file
  * @param frameworkTool - frameworkTool
  * @param known - true if the framework is known
- * @returns array of strings from the chosen file
+ * @returns Promise of KnownList
  */
 export async function getFramework(
   userGeneratedPath: string,
@@ -63,6 +76,11 @@ export async function getFramework(
   };
 }
 
+/**
+ * Find a framework by name.
+ * @param name
+ * @returns FrameworkToolItem | undefined
+ */
 export function findFrameworkByName(name: string): FrameworkToolItem | undefined {
   return frameworksTools.find((framework: FrameworkToolItem): boolean => framework.name === name);
 }

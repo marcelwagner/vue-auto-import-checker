@@ -4,8 +4,6 @@
     "./*.ts",
     "./**/*.ts",
     "./src/**/*.ts",
-    "./src/tools/**/*.ts",
-    "./src/plugins/**/*.ts",
     "./types/**/*.ts",
     "node_modules/vitest/globals.d.ts"
   ],
@@ -23,13 +21,11 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "checkJs": true,
-
     "removeComments": true,
     "verbatimModuleSyntax": true,
     "erasableSyntaxOnly": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-
     "strict": true,
     "skipLibCheck": true
   }

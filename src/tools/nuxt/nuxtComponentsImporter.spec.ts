@@ -18,7 +18,7 @@ describe('nuxt-importer tool', () => {
   test('should return 20 nuxt tags', async () => {
     const result = await nuxtComponentsImporter(basePath, cachePath);
 
-    expect(result.length).to.equal(20);
+    expect(result.length).to.equal(21);
   });
 
   describe('produced', async () => {
