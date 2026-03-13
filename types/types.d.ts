@@ -32,7 +32,7 @@ type WriteStatsProps = {
   tagsList: Tag[];
   uniqueTagsList: string[];
   showResult: boolean;
-  unknownTagsList?: Tag[];
+  kafka: boolean;
 };
 
 type ComponentImport = {

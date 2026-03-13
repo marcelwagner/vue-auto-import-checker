@@ -170,7 +170,7 @@ import getUnknownTags, {
         }
 
         if (showStats) {
-          writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult });
+          writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult, kafka });
         }
       }
 
@@ -213,7 +213,14 @@ import getUnknownTags, {
       }
 
       if (showStats) {
-        writeStats({ stats, filesList, tagsList: unknownTagsList, uniqueTagsList, showResult });
+        writeStats({
+          stats,
+          filesList,
+          tagsList: unknownTagsList,
+          uniqueTagsList,
+          showResult,
+          kafka
+        });
       }
     }
 

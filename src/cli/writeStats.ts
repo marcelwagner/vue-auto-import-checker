@@ -11,7 +11,8 @@ export function writeStats({
   filesList,
   tagsList,
   uniqueTagsList,
-  showResult
+  showResult,
+  kafka
 }: WriteStatsProps) {
   const duration = stats.endTime - stats.startTime;
   const durationInSeconds = duration / 1000;
@@ -51,7 +52,7 @@ export function writeStats({
   logger.info('....................................');
   logger.info('');
 
-  logger.info(`>> Unique unknown tags found      <<`);
+  logger.info(`>> Unique ${kafka ? '' : 'unknown '}tags found${kafka ? '        ' : ''}      <<`);
   logger.info('');
   uniqueTagsList.forEach(tag => logger.info(` - ${tag}`));
 

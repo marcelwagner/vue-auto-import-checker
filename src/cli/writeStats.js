@@ -1,4 +1,4 @@
-export function writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult }) {
+export function writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult, kafka }) {
     const duration = stats.endTime - stats.startTime;
     const durationInSeconds = duration / 1000;
     const durationAboveSecond = durationInSeconds >= 1;
@@ -24,7 +24,7 @@ export function writeStats({ stats, filesList, tagsList, uniqueTagsList, showRes
     logger.info('');
     logger.info('....................................');
     logger.info('');
-    logger.info(`>> Unique unknown tags found      <<`);
+    logger.info(`>> Unique ${kafka ? '' : 'unknown '}tags found${kafka ? '        ' : ''}      <<`);
     logger.info('');
     uniqueTagsList.forEach(tag => logger.info(` - ${tag}`));
     logger.info('');

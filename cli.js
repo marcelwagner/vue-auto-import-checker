@@ -88,7 +88,7 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
                     writeConfig(config, showResult);
                 }
                 if (showStats) {
-                    writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult });
+                    writeStats({ stats, filesList, tagsList, uniqueTagsList, showResult, kafka });
                 }
             }
             const foundText = tagsList.length >= 1
@@ -116,7 +116,14 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
                 writeConfig(config, showResult);
             }
             if (showStats) {
-                writeStats({ stats, filesList, tagsList: unknownTagsList, uniqueTagsList, showResult });
+                writeStats({
+                    stats,
+                    filesList,
+                    tagsList: unknownTagsList,
+                    uniqueTagsList,
+                    showResult,
+                    kafka
+                });
             }
         }
         const foundText = unknownTagsList.length >= 1
