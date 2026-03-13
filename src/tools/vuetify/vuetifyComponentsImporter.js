@@ -18,7 +18,7 @@ export async function vuetifyComponentsImporter(basePath, cachePath) {
             const indexFile = join(vuetifyDirectory, dir, `index.d.ts`);
             const listOfComponents = await readFile(indexFile, 'utf8');
             for (const componentExport of listOfComponents.split('\n')) {
-                const component = componentExport.match(/export \{ ([\w]+) \} [ ./a-zA-Z';]*/);
+                const component = componentExport.match(/export \{ (\w+) } [ ./a-zA-Z';]*/);
                 if (component === null) {
                     continue;
                 }

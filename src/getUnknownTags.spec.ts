@@ -983,7 +983,7 @@ describe('getUnknownTags', async () => {
       cachePath,
       importsKnown: false,
       basePath,
-      skipReturnUnknown: true
+      kafka: true
     };
 
     const { tagsList } = await getUnknownTags(config);

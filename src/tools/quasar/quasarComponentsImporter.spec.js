@@ -12,9 +12,10 @@ vi.stubGlobal('logger', {
     info: vi.fn()
 });
 describe('quasar-importer tool', () => {
-    test('should return 79 quasar tags', async () => {
+    const tags = 79;
+    test(`should return ${tags} quasar tags`, async () => {
         const result = await quasarComponentsImporter(basePath, cachePath);
-        expect(result.length).to.equal(79);
+        expect(result.length).to.equal(tags);
     });
     describe('produced', async () => {
         const quasarConfig = {

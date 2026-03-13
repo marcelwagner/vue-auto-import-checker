@@ -60,24 +60,24 @@ The help of the cli tool is a good starting point, but you can also start with a
 
 ## CLI Options
 
-| Option                         | Alias | Description                                                                                                   | Default                   |
-|--------------------------------|-------|---------------------------------------------------------------------------------------------------------------|---------------------------|
-| `--components-file <file>`     | `-c`  | Path to a file exporting registered components (relative to current working directory)                        | `""`                      |
-| `--project-path <path>`        | `-p`  | Directory path containing Vue project files to scan (relative to current working directory)                   | `""`                      |
-| `--cache-path <path>`          | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)        | `"./node_modules/.cache"` |
-| `--tool <tool>`                | `-t`  | Run a specific helper tool (e.g., nuxt, primevue, quasar, vueuse, vuetify) to generate customized tag lists   | `""`                      |
-| `--stats`                      | `-s`  | Output aggregated scan statistics                                                                             | `false`                   |
-| `--result`                     | `-r`  | Output detailed result entries for each found component                                                       | `false`                   |
-| `--quiet`                      | `-q`  | Suppress all standard output                                                                                  | `false`                   |
-| `--known-tags [tags...]`       | `-l`  | List of custom component tags to treat as known                                                               | `[]`                      |
-| `--known-tags-file <file>`     | `-j`  | Path to a JSON file containing a list of component tags to treat as known                                     | `""`                      |
-| `--frameworks [frameworks...]` | `-f`  | Predefined framework tag sets (e.g., vuetify, vueuse, quasar, nuxt, naiveui, primevue) as known               | `[]`                      |
-| `--negate-known [sets...]`     | `-n`  | Explicitly treat tag-sets as known (e.g., html, svg, vue, vue-router)                                         | `[]`                      |
-| `--kafka`                      | `-k`  | Output each found tag with its framework and whether it is recognized                                         | `false`                   |
-| `--debug`                      | `-d`  | Enable detailed debug logging                                                                                 | `false`                   |
-| `--imports-known`              | `-i`  | Treat tags matching imported components as known                                                              | `false`                   |
-| `--version`                    | `-v`  | Output the current version                                                                                    | —                         |
-| `--help`                       | `-h`  | Display help information                                                                                      | —                         |
+| Option                          | Alias | Description                                                                                                   | Default                   |
+|---------------------------------|-------|---------------------------------------------------------------------------------------------------------------|---------------------------|
+| `--components-file <file-path>` | `-c`  | Path to a file exporting registered components (relative to current working directory)                        | `""`                      |
+| `--project-path <project-path>` | `-p`  | Directory path containing Vue project files to scan (relative to current working directory)                   | `""`                      |
+| `--cache-path <cache-path>`     | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)        | `"./node_modules/.cache"` |
+| `--tool <tool>`                 | `-t`  | Run a specific helper tool (e.g., nuxt, primevue, quasar, vueuse, vuetify) to generate customized tag lists   | `""`                      |
+| `--stats`                       | `-s`  | Output aggregated scan statistics                                                                             | `false`                   |
+| `--result`                      | `-r`  | Output detailed result entries for each found component                                                       | `false`                   |
+| `--quiet`                       | `-q`  | Suppress all standard output                                                                                  | `false`                   |
+| `--known-tags [tags...]`        | `-l`  | List of custom component tags to treat as known                                                               | `[]`                      |
+| `--known-tags-file <file-path>` | `-j`  | Path to a JSON file containing a list of component tags to treat as known                                     | `""`                      |
+| `--frameworks [frameworks...]`  | `-f`  | Predefined framework tag sets (e.g., vuetify, vueuse, quasar, nuxt, naiveui, primevue) as known               | `[]`                      |
+| `--negate-known [sets...]`      | `-n`  | Explicitly treat tag-sets as known (e.g., html, svg, vue, vue-router)                                         | `[]`                      |
+| `--kafka`                       | `-k`  | Output each found tag with its framework and whether it is recognized                                         | `false`                   |
+| `--debug`                       | `-d`  | Enable detailed debug logging                                                                                 | `false`                   |
+| `--imports-known`               | `-i`  | Treat tags matching imported components as known                                                              | `false`                   |
+| `--version`                     | `-v`  | Output the current version                                                                                    | —                         |
+| `--help`                        | `-h`  | Display help information                                                                                      | —                         |
 
 ## Known Framework tags
 

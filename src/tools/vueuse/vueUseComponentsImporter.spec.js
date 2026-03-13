@@ -12,9 +12,10 @@ vi.stubGlobal('logger', {
     info: vi.fn()
 });
 describe('tool vuuse-importer', () => {
-    test('should return 44 vueUse tags', async () => {
+    const tags = 44;
+    test(`should return ${tags} vueUse tags`, async () => {
         const result = await vueUseComponentsImporter(basePath, cachePath);
-        expect(result.length).to.equal(44);
+        expect(result.length).to.equal(tags);
     });
     describe('produced', async () => {
         const vueUseConfig = {

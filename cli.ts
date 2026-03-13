@@ -12,6 +12,7 @@ import getUnknownTags, {
   getKnownComponentList,
   getUniqueFromList,
   prepareCommander,
+  type VAIC_ComponentSearch,
   type VAIC_Config,
   writeComponents,
   writeConfig,
@@ -144,14 +145,14 @@ import getUnknownTags, {
     basePath,
     importsKnown,
     debug,
-    skipReturnUnknown: kafka
+    kafka
   };
 
   // Full scan flow: Output every tag if it is known or not
   if (kafka) {
     try {
       // Run the main scanning routine using the tag list
-      const { tagsList, stats } = await getUnknownTags(config);
+      const { tagsList, stats }: VAIC_ComponentSearch = await getUnknownTags(config);
 
       // Compute unique tag names and unique files for summary/stats.
       const uniqueTagsList: string[] = getUniqueFromList(
@@ -192,7 +193,7 @@ import getUnknownTags, {
   // Full scan flow: Inspect project files and report unknown tags, respecting known rules.
   try {
     // Run the main scanning routine, use unknown tags
-    const { unknownTagsList, stats } = await getUnknownTags(config);
+    const { unknownTagsList, stats }: VAIC_ComponentSearch = await getUnknownTags(config);
 
     // Compute unique tag names and unique files for summary/stats.
     const uniqueTagsList: string[] = getUniqueFromList(

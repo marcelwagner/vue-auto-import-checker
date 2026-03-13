@@ -36,7 +36,7 @@ export async function getUnknownTags({
   basePath,
   importsKnown,
   debug,
-  skipReturnUnknown
+  kafka
 }: VAIC_Config): Promise<VAIC_ComponentSearch> {
   // Base path for resolving relative paths if not provided.
   const base: string = basePath ? basePath : dirname(fileURLToPath(import.meta.url));
@@ -84,7 +84,7 @@ export async function getUnknownTags({
   });
 
   // Run the actual unknown tag detection logic.
-  const unknownTagsList: Tag[] = skipReturnUnknown ? [] : await getUnknownTagsList(tagsList);
+  const unknownTagsList: Tag[] = kafka ? [] : await getUnknownTagsList(tagsList);
 
   stats.endTime = Date.now();
 

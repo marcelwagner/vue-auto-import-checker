@@ -8,17 +8,17 @@ import { defaultCachePath, packageJson } from '../config/index.ts';
 export function prepareCommander(): CommanderInit {
   program
     .option(
-      '-c, --components-file <file>',
+      '-c, --components-file <file-path>',
       'path to a file exporting registered components (relative to current working directory)',
       ''
     )
     .option(
-      '-p, --project-path <path>',
+      '-p, --project-path <project-path>',
       'directory path containing Vue project files to scan (relative to current working directory)',
       ''
     )
     .option(
-      '-a, --cache-path <path>',
+      '-a, --cache-path <cache-path>',
       'directory for storing and looking up cached/custom known files (relative to current working directory)',
       defaultCachePath
     )
@@ -32,7 +32,7 @@ export function prepareCommander(): CommanderInit {
     .option('-q, --quiet', 'suppress all standard output', false)
     .option('-l, --known-tags [tags...]', 'list of custom component tags to treat as known', [])
     .option(
-      '-j, --known-tags-file <file>',
+      '-j, --known-tags-file <file-path>',
       'path to a JSON file containing a list of component tags to treat as known',
       ''
     )

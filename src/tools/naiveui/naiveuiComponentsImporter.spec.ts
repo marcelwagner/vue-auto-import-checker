@@ -15,10 +15,12 @@ vi.stubGlobal('logger', {
 });
 
 describe('naiveui-importer tool', () => {
-  test('should return 93 naiveui tags', async () => {
+  const tags = 93;
+
+  test(`should return ${tags} naiveui tags`, async () => {
     const result = await naiveuiComponentsImporter(basePath, cachePath);
 
-    expect(result.length).to.equal(93);
+    expect(result.length).to.equal(tags);
   });
 
   describe('produced', async () => {

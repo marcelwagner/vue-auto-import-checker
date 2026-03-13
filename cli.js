@@ -73,7 +73,7 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
         basePath,
         importsKnown,
         debug,
-        skipReturnUnknown: kafka
+        kafka
     };
     if (kafka) {
         try {

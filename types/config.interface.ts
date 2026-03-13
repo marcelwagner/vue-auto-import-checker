@@ -9,7 +9,7 @@ export interface VAIC_Config {
   importsKnown: boolean;
   basePath?: string;
   debug?: boolean;
-  skipReturnUnknown?: boolean;
+  kafka?: boolean;
 }
 
 export interface VAIC_ComponentSearch {

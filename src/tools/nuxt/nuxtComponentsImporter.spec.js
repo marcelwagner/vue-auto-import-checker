@@ -12,9 +12,10 @@ vi.stubGlobal('logger', {
     info: vi.fn()
 });
 describe('nuxt-importer tool', () => {
-    test('should return 20 nuxt tags', async () => {
+    const tags = 21;
+    test(`should return ${tags} nuxt tags`, async () => {
         const result = await nuxtComponentsImporter(basePath, cachePath);
-        expect(result.length).to.equal(21);
+        expect(result.length).to.equal(tags);
     });
     describe('produced', async () => {
         const quasarConfig = {

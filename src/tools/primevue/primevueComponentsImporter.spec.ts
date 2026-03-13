@@ -15,10 +15,12 @@ vi.stubGlobal('logger', {
 });
 
 describe('primevue-importer tool', () => {
-  test('should return 166 primevue tags', async () => {
+  const tags = 166;
+
+  test(`should return ${tags} primevue tags`, async () => {
     const result = await primevueComponentsImporter(basePath, cachePath);
 
-    expect(result.length).to.equal(166);
+    expect(result.length).to.equal(tags);
   });
 
   describe('produced', async () => {
