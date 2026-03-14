@@ -1,5 +1,5 @@
 // Extend the NodeJS global type to include config
-import { Logger } from 'winston';
+import type { Logger } from 'winston';
 
 declare global {
   var debug: boolean;

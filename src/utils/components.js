@@ -16,7 +16,9 @@ export async function getKnownComponentList(basePath, componentsFile) {
                 .replace(/[\W]*\}/, '')
                 .split(/\n/)
                 .forEach((line) => {
-                const rawMatch = line.trim().replace(/: typeof import\('[a-zA-Z0-9-./'[\]()",]+/, '');
+                const rawMatch = line
+                    .trim()
+                    .replace(/: typeof import\('[a-zA-Z0-9-./'[\]()",]+/, '');
                 componentsList.push(rawMatch);
             });
         }

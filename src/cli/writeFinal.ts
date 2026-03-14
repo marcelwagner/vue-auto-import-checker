@@ -7,7 +7,7 @@ import { program } from 'commander';
  * @param text - text to write
  * @param errorCode - exit code
  */
-export function writeFinalState(error: boolean, text: string, errorCode: number) {
+export function writeFinalState(error: boolean, text: string, errorCode: number): void {
   if (error) {
     program.error(text, { exitCode: errorCode });
   }

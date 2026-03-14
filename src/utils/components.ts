@@ -20,7 +20,7 @@ export async function getKnownComponentList(
   basePath: string,
   componentsFile: string
 ): Promise<string[]> {
-  const componentsFilePath = join(basePath, componentsFile);
+  const componentsFilePath: string = join(basePath, componentsFile);
 
   if (!existsSync(componentsFilePath)) {
     return Promise.reject({ errorText: `Components file not found: ${componentsFilePath}` });
@@ -48,7 +48,9 @@ export async function getKnownComponentList(
         .forEach((line: string): void => {
           // Trim whitespace and remove the TypeScript type suffix that looks like:
           // ": typeof import('...')"
-          const rawMatch = line.trim().replace(/: typeof import\('[a-zA-Z0-9-./'[\]()",]+/, '');
+          const rawMatch: string = line
+            .trim()
+            .replace(/: typeof import\('[a-zA-Z0-9-./'[\]()",]+/, '');
           // Store both the raw tag and a normalized lowercased version.
           componentsList.push(rawMatch);
         });

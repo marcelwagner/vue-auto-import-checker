@@ -3,7 +3,7 @@
  *
  * @param componentsList - list of components
  */
-export function writeComponents(componentsList: string[]) {
+export function writeComponents(componentsList: string[]): void {
   if (componentsList.length >= 1) {
     logger.info('');
     logger.info(`Found component${componentsList.length >= 2 ? 's' : ''}:`);

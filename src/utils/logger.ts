@@ -5,7 +5,7 @@ import winston from 'winston';
  *
  * @param debug - whether to enable debug logging
  */
-export function createLogger(debug: boolean) {
+export function createLogger(debug: boolean): void {
   global.debug = debug;
 
   const { combine, timestamp, printf } = winston.format;
@@ -24,6 +24,6 @@ export function createLogger(debug: boolean) {
   });
 }
 
-export function currentDateTime() {
+export function currentDateTime(): string {
   return new Date().toLocaleString();
 }

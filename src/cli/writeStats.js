@@ -26,7 +26,9 @@ export function writeStats({ stats, filesList, tagsList, uniqueTagsList, showRes
     logger.info('');
     logger.info(`>> Unique ${kafka ? '' : 'unknown '}tags found${kafka ? '        ' : ''}      <<`);
     logger.info('');
-    uniqueTagsList.forEach(tag => logger.info(` - ${tag}`));
+    uniqueTagsList.forEach((tag) => {
+        logger.info(` - ${tag}`);
+    });
     logger.info('');
     logger.info(`Total                     : ${uniqueTagsList.length}`);
     logger.info('');

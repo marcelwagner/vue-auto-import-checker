@@ -1,7 +1,7 @@
 import { baseTags } from "../config/index.js";
 import { normalize } from "./normalize.js";
 export function getBaseTags(negateKnown) {
-    return baseTags.map(base => ({
+    return baseTags.map((base) => ({
         tags: base.tags,
         name: base.name,
         known: !negateKnown.includes(base.name),
@@ -10,7 +10,7 @@ export function getBaseTags(negateKnown) {
 }
 export function getBaseTagsList(negateKnown) {
     const baseTags = [];
-    negateKnown.forEach(base => {
+    negateKnown.forEach((base) => {
         const foundBase = findBaseTagsByName(base);
         if (foundBase) {
             baseTags.push(foundBase.name);
@@ -22,5 +22,5 @@ export function getBaseTagsList(negateKnown) {
     return baseTags;
 }
 export function findBaseTagsByName(name) {
-    return baseTags.find(base => base.name === normalize(name));
+    return baseTags.find((base) => base.name === normalize(name));
 }

@@ -1,3 +1,4 @@
+import type { Logger } from 'winston';
 import { getLineIndexAsString } from './index.ts';
 
 /**
@@ -6,13 +7,13 @@ import { getLineIndexAsString } from './index.ts';
  * @param tags - list of tags found
  * @param kafka - whether to show all stats or only unknown stats
  */
-export function writeResult(tags: Tag[], kafka: boolean) {
-  let currentFile = '';
+export function writeResult(tags: Tag[], kafka: boolean): void {
+  let currentFile: string = '';
 
   logger.info('');
   logger.info(`>> Result                         <<`);
 
-  tags.forEach(({ file, line, tagName, lines, knownSource }) => {
+  tags.forEach(({ file, line, tagName, lines, knownSource }: Tag): void => {
     logger.info('');
     if (currentFile !== file) {
       logger.info('----------------------');
@@ -26,33 +27,46 @@ export function writeResult(tags: Tag[], kafka: boolean) {
 
     logger.info('');
 
-    lines.forEach(({ text, index }) =>
-      logger.info(`${getLineIndexAsString(index, lines[lines.length - 1].index)}: ${text}`)
+    lines.forEach(
+      ({ text, index }: UnknownTagLine): Logger =>
+        logger.info(`${getLineIndexAsString(index, lines[lines.length - 1].index)}: ${text}`)
     );
 
     logger.info('');
     logger.info(`Tag name    : ${tagName}`);
 
-    const isImport = knownSource.every(({ source }) => source === 'import');
-    const isUnknown = knownSource.every(({ source }) => source === 'unknown');
-    const isComponent = knownSource.every(({ source }) => source === 'components');
+    const isImport: boolean = knownSource.every(
+      ({ source }: KnownSource): boolean => source === 'import'
+    );
+    const isUnknown: boolean = knownSource.every(
+      ({ source }: KnownSource): boolean => source === 'unknown'
+    );
+    const isComponent: boolean = knownSource.every(
+      ({ source }: KnownSource): boolean => source === 'components'
+    );
 
     if (isImport) {
-      logger.info(`Import      : ${knownSource.map(({ file }) => file).join(', ')}`);
+      logger.info(
+        `Import      : ${knownSource.map(({ file }: KnownSource): string => file).join(', ')}`
+      );
     }
 
     if (isComponent && kafka) {
-      logger.info(`Components  : ${knownSource.map(({ file }) => file).join(', ')}`);
+      logger.info(
+        `Components  : ${knownSource.map(({ file }: KnownSource): string => file).join(', ')}`
+      );
     }
 
     if (!isImport && !isComponent && (kafka || !isUnknown)) {
       logger.info(
-        `Framework${knownSource.length >= 2 ? 's' : ' '}  : ${knownSource.map(({ source, file }) => `${source}` + (file ? ` (${file})` : '')).join(', ')}`
+        `Framework${knownSource.length >= 2 ? 's' : ' '}  : ${knownSource.map(({ source, file }: KnownSource): string => `${source}` + (file ? ` (${file})` : '')).join(', ')}`
       );
     }
 
     if (kafka) {
-      logger.info(`Is known    : ${knownSource.some(({ known }) => known) ? 'yes' : 'no'}`);
+      logger.info(
+        `Is known    : ${knownSource.some(({ known }: KnownSource): boolean => known) ? 'yes' : 'no'}`
+      );
     }
   });
 

@@ -35,7 +35,7 @@ export async function getFileContent(filePath: string): Promise<string> {
  */
 export async function getJsonFileContent(filePath: string): Promise<string[]> {
   try {
-    const jsonFileContent = await getFileContent(filePath);
+    const jsonFileContent: string = await getFileContent(filePath);
     return JSON.parse(jsonFileContent);
   } catch (error) {
     return Promise.reject(
@@ -57,14 +57,14 @@ export async function writeCustomPluginFile(
   componentsList: string[]
 ): Promise<void> {
   if (componentsList.length >= 1) {
-    const localDirExists = existsSync(dir);
+    const localDirExists: boolean = existsSync(dir);
 
     if (!localDirExists) {
       logger.debug(`localDir ${dir} will be made`);
       await mkdir(dir);
     }
 
-    const localTagsFile = join(dir, tagsFile);
+    const localTagsFile: string = join(dir, tagsFile);
 
     logger.debug('localTagsFile', localTagsFile);
 

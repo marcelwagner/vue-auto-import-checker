@@ -146,7 +146,9 @@ export async function getKnownLists({ negateKnown, knownFrameworks, knownTags, k
     return [...knownTagsList, ...knownTagsFileContentList, ...frameworkTags, ...baseTags];
 }
 export function matchesOneOf(tag, regexMatchResult) {
-    return regexMatchResult ? regexMatchResult.some((result) => result === tag) : false;
+    return regexMatchResult
+        ? regexMatchResult.some((result) => result === tag)
+        : false;
 }
 export function getImportsListFromFile(fileContent) {
     const importsList = [];

@@ -8,12 +8,14 @@ import { normalize } from './normalize.ts';
  * @returns KnownList[] - list of base tags
  */
 export function getBaseTags(negateKnown: Known[]): KnownList[] {
-  return baseTags.map(base => ({
-    tags: base.tags,
-    name: base.name as Source,
-    known: !negateKnown.includes(base.name as Known),
-    file: base.source
-  }));
+  return baseTags.map(
+    (base: BaseTags): KnownList => ({
+      tags: base.tags,
+      name: base.name as Source,
+      known: !negateKnown.includes(base.name as Known),
+      file: base.source
+    })
+  );
 }
 
 /**
@@ -25,8 +27,8 @@ export function getBaseTags(negateKnown: Known[]): KnownList[] {
 export function getBaseTagsList(negateKnown: string[]): Known[] {
   const baseTags: Known[] = [];
 
-  negateKnown.forEach(base => {
-    const foundBase = findBaseTagsByName(base);
+  negateKnown.forEach((base: string): void => {
+    const foundBase: BaseTags | undefined = findBaseTagsByName(base);
     if (foundBase) {
       baseTags.push(foundBase.name as Known);
     } else {
@@ -44,5 +46,5 @@ export function getBaseTagsList(negateKnown: string[]): Known[] {
  * @returns BaseTags | undefined
  */
 export function findBaseTagsByName(name: string): BaseTags | undefined {
-  return baseTags.find(base => base.name === normalize(name));
+  return baseTags.find((base: BaseTags): boolean => base.name === normalize(name));
 }

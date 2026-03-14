@@ -15,12 +15,12 @@ export function writeStats({
   uniqueTagsList,
   showResult,
   kafka
-}: WriteStatsProps) {
-  const duration = stats.endTime - stats.startTime;
-  const durationInSeconds = duration / 1000;
-  const durationAboveSecond = durationInSeconds >= 1;
-  const durationNumber = durationAboveSecond ? durationInSeconds : duration;
-  const durationUnit = durationAboveSecond ? 's' : 'ms';
+}: WriteStatsProps): void {
+  const duration: number = stats.endTime - stats.startTime;
+  const durationInSeconds: number = duration / 1000;
+  const durationAboveSecond: boolean = durationInSeconds >= 1;
+  const durationNumber: number = durationAboveSecond ? durationInSeconds : duration;
+  const durationUnit: 's' | 'ms' = durationAboveSecond ? 's' : 'ms';
 
   // Print line between stats & results
   if (showResult) {
@@ -56,7 +56,9 @@ export function writeStats({
 
   logger.info(`>> Unique ${kafka ? '' : 'unknown '}tags found${kafka ? '        ' : ''}      <<`);
   logger.info('');
-  uniqueTagsList.forEach(tag => logger.info(` - ${tag}`));
+  uniqueTagsList.forEach((tag: string): void => {
+    logger.info(` - ${tag}`);
+  });
 
   logger.info('');
   logger.info(`Total                     : ${uniqueTagsList.length}`);

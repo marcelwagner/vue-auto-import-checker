@@ -14,4 +14,4 @@ export default async function (config: VAIC_Config): Promise<VAIC_ComponentSearc
 export * from './src/cli/index.ts';
 export * from './src/tools/index.ts';
 export * from './src/utils/index.ts';
-export type { VAIC_ComponentSearch, VAIC_Config } from './types/config.interface.ts';
+export type { VAIC_ComponentSearch, VAIC_Config };

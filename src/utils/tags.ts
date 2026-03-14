@@ -103,14 +103,14 @@ export async function getTagsFromDirectory(
 ): Promise<Tag[]> {
   stats.dirCounter++;
 
-  const directory = join(basePath, directoryPath);
+  const directory: string = join(basePath, directoryPath);
 
   logger.debug(`Dir: ${directory}`);
 
   const entries: Dirent<string>[] = await readdir(directory, { withFileTypes: true });
 
   for (const entry of entries) {
-    const fullPath = join(directory, entry.name);
+    const fullPath: string = join(directory, entry.name);
 
     if (entry.isFile()) {
       // Process file and surface errors unless quiet mode is enabled.
@@ -150,7 +150,7 @@ export async function getTagsFromDirectory(
  */
 export async function getUnknownTagsList(tags: Tag[]): Promise<Tag[]> {
   return tags.filter((tag: Tag): boolean => {
-    const tagName = normalize(tag.tagName);
+    const tagName: string = normalize(tag.tagName);
 
     if (!tag.known) {
       logger.debug(`tag ${tagName} is unknown`);
@@ -284,7 +284,9 @@ export async function getKnownLists({
  * @returns boolean - true if any captured group equals the provided tag
  */
 export function matchesOneOf(tag: string, regexMatchResult: RegExpMatchArray | null): boolean {
-  return regexMatchResult ? regexMatchResult.some((result: string) => result === tag) : false;
+  return regexMatchResult
+    ? regexMatchResult.some((result: string): boolean => result === tag)
+    : false;
 }
 
 /**

@@ -15,8 +15,8 @@ export async function getFrameworkTools(
   cachePath: string
 ): Promise<KnownList[]> {
   return Promise.all(
-    frameworksTools.map(frameworkTool => {
-      const known = knownFrameworks.includes(frameworkTool.name as Framework);
+    frameworksTools.map((frameworkTool: FrameworkToolItem): Promise<KnownList> => {
+      const known: boolean = knownFrameworks.includes(frameworkTool.name as Framework);
       return getFramework(cachePath, frameworkTool, known);
     })
   );
@@ -61,10 +61,10 @@ export async function getFramework(
   known: boolean
 ): Promise<KnownList> {
   // Build the path to a potential user-provided JSON file, e.g. /path/to/user/<file>.json
-  const localPluginFile = join(userGeneratedPath, `${frameworkTool?.file}.${toolsFileExt}`);
+  const localPluginFile: string = join(userGeneratedPath, `${frameworkTool?.file}.${toolsFileExt}`);
 
   // Quick synchronous existence check to decide which file to load
-  const localPluginFileExists = existsSync(localPluginFile);
+  const localPluginFileExists: boolean = existsSync(localPluginFile);
 
   // If a user file exists, load and return it; otherwise return null
   return {
