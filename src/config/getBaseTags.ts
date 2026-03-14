@@ -2,7 +2,9 @@ import { htmlTags, svgTags, vueRouterTags, vueTags } from '../plugins/index.ts';
 
 /**
  * Mapping of supported base tags to their respective tags and sources.
+ *
  * @param repoTreeUrl - url to the framework repo with tree and version
+ * @returns BaseTags[] - list of base tags
  */
 export function getBaseTags(repoTreeUrl: string): BaseTags[] {
   return [

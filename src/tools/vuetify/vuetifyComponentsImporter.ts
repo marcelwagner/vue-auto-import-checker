@@ -5,33 +5,39 @@ import { writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all vuetify components from the vuetify library
- * @param basePath
- * @param cachePath
+ * @param basePath - base path for resolving node_modules and cache paths
+ * @param cachePath - path to the cache directory where the list of components will be stored
+ * @returns Promise<string[]> Promise that resolves with the list of component names
  */
-export async function vuetifyComponentsImporter(basePath: string, cachePath: string) {
+export async function vuetifyComponentsImporter(
+  basePath: string,
+  cachePath: string
+): Promise<string[]> {
   try {
-    const vuetifyDirectory = join(basePath, 'node_modules/vuetify/lib/components');
+    const vuetifyDirectory: string = join(basePath, 'node_modules/vuetify/lib/components');
 
     if (!existsSync(vuetifyDirectory)) {
       return Promise.reject({ errorText: `Vuetify Directory not found: ${vuetifyDirectory}` });
     }
 
-    const listOfDirectories = await readdir(vuetifyDirectory);
+    const listOfDirectories: string[] = await readdir(vuetifyDirectory);
 
-    const componentsList = [];
+    const componentsList: string[] = [];
 
     for (const dir of listOfDirectories) {
-      const componentDir = dir.match(/^V[A-Z][a-zA-Z0-9]+/);
+      const componentDir: RegExpMatchArray | null = dir.match(/^V[A-Z][a-zA-Z0-9]+/);
 
       if (componentDir === null) {
         continue;
       }
 
-      const indexFile = join(vuetifyDirectory, dir, `index.d.ts`);
-      const listOfComponents = await readFile(indexFile, 'utf8');
+      const indexFile: string = join(vuetifyDirectory, dir, `index.d.ts`);
+      const listOfComponents: string = await readFile(indexFile, 'utf8');
 
       for (const componentExport of listOfComponents.split('\n')) {
-        const component = componentExport.match(/export \{ (\w+) } [ ./a-zA-Z';]*/);
+        const component: RegExpMatchArray | null = componentExport.match(
+          /export \{ (\w+) } [ ./a-zA-Z';]*/
+        );
 
         if (component === null) {
           continue;
@@ -43,7 +49,7 @@ export async function vuetifyComponentsImporter(basePath: string, cachePath: str
       }
     }
 
-    const customPluginPath = join(basePath, cachePath);
+    const customPluginPath: string = join(basePath, cachePath);
 
     await writeCustomPluginFile(customPluginPath, 'vuetifyTags.json', componentsList);
 

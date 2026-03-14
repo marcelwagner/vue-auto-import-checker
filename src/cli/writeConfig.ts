@@ -2,8 +2,9 @@ import type { VAIC_Config } from '../../types/config.interface.ts';
 
 /**
  * Write the config to the console.
- * @param config
- * @param showResult
+ *
+ * @param config - config object
+ * @param showResult - whether to show the result stats
  */
 export function writeConfig(config: VAIC_Config, showResult: boolean) {
   if (showResult) {

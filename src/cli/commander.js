@@ -2,21 +2,21 @@ import { program } from 'commander';
 import { defaultCachePath, packageJson } from "../config/index.js";
 export function prepareCommander() {
     program
-        .option('-c, --components-file <file-path>', 'path to a file exporting registered components (relative to current working directory)', '')
-        .option('-p, --project-path <project-path>', 'directory path containing Vue project files to scan (relative to current working directory)', '')
-        .option('-a, --cache-path <cache-path>', 'directory for storing and looking up cached/custom known files (relative to current working directory)', defaultCachePath)
-        .option('-t, --tool <tool>', 'run a specific helper tool (e.g., naiveui, nuxt, primevue, quasar, vuetify, vueuse) to generate customized tag lists', '')
-        .option('-s, --stats', 'output aggregated scan statistics', false)
-        .option('-r, --result', 'output detailed result entries for each found component', false)
-        .option('-q, --quiet', 'suppress all standard output', false)
-        .option('-l, --known-tags [tags...]', 'list of custom component tags to treat as known', [])
-        .option('-j, --known-tags-file <file-path>', 'path to a JSON file containing a list of component tags to treat as known', '')
-        .option('-f, --frameworks [frameworks...]', 'predefined framework tag sets (e.g., vuetify, vueuse, quasar, nuxt, naiveui, primevue) as known', [])
-        .option('-n, --negate-known [sets...]', 'explicitly treat tag-sets as known (e.g., html, svg, vue, vue-router)', [])
-        .option('-k, --kafka', 'output each found tag with its framework and whether it is recognized', false)
-        .option('-d, --debug', 'enable detailed debug logging', false)
-        .option('-i, --imports-known', 'treat tags matching imported components as known', false)
-        .version(packageJson.version, '-v, --version', 'output the current version');
+        .option('-c, --components-file <file-path>', 'Path to a file exporting registered components (relative to current working directory)', '')
+        .option('-p, --project-path <project-path>', 'Directory path containing Vue project files to scan (relative to current working directory)', '')
+        .option('-a, --cache-path <cache-path>', 'Directory for storing and looking up cached/custom known files (relative to current working directory)', defaultCachePath)
+        .option('-t, --tool <tool>', 'Run a specific helper tool (e.g., Naive UI, Nuxt, PrimeVue, Quasar, Vuetify, VueUse) to generate customized tag lists', '')
+        .option('-s, --stats', 'Output aggregated scan statistics', false)
+        .option('-r, --result', 'Output detailed result entries for each found component', false)
+        .option('-q, --quiet', 'Suppress all standard output', false)
+        .option('-l, --known-tags [tags...]', 'List of custom component tags to treat as known', [])
+        .option('-j, --known-tags-file <file-path>', 'Path to a JSON file containing a list of component tags to treat as known', '')
+        .option('-f, --frameworks [frameworks...]', 'Predefined framework tag sets (e.g., Naive UI, Nuxt, PrimeVue, Quasar, Vuetify, VueUse) as known', [])
+        .option('-n, --negate-known [sets...]', 'Explicitly treat tag sets as known (e.g., HTML, SVG, Vue, VueRouter)', [])
+        .option('-k, --kafka', 'Output each found tag with its framework and whether it is recognized', false)
+        .option('-d, --debug', 'Enable detailed debug logging', false)
+        .option('-i, --imports-known', 'Treat tags matching imported components as known', false)
+        .version(packageJson.version, '-v, --version', 'Output the current version');
     program.parse();
     const options = program.opts();
     return {

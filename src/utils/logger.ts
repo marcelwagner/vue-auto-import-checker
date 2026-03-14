@@ -2,7 +2,8 @@ import winston from 'winston';
 
 /**
  * Create a logger instance.
- * @param debug
+ *
+ * @param debug - whether to enable debug logging
  */
 export function createLogger(debug: boolean) {
   global.debug = debug;

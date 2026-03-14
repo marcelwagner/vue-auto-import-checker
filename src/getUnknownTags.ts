@@ -22,8 +22,8 @@ import {
  *    against computed known/unknown lists and registered components.
  *  - Return aggregated `stats`, found `tagList` and `unknownTags` and the `componentsList`.
  *
- * @param {VAIC_Config} config - configuration object adhering to `VAIC_Config`
- * @returns {Promise<VAIC_ComponentSearch>} Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
+ * @param config - configuration object adhering to `VAIC_Config`
+ * @returns Promise<VAIC_ComponentSearch> - Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
  */
 export async function getUnknownTags({
   componentsFile,

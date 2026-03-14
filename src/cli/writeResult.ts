@@ -2,8 +2,9 @@ import { getLineIndexAsString } from './index.ts';
 
 /**
  * Write the result to the console.
- * @param tags
- * @param kafka
+ *
+ * @param tags - list of tags found
+ * @param kafka - whether to show all stats or only unknown stats
  */
 export function writeResult(tags: Tag[], kafka: boolean) {
   let currentFile = '';

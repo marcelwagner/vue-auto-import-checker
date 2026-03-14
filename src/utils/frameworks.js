@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { frameworksTools, toolsFileExt } from "../config/index.js";
-import { getJsonFileContent } from "./index.js";
+import { getJsonFileContent, normalize } from "./index.js";
 export async function getFrameworkTools(knownFrameworks, cachePath) {
     return Promise.all(frameworksTools.map(frameworkTool => {
         const known = knownFrameworks.includes(frameworkTool.name);
@@ -34,5 +34,5 @@ export async function getFramework(userGeneratedPath, frameworkTool, known) {
     };
 }
 export function findFrameworkByName(name) {
-    return frameworksTools.find((framework) => framework.name === name);
+    return frameworksTools.find((framework) => framework.name === normalize(name));
 }

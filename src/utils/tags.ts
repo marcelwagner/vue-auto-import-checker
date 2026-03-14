@@ -2,7 +2,13 @@ import type { Dirent } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { vueTemplateEnd, vueTemplateStart } from '../config/index.ts';
-import { getBaseTags, getFileContent, getFrameworkTools, getJsonFileContent } from './index.ts';
+import {
+  getBaseTags,
+  getFileContent,
+  getFrameworkTools,
+  getJsonFileContent,
+  normalize
+} from './index.ts';
 
 /**
  * Process a single file and collect unknown tags.
@@ -26,7 +32,7 @@ export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]>
   // Split file into lines to provide accurate line numbers for reporting.
   const linesOfFile: string[] = fileContent.split(/\n/);
 
-  logger.debug(`ALl lines length: ${linesOfFile.length}`);
+  logger.debug(`All lines length: ${linesOfFile.length}`);
 
   const templateStartIndex: number = linesOfFile.findIndex((line: string): boolean =>
     line.trim().includes(vueTemplateStart)
@@ -57,7 +63,7 @@ export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]>
     tagListRaw.forEach((tagRaw: string): void => {
       const componentMatch: ComponentImport | undefined = imports.find(
         (imp: ComponentImport): boolean =>
-          imp.component.some((comp: string): boolean => normalizeTag(comp) === normalizeTag(tagRaw))
+          imp.component.some((comp: string): boolean => normalize(comp) === normalize(tagRaw))
       );
 
       tags.push({
@@ -136,9 +142,15 @@ export async function getTagsFromDirectory(
   return tags;
 }
 
+/**
+ * Filter the list of tags to return only those that are unknown (i.e., not marked as known).
+ *
+ * @param tags - array with all tag occurrences
+ * @returns Promise resolving to an array of Tag objects representing the unknown tags
+ */
 export async function getUnknownTagsList(tags: Tag[]): Promise<Tag[]> {
   return tags.filter((tag: Tag): boolean => {
-    const tagName = normalizeTag(tag.tagName);
+    const tagName = normalize(tag.tagName);
 
     if (!tag.known) {
       logger.debug(`tag ${tagName} is unknown`);
@@ -151,6 +163,16 @@ export async function getUnknownTagsList(tags: Tag[]): Promise<Tag[]> {
   });
 }
 
+/**
+ *  Determine the known status of each tag by comparing against the aggregated known lists and components list.
+ *
+ * @param knownTagsList - array of known tags
+ * @param componentsList - array of components
+ * @param componentsFile - path to the JSON file containing components
+ * @param tags - array with all tag occurrences
+ * @param importsKnown - whether to consider imports as known
+ * @returns Promise resolving to an array of Tag objects representing the identified tags
+ */
 export async function getIdentifiedTagsList({
   knownTagsList,
   componentsList,
@@ -159,12 +181,12 @@ export async function getIdentifiedTagsList({
   importsKnown
 }: IdentifiedTagsListProps): Promise<Tag[]> {
   return tags.map((tag: Tag): Tag => {
-    const tagName: string = normalizeTag(tag.tagName);
+    const tagName: string = normalize(tag.tagName);
 
     if (knownTagsList.length >= 1) {
       // Compare each candidate after removing hyphens and lowercasing.
       const knownLists: KnownList[] = knownTagsList.filter((list: KnownList): boolean =>
-        list.tags.some((tagFromList: string): boolean => normalizeTag(tagFromList) === tagName)
+        list.tags.some((tagFromList: string): boolean => normalize(tagFromList) === tagName)
       );
 
       if (tag.knownSource.length >= 1) {
@@ -190,7 +212,7 @@ export async function getIdentifiedTagsList({
     }
 
     if (componentsList.length >= 1) {
-      if (componentsList.some((rawTag: string): boolean => normalizeTag(rawTag) === tagName)) {
+      if (componentsList.some((rawTag: string): boolean => normalize(rawTag) === tagName)) {
         tag.knownSource.push({ source: 'components', known: true, file: componentsFile });
         tag.known = true;
 
@@ -214,7 +236,7 @@ export async function getIdentifiedTagsList({
  * @param negateKnown - whether to negate the known tags list (e.g. exclude known tags)
  * @param knownFrameworks - list of known frameworks from cli
  * @param knownTags - list of known tags from cli
- * @param knownTagsFileContent - content of the JSON file containing known tags
+ * @param knownTagsFile - path to the JSON file containing known tags
  * @param cachePath - path to the user-generated JSON file
  * @returns Promise resolving to an array of KnownList objects representing the aggregated known tags and their sources
  */
@@ -255,18 +277,6 @@ export async function getKnownLists({
 }
 
 /**
- * Normalize a tag name by removing hyphens and converting to lowercase.
- * @param tag - the tag name to normalize
- * @returns string - normalized tag name
- * @example normalizeTag('my-button') // 'mybutton'
- * @example normalizeTag('my_button') // 'mybutton'
- * @example normalizeTag('MyButton') // 'mybutton'
- */
-export function normalizeTag(tag: string): string {
-  return tag.replace(/-/g, '').replace(/_/g, '').toLowerCase();
-}
-
-/**
  * Check whether a tag matches one of the capture groups from a regex match result.
  *
  * @param tag - the tag to compare
@@ -279,6 +289,7 @@ export function matchesOneOf(tag: string, regexMatchResult: RegExpMatchArray | n
 
 /**
  * Extract component imports from a file's content.
+ *
  * @param fileContent - the content of the file to parse
  * @returns ComponentImport[] - an array of objects containing component names and paths
  * @example getImportsFromFile('import { Button } from "@/components/Button.vue";') // [{ component: ['Button'], path: '@/components/Button.vue' }]

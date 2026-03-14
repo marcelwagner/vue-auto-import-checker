@@ -3,57 +3,58 @@ import { defaultCachePath, packageJson } from '../config/index.ts';
 
 /**
  * Initialize and parse command-line arguments.
+ *
  * @returns an object containing parsed CLI options
  **/
 export function prepareCommander(): CommanderInit {
   program
     .option(
       '-c, --components-file <file-path>',
-      'path to a file exporting registered components (relative to current working directory)',
+      'Path to a file exporting registered components (relative to current working directory)',
       ''
     )
     .option(
       '-p, --project-path <project-path>',
-      'directory path containing Vue project files to scan (relative to current working directory)',
+      'Directory path containing Vue project files to scan (relative to current working directory)',
       ''
     )
     .option(
       '-a, --cache-path <cache-path>',
-      'directory for storing and looking up cached/custom known files (relative to current working directory)',
+      'Directory for storing and looking up cached/custom known files (relative to current working directory)',
       defaultCachePath
     )
     .option(
       '-t, --tool <tool>',
-      'run a specific helper tool (e.g., naiveui, nuxt, primevue, quasar, vuetify, vueuse) to generate customized tag lists',
+      'Run a specific helper tool (e.g., Naive UI, Nuxt, PrimeVue, Quasar, Vuetify, VueUse) to generate customized tag lists',
       ''
     )
-    .option('-s, --stats', 'output aggregated scan statistics', false)
-    .option('-r, --result', 'output detailed result entries for each found component', false)
-    .option('-q, --quiet', 'suppress all standard output', false)
-    .option('-l, --known-tags [tags...]', 'list of custom component tags to treat as known', [])
+    .option('-s, --stats', 'Output aggregated scan statistics', false)
+    .option('-r, --result', 'Output detailed result entries for each found component', false)
+    .option('-q, --quiet', 'Suppress all standard output', false)
+    .option('-l, --known-tags [tags...]', 'List of custom component tags to treat as known', [])
     .option(
       '-j, --known-tags-file <file-path>',
-      'path to a JSON file containing a list of component tags to treat as known',
+      'Path to a JSON file containing a list of component tags to treat as known',
       ''
     )
     .option(
       '-f, --frameworks [frameworks...]',
-      'predefined framework tag sets (e.g., vuetify, vueuse, quasar, nuxt, naiveui, primevue) as known',
+      'Predefined framework tag sets (e.g., Naive UI, Nuxt, PrimeVue, Quasar, Vuetify, VueUse) as known',
       []
     )
     .option(
       '-n, --negate-known [sets...]',
-      'explicitly treat tag-sets as known (e.g., html, svg, vue, vue-router)',
+      'Explicitly treat tag sets as known (e.g., HTML, SVG, Vue, VueRouter)',
       []
     )
     .option(
       '-k, --kafka',
-      'output each found tag with its framework and whether it is recognized',
+      'Output each found tag with its framework and whether it is recognized',
       false
     )
-    .option('-d, --debug', 'enable detailed debug logging', false)
-    .option('-i, --imports-known', 'treat tags matching imported components as known', false)
-    .version(packageJson.version, '-v, --version', 'output the current version');
+    .option('-d, --debug', 'Enable detailed debug logging', false)
+    .option('-i, --imports-known', 'Treat tags matching imported components as known', false)
+    .version(packageJson.version, '-v, --version', 'Output the current version');
 
   program.parse();
 
@@ -61,8 +62,8 @@ export function prepareCommander(): CommanderInit {
 
   // Normalize CLI options into explicit typed variables used by the rest of the program.
   // Use `Boolean(...)` or explicit casts to ensure expected primitive types.
-  // commander maps `--custom-tags` -> `options.customTags` and
-  // `--custom-tags-file` -> `options.customTagsFile`.
+  // commander maps `--known-tags` -> `options.knownTags` and
+  // `--known-tags-file` -> `options.knownTagsFile`.
   return {
     knownFrameworks: options.frameworks || [],
     negateKnown: options.negateKnown || [],

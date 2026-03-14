@@ -74,4 +74,13 @@ describe('npx vue-auto-import-checker -c ./tests/data/vue-test-project/component
       /[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}, [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2} (AM|PM): Found [0-9]* unique unknown tag[s]{0,1} in [0-9]* line[s]{0,1} in [0-9]* file[s]{0,1}/
     );
   });
+
+  test('-c ./tests/data/vue-test-project/components.d.ts -p ./tests/data/vue-test-project/src -n HTML -f Vuetify -q', async () => {
+    const returnedData = await executeTest(
+      'npx vue-auto-import-checker -c ./tests/data/vue-test-project/components.d.ts -p ./tests/data/vue-test-project/src -n HTML -f Vuetify -q'
+    );
+    expect(returnedData.error.trim()).toMatch(
+      /[0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4}, [0-9]{1,2}:[0-9]{1,2}:[0-9]{1,2} (AM|PM): Found [0-9]* unique unknown tag[s]{0,1} in [0-9]* line[s]{0,1} in [0-9]* file[s]{0,1}/
+    );
+  });
 });

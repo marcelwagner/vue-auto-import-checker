@@ -1,13 +1,13 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-
 import { frameworksTools, toolsFileExt } from '../config/index.ts';
-import { getJsonFileContent } from './index.ts';
+import { getJsonFileContent, normalize } from './index.ts';
 
 /**
  * Load the list of known frameworks and their tags from the user-provided JSON files.
- * @param knownFrameworks
- * @param cachePath
+ *
+ * @param knownFrameworks - list of known frameworks
+ * @param cachePath - path to the cache directory
  * @returns Promise of KnownList[]
  */
 export async function getFrameworkTools(
@@ -23,7 +23,8 @@ export async function getFrameworkTools(
 }
 
 /** Convert the list of known frameworks to a list of FrameworkToolItem
- * @param knownFrameworks
+ *
+ * @param knownFrameworks - list of known frameworks
  * @returns array of FrameworkToolItem
  */
 export function getFrameworkList(knownFrameworks: string[]): Framework[] {
@@ -78,9 +79,12 @@ export async function getFramework(
 
 /**
  * Find a framework by name.
- * @param name
+ *
+ * @param name - name of the framework
  * @returns FrameworkToolItem | undefined
  */
 export function findFrameworkByName(name: string): FrameworkToolItem | undefined {
-  return frameworksTools.find((framework: FrameworkToolItem): boolean => framework.name === name);
+  return frameworksTools.find(
+    (framework: FrameworkToolItem): boolean => framework.name === normalize(name)
+  );
 }

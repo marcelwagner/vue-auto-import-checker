@@ -1,6 +1,7 @@
 /**
  * Write the list of components to the console.
- * @param componentsList
+ *
+ * @param componentsList - list of components
  */
 export function writeComponents(componentsList: string[]) {
   if (componentsList.length >= 1) {

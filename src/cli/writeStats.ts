@@ -1,10 +1,12 @@
 /**
  * Write the stats to the console.
- * @param stats
- * @param filesList
- * @param tagsList
- * @param uniqueTagsList
- * @param showResult
+ *
+ * @param stats - scan stats
+ * @param filesList - list of files scanned
+ * @param tagsList - list of tags found
+ * @param uniqueTagsList - list of unique tags found
+ * @param showResult - whether to show the result stats
+ * @param kafka - whether to show all stats or only unknown stats
  */
 export function writeStats({
   stats,

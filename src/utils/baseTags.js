@@ -1,4 +1,5 @@
 import { baseTags } from "../config/index.js";
+import { normalize } from "./normalize.js";
 export function getBaseTags(negateKnown) {
     return baseTags.map(base => ({
         tags: base.tags,
@@ -21,5 +22,5 @@ export function getBaseTagsList(negateKnown) {
     return baseTags;
 }
 export function findBaseTagsByName(name) {
-    return baseTags.find(base => base.name === name.replace(/_-/, '').toLowerCase());
+    return baseTags.find(base => base.name === normalize(name));
 }

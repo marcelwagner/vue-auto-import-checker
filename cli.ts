@@ -23,7 +23,7 @@ import getUnknownTags, {
 } from './index.ts';
 
 // Main async entry: choose between tool execution, listing components or full scan.
-(async () => {
+(async (): Promise<void> => {
   // Base path for resolving relative paths.
   const basePath: string = process.cwd() || '';
   // Parse command-line arguments and normalize options.
@@ -42,7 +42,7 @@ import getUnknownTags, {
     importsKnown,
     quiet,
     debug
-  } = prepareCommander();
+  }: CommanderInit = prepareCommander();
   // Set global quiet flag for downstream modules to conditionally suppress output.
   global.quiet = Boolean(quiet);
 

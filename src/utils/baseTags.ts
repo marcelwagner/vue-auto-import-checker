@@ -1,8 +1,11 @@
 import { baseTags } from '../config/index.ts';
+import { normalize } from './normalize.ts';
 
 /**
  * Get the list of base tags to search for.
- * @param negateKnown
+ *
+ * @param negateKnown - list of known base tags
+ * @returns KnownList[] - list of base tags
  */
 export function getBaseTags(negateKnown: Known[]): KnownList[] {
   return baseTags.map(base => ({
@@ -15,9 +18,11 @@ export function getBaseTags(negateKnown: Known[]): KnownList[] {
 
 /**
  * Get the list of base names to search for.
- * @param negateKnown
+ *
+ * @param negateKnown - list of known base tags
+ * @returns Known[] - list of base names
  */
-export function getBaseTagsList(negateKnown: string[]) {
+export function getBaseTagsList(negateKnown: string[]): Known[] {
   const baseTags: Known[] = [];
 
   negateKnown.forEach(base => {
@@ -34,8 +39,10 @@ export function getBaseTagsList(negateKnown: string[]) {
 
 /**
  * Find a base tag by name.
- * @param name
+ *
+ * @param name - name of the base tag
+ * @returns BaseTags | undefined
  */
-export function findBaseTagsByName(name: string) {
-  return baseTags.find(base => base.name === name.replace(/_-/, '').toLowerCase());
+export function findBaseTagsByName(name: string): BaseTags | undefined {
+  return baseTags.find(base => base.name === normalize(name));
 }

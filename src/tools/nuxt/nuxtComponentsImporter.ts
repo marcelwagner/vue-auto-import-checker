@@ -5,23 +5,27 @@ import { writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all nuxt components from the nuxt library
- * @param basePath
- * @param cachePath
+ * @param basePath - base path for resolving node_modules and cache paths
+ * @param cachePath - path to the cache directory where the list of components will be stored
+ * @returns Promise<string[]> Promise that resolves with the list of component names
  */
-export async function nuxtComponentsImporter(basePath: string, cachePath: string) {
+export async function nuxtComponentsImporter(
+  basePath: string,
+  cachePath: string
+): Promise<string[]> {
   try {
-    const nuxtDirectory = join(basePath, 'node_modules/nuxt/dist/app/components');
+    const nuxtDirectory: string = join(basePath, 'node_modules/nuxt/dist/app/components');
 
     if (!existsSync(nuxtDirectory)) {
       return Promise.reject({ errorText: `Nuxt Directory not found: ${nuxtDirectory}` });
     }
 
-    const listOfFiles = await readdir(nuxtDirectory);
+    const listOfFiles: string[] = await readdir(nuxtDirectory);
 
-    const componentsList = [];
+    const componentsList: string[] = [];
 
     for (const file of listOfFiles) {
-      const vueFile = file.match(/([a-zA-Z0-9-]+).vue$/);
+      const vueFile: RegExpMatchArray | null = file.match(/([a-zA-Z0-9-]+).vue$/);
 
       if (vueFile) {
         logger.debug(`found vueFile: ${vueFile}`);
@@ -29,8 +33,8 @@ export async function nuxtComponentsImporter(basePath: string, cachePath: string
         continue;
       }
 
-      const fileContent = await readFile(join(nuxtDirectory, file), 'utf8');
-      const componentNameRaw = fileContent.match(
+      const fileContent: string = await readFile(join(nuxtDirectory, file), 'utf8');
+      const componentNameRaw: RegExpMatchArray | null = fileContent.match(
         /defineComponent\(\{[\W]+name: "([a-zA-Z0-9-]+)",/gm
       );
 
@@ -38,7 +42,7 @@ export async function nuxtComponentsImporter(basePath: string, cachePath: string
         continue;
       }
 
-      const componentName = componentNameRaw[0]
+      const componentName: string = componentNameRaw[0]
         .replace(/defineComponent\(\{[\W]+name: "/, '')
         .replace('",', '');
 
@@ -47,7 +51,7 @@ export async function nuxtComponentsImporter(basePath: string, cachePath: string
       componentsList.push(componentName);
     }
 
-    const customPluginPath = join(basePath, cachePath);
+    const customPluginPath: string = join(basePath, cachePath);
 
     await writeCustomPluginFile(customPluginPath, 'nuxtTags.json', componentsList);
 

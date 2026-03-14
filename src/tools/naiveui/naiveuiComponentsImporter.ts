@@ -1,27 +1,31 @@
-import { existsSync } from 'node:fs';
+import { existsSync, Stats } from 'node:fs';
 import { readdir, readFile, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
- * Imports all naiveui components from the naive-ui library
- * @param basePath
- * @param cachePath
+ * Imports all naive-ui components from the naive-ui library
+ * @param basePath - base path for resolving node_modules and cache paths
+ * @param cachePath - path to the cache directory where the list of components will be stored
+ * @returns Promise<string[]> Promise that resolves with the list of component names
  */
-export async function naiveuiComponentsImporter(basePath: string, cachePath: string) {
+export async function naiveuiComponentsImporter(
+  basePath: string,
+  cachePath: string
+): Promise<string[]> {
   try {
-    const naiveuiDirectory = join(basePath, 'node_modules/naive-ui/lib');
+    const naiveuiDirectory: string = join(basePath, 'node_modules/naive-ui/lib');
 
     if (!existsSync(naiveuiDirectory)) {
       return Promise.reject({ errorText: `Naive-UI Directory not found: ${naiveuiDirectory}` });
     }
 
-    const listOfDirs = await readdir(naiveuiDirectory);
+    const listOfDirs: string[] = await readdir(naiveuiDirectory);
 
-    const componentsList = [];
+    const componentsList: string[] = [];
 
     for (const dir of listOfDirs) {
-      const dirStat = await stat(join(naiveuiDirectory, dir));
+      const dirStat: Stats = await stat(join(naiveuiDirectory, dir));
 
       if (!dirStat.isDirectory()) {
         continue;
@@ -31,17 +35,19 @@ export async function naiveuiComponentsImporter(basePath: string, cachePath: str
         continue;
       }
 
-      const indexFile = join(naiveuiDirectory, dir, 'index.d.ts');
+      const indexFile: string = join(naiveuiDirectory, dir, 'index.d.ts');
 
       if (!existsSync(indexFile)) {
         continue;
       }
 
-      const fileContent = await readFile(indexFile, 'utf8');
-      const lines = fileContent.split('\n');
+      const fileContent: string = await readFile(indexFile, 'utf8');
+      const lines: string[] = fileContent.split('\n');
 
       for (const line of lines) {
-        const component = line.match(/export {[a-zA-Z0-9\W]*default as (N[a-zA-Z0-9-]+)[\W]{0,1}}/);
+        const component: RegExpMatchArray | null = line.match(
+          /export {[a-zA-Z0-9\W]*default as (N[a-zA-Z0-9-]+)[\W]{0,1}}/
+        );
 
         if (component === null) {
           continue;
@@ -53,7 +59,7 @@ export async function naiveuiComponentsImporter(basePath: string, cachePath: str
       }
     }
 
-    const customPluginPath = join(basePath, cachePath);
+    const customPluginPath: string = join(basePath, cachePath);
 
     await writeCustomPluginFile(customPluginPath, 'naiveuiTags.json', componentsList);
 

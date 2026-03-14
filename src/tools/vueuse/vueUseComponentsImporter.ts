@@ -5,18 +5,22 @@ import { writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all vueUse components from the vueUse library
- * @param basePath
- * @param cachePath
+ * @param basePath - base path for resolving node_modules and cache paths
+ * @param cachePath - path to the cache directory where the list of components will be stored
+ * @returns Promise<string[]> Promise that resolves with the list of component names
  */
-export async function vueUseComponentsImporter(basePath: string, cachePath: string) {
+export async function vueUseComponentsImporter(
+  basePath: string,
+  cachePath: string
+): Promise<string[]> {
   try {
     // index.d.mts for vuetify 13.5.0
-    const indexMFile = join(basePath, 'node_modules/@vueuse/components/index.d.mts');
+    const indexMFile: string = join(basePath, 'node_modules/@vueuse/components/index.d.mts');
     // index.d.mts for vuetify 14.0.0
-    const indexFile = join(basePath, 'node_modules/@vueuse/components/dist/index.d.ts');
+    const indexFile: string = join(basePath, 'node_modules/@vueuse/components/dist/index.d.ts');
 
-    const indexMFileExists = existsSync(indexMFile);
-    const indexFileExists = existsSync(indexFile);
+    const indexMFileExists: boolean = existsSync(indexMFile);
+    const indexFileExists: boolean = existsSync(indexFile);
 
     if (!indexMFileExists && !indexFileExists) {
       return Promise.reject({
@@ -27,14 +31,14 @@ export async function vueUseComponentsImporter(basePath: string, cachePath: stri
     logger.debug(`File: ${indexMFile} exists ${indexMFileExists}`);
     logger.debug(`File: ${indexFile} exists ${indexFileExists}`);
 
-    const fileContent = indexMFileExists
+    const fileContent: string = indexMFileExists
       ? await readFile(indexMFile, 'utf8')
       : await readFile(indexFile, 'utf8');
 
-    const componentsList = [];
+    const componentsList: string[] = [];
 
     for (const fileContentLine of fileContent.split('\n')) {
-      const component = fileContentLine.match(
+      const component: RegExpMatchArray | null = fileContentLine.match(
         /declare const ([\w]+): (vue.DefineComponent|vue1.DefineSetupFnComponent|vue0.DefineSetupFnComponent)/
       );
 
@@ -47,7 +51,7 @@ export async function vueUseComponentsImporter(basePath: string, cachePath: stri
       componentsList.push(component[1]);
     }
 
-    const customPluginPath = join(basePath, cachePath);
+    const customPluginPath: string = join(basePath, cachePath);
 
     await writeCustomPluginFile(customPluginPath, 'vueUseTags.json', componentsList);
 

@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, Stats } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import { writeCustomPluginFile } from "../../utils/index.js";

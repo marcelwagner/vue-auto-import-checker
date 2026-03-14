@@ -17,7 +17,9 @@ import {
 
 /**
  * Mapping of supported frameworks to their respective tags and import tools.
+ *
  * @param repoTreeUrl - url to the framework repo with tree and version
+ * @returns FrameworkToolItem[] - list of framework tools
  */
 export function getFrameworksTools(repoTreeUrl: string): FrameworkToolItem[] {
   return [

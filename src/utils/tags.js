@@ -1,13 +1,13 @@
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { vueTemplateEnd, vueTemplateStart } from "../config/index.js";
-import { getBaseTags, getFileContent, getFrameworkTools, getJsonFileContent } from "./index.js";
+import { getBaseTags, getFileContent, getFrameworkTools, getJsonFileContent, normalize } from "./index.js";
 export async function getTagsFromFile(file, tags) {
     stats.fileCounter++;
     const fileContent = await getFileContent(file);
     logger.debug(`File: ${file}`);
     const linesOfFile = fileContent.split(/\n/);
-    logger.debug(`ALl lines length: ${linesOfFile.length}`);
+    logger.debug(`All lines length: ${linesOfFile.length}`);
     const templateStartIndex = linesOfFile.findIndex((line) => line.trim().includes(vueTemplateStart));
     const templateEndIndex = linesOfFile.findLastIndex((line) => line.trim().includes(vueTemplateEnd));
     if (templateStartIndex === -1) {
@@ -21,7 +21,7 @@ export async function getTagsFromFile(file, tags) {
     const imports = getImportsListFromFile(fileContent);
     tagList.forEach((tagListRaw, index) => {
         tagListRaw.forEach((tagRaw) => {
-            const componentMatch = imports.find((imp) => imp.component.some((comp) => normalizeTag(comp) === normalizeTag(tagRaw)));
+            const componentMatch = imports.find((imp) => imp.component.some((comp) => normalize(comp) === normalize(tagRaw)));
             tags.push({
                 line: index + 1,
                 tagName: tagRaw,
@@ -74,7 +74,7 @@ export async function getTagsFromDirectory(basePath, directoryPath, tags) {
 }
 export async function getUnknownTagsList(tags) {
     return tags.filter((tag) => {
-        const tagName = normalizeTag(tag.tagName);
+        const tagName = normalize(tag.tagName);
         if (!tag.known) {
             logger.debug(`tag ${tagName} is unknown`);
             return true;
@@ -85,9 +85,9 @@ export async function getUnknownTagsList(tags) {
 }
 export async function getIdentifiedTagsList({ knownTagsList, componentsList, componentsFile, tags, importsKnown }) {
     return tags.map((tag) => {
-        const tagName = normalizeTag(tag.tagName);
+        const tagName = normalize(tag.tagName);
         if (knownTagsList.length >= 1) {
-            const knownLists = knownTagsList.filter((list) => list.tags.some((tagFromList) => normalizeTag(tagFromList) === tagName));
+            const knownLists = knownTagsList.filter((list) => list.tags.some((tagFromList) => normalize(tagFromList) === tagName));
             if (tag.knownSource.length >= 1) {
                 tag.knownSource.forEach((knownSource) => {
                     if (knownSource.source === 'import' && importsKnown) {
@@ -107,7 +107,7 @@ export async function getIdentifiedTagsList({ knownTagsList, componentsList, com
             }
         }
         if (componentsList.length >= 1) {
-            if (componentsList.some((rawTag) => normalizeTag(rawTag) === tagName)) {
+            if (componentsList.some((rawTag) => normalize(rawTag) === tagName)) {
                 tag.knownSource.push({ source: 'components', known: true, file: componentsFile });
                 tag.known = true;
                 logger.debug(`tag ${tagName} is in components list`);
@@ -144,9 +144,6 @@ export async function getKnownLists({ negateKnown, knownFrameworks, knownTags, k
     logger.debug(`knownTagsList: ${JSON.stringify(knownTagsList, null, 2)}`);
     logger.debug(`knownTagsFileContentList: ${JSON.stringify(knownTagsFileContentList, null, 2)}`);
     return [...knownTagsList, ...knownTagsFileContentList, ...frameworkTags, ...baseTags];
-}
-export function normalizeTag(tag) {
-    return tag.replace(/-/g, '').replace(/_/g, '').toLowerCase();
 }
 export function matchesOneOf(tag, regexMatchResult) {
     return regexMatchResult ? regexMatchResult.some((result) => result === tag) : false;

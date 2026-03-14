@@ -1,19 +1,19 @@
 # Security
 
-The tool will need some read and write permissions on the local hard disc.
+The tool needs some read and write permissions on the local hard disk.
 
-To use the tool without any custom file (vuetify, vueUse, customTagFile), the tool needs:
+To use the tool without any custom file (Vuetify, VueUse, `known-tags-file`), the tool needs:
 
-- `read`-permission to the files and folders of `project-path`
-- `read`-permission for the `components-file`-path
+- `read` permission for the files and folders of `project-path`
+- `read` permission for the `components-file` path
 
-If you want to use a customTagFile, the tool needs additionally:
+If you want to use a `known-tags-file`, the tool additionally needs:
 
-- `read`-permission for the `customtagsfile`-path
+- `read` permission for the `known-tags-file` path
 
-If you want to use custom vuetify or VueUse tag-lists, the tool needs additionally:
+If you want to use custom Vuetify or VueUse tag lists, the tool additionally needs:
 
-- `read` & `write`-permission for the `node_modules`-path and its subfolders
+- `read` & `write` permission for the `node_modules` path and its subfolders
 
-The tool will add a folder `.cache` as a subfolder to the `node_modules`-folder for your custom vuetify or VueUse
-tag-lists.
+The tool will add a `.cache` folder as a subfolder to the `node_modules` folder for your custom Vuetify or VueUse
+tag lists.

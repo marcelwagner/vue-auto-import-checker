@@ -1,7 +1,8 @@
 /**
  * Write the tool result to the console.
- * @param toolName
- * @param toolTags
+ *
+ * @param toolName - name of the tool
+ * @param toolTags - list of tags found by the tool
  */
 export function writeToolsResult(toolName: string, toolTags: string[]) {
   if (toolTags.length >= 1) {

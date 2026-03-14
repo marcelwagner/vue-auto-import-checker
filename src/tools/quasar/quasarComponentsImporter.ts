@@ -5,23 +5,27 @@ import { writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all quasar components from the quasar library
- * @param basePath
- * @param cachePath
+ * @param basePath - base path for resolving node_modules and cache paths
+ * @param cachePath - path to the cache directory where the list of components will be stored
+ * @returns Promise<string[]> Promise that resolves with the list of component names
  */
-export async function quasarComponentsImporter(basePath: string, cachePath: string) {
+export async function quasarComponentsImporter(
+  basePath: string,
+  cachePath: string
+): Promise<string[]> {
   try {
-    const componentsFile = join(basePath, 'node_modules/quasar/src/components.js');
+    const componentsFile: string = join(basePath, 'node_modules/quasar/src/components.js');
 
     if (!existsSync(componentsFile)) {
       return Promise.reject({ errorText: `No components.js found: ${componentsFile}` });
     }
 
-    const listOfComponents = await readFile(componentsFile, 'utf8');
+    const listOfComponents: string = await readFile(componentsFile, 'utf8');
 
-    const componentsList = [];
+    const componentsList: string[] = [];
 
     for (const componentExport of listOfComponents.split('\n')) {
-      const component = componentExport.match(
+      const component: RegExpMatchArray | null = componentExport.match(
         /export \* from \W.\/components\/([\w-]+)\/index.js\W/
       );
 
@@ -34,7 +38,7 @@ export async function quasarComponentsImporter(basePath: string, cachePath: stri
       componentsList.push(`q-${component[1]}`);
     }
 
-    const customPluginPath = join(basePath, cachePath);
+    const customPluginPath: string = join(basePath, cachePath);
 
     await writeCustomPluginFile(customPluginPath, 'quasarTags.json', componentsList);
 

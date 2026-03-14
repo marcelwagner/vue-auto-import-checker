@@ -10,7 +10,6 @@ import { join } from 'node:path';
  *
  * @param filePath - path to the file to read
  * @returns promise that resolves with the file content as a string
- * @throws rejects with a prefixed error string if reading fails
  */
 export async function getFileContent(filePath: string): Promise<string> {
   try {
@@ -33,7 +32,6 @@ export async function getFileContent(filePath: string): Promise<string> {
  *
  * @param filePath - path to the JSON file
  * @returns promise that resolves with the parsed JSON (expected as `string[]` in current usage)
- * @throws rejects with a prefixed error string if reading or parsing fails
  */
 export async function getJsonFileContent(filePath: string): Promise<string[]> {
   try {
@@ -48,10 +46,10 @@ export async function getJsonFileContent(filePath: string): Promise<string[]> {
 
 /**
  * Write a JSON file with the given content.
- * @param dir
- * @param tagsFile
- * @param componentsList
- * @returns promise void
+ *
+ * @param dir - directory to write the file in
+ * @param tagsFile - name of the file to write (e.g., 'vuetifyTags.json')
+ * @param componentsList - array of component tags to write to the file
  */
 export async function writeCustomPluginFile(
   dir: string,
