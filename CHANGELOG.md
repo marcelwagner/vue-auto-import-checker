@@ -5,29 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.13.0] - 2026-xx-xx
+## [1.0.0] - 2026-03-14
 
 ### Added
-- New `normalize` utility to improve tag matching by stripping hyphens, spaces, and underscores.
 - Support for newer versions of frameworks:
   - Nuxt >= 4.2.1 (added 4.2.2, 4.3.1, 4.4.2)
   - PrimeVue >= 4.5.3 (added 4.5.4)
   - Vuetify >= 3.8.4 (added 3.11.3, 4.0.1)
   - VueUse >= 13.6.0 (added 14.1.0, 14.2.1)
   - Quasar >= 1.16.0 (added 2.18.6)
-- New `--kafka` option (renamed from `skipReturnUnknown`) to output each found tag with its framework and recognition status.
-- Added npmjs links and improved README formatting.
+- New `--kafka` option to output each found tag with its framework and recognition status.
+- New `--imports-known` option to output found tag which are imported components as known tags.
+- Added js files to use JavaScript instead of TypeScript.
+- Added lots of tests for the CLI and tools.
+- Added `CHANGELOG.md` file.
+- Added a `cookbook.md` file for more detailed examples.
+- Added a `security.md` file for security vulnerabilities.
 
 ### Changed
+- Changed the executor of the cli from `tsx` to `node`.
 - Recommended Node.js version updated to >= 24.11.1 (minimum required 20.19.1).
 - Improved CLI statistics output and descriptions.
-- Refactored type hints across the project for better development experience.
-- Renamed internal configuration and moved paths for better project structure.
+- Refactored type hints across the project for a better development experience.
+- Renamed internal configuration and moved paths for a better project structure.
 
 ### Fixed
 - Fixed spelling, grammar, and phrasing in all documentation (README, cookbook, tools) and CLI descriptions for better professional consistency.
 - Corrected terminology (e.g., "tag sets") and capitalization in help outputs.
-- Fixed a typo in debug logs (`ALl` -> `All`).
 
 ## [0.12.0] - 2025-12-07
 
