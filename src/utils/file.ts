@@ -10,15 +10,16 @@ import { join } from 'node:path';
  *
  * @param filePath - path to the file to read
  * @returns promise that resolves with the file content as a string
- * @throws rejects with a prefixed error string if reading fails
  */
-export async function getFileContent(filePath: string) {
+export async function getFileContent(filePath: string): Promise<string> {
   try {
     // Read the file using UTF-8 encoding and return the resulting string.
     return readFile(filePath, 'utf8');
   } catch (error) {
     // Normalize the rejection to a readable string so callers get a consistent error shape.
-    return Promise.reject('Error getting file content ' + error);
+    return Promise.reject({
+      errorText: `Error getting file content from file ${filePath} ` + JSON.stringify(error)
+    });
   }
 }
 
@@ -31,40 +32,45 @@ export async function getFileContent(filePath: string) {
  *
  * @param filePath - path to the JSON file
  * @returns promise that resolves with the parsed JSON (expected as `string[]` in current usage)
- * @throws rejects with a prefixed error string if reading or parsing fails
  */
 export async function getJsonFileContent(filePath: string): Promise<string[]> {
   try {
-    const jsonFileContent = await getFileContent(filePath);
-    // Parse the JSON text and return the resulting value.
+    const jsonFileContent: string = await getFileContent(filePath);
     return JSON.parse(jsonFileContent);
   } catch (error) {
-    // Provide a consistent rejection message for callers to handle.
-    return Promise.reject('Error getting json file content ' + error);
+    return Promise.reject({
+      errorText: `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
+    });
   }
 }
 
+/**
+ * Write a JSON file with the given content.
+ *
+ * @param dir - directory to write the file in
+ * @param tagsFile - name of the file to write (e.g., 'vuetifyTags.json')
+ * @param componentsList - array of component tags to write to the file
+ */
 export async function writeCustomPluginFile(
   dir: string,
   tagsFile: string,
   componentsList: string[]
-) {
-  const localDirExists = existsSync(dir);
+): Promise<void> {
+  if (componentsList.length >= 1) {
+    const localDirExists: boolean = existsSync(dir);
 
-  logger.debug(`localDir ${dir} exists ${localDirExists}`);
+    if (!localDirExists) {
+      logger.debug(`localDir ${dir} will be made`);
+      await mkdir(dir);
+    }
 
-  if (!localDirExists) {
-    logger.debug(`localDir ${dir} will be made`);
+    const localTagsFile: string = join(dir, tagsFile);
 
-    await mkdir(dir);
+    logger.debug('localTagsFile', localTagsFile);
+
+    await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
+      flag: 'w+',
+      encoding: 'utf-8'
+    });
   }
-
-  const localTagsFile = join(dir, tagsFile);
-
-  logger.debug('localTagsFile', localTagsFile);
-
-  await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
-    flag: 'w+',
-    encoding: 'utf-8'
-  });
 }

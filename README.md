@@ -1,49 +1,64 @@
 # Vue auto-import checker
 
+npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-checker)
+
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker)
 
 <!-- TOC -->
-
 * [Description](#description)
+* [Why?](#why)
 * [Requirements](#requirements)
 * [Installation](#installation)
-* [CLI-Options](#cli-options)
 * [Usage](#usage)
+* [CLI Options](#cli-options)
+* [Known Framework tags](#known-framework-tags)
 * [Examples](#examples)
 * [CI/CD Integration](#cicd-integration)
 * [Security](#security)
+* [Importers](#importers)
 * [Contributors](#contributors)
 * [Feedback & Contributions](#feedback--contributions)
-
 <!-- TOC -->
 
 ## Description
 
-A CLI tool that checks whether every non-HTML tag used in your Vue templates is properly registered in `components.d.ts`
-when using [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) (or similar auto-import setups).
+A CLI tool that checks if every tag used in your Vue templates is either properly registered in `components.d.ts`
+when using [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) (or similar auto-import setups), 
+is a tag from a standard library like `HTML`, `SVG`, `Vue`, or `VueRouter`, or a tag from a framework like `Vuetify` or `Nuxt`.
 
-You can configure which tag-sets the checker should ignore. `HTML`, `Vue`, `VueRouter` and `SVG` tags are ignored by
-default. You can remove them from the ignore list if needed.
+You can configure which tag sets the checker should handle as if they were known. `HTML`, `Vue`, `VueRouter`, and `SVG` 
+tags are known by default, but you can remove them from the known list if needed.
 
-Choose also if the checker should ignore other tags of famous frameworks. Currently, we support:
+To have a framework on the known list, you only need to provide its name. Look up what we support at the moment (Nuxt, 
+PrimeVue, Vuetify, ...) in the section [Known Framework tags](#known-framework-tags).
 
-- `vuetify` (currently v3.8.3)*
-- `VueUse` (currently v13.5.0)*
-- `quasar` (currently v1.15.8)*
-- `nuxt` (currently v4.2.1)*
-- others are work in progress ...
+It is also possible to provide your own list of known tags by providing a `custom-tags-file` in JSON format or a simple list 
+of tags.
 
-But you can provide your own list by passing a `customtagsfile` in json format with your individual ignore tags.
+You can also use the importer tools to use your own list of tags for `Vuetify`, `VueUse`, `Quasar`, `Nuxt`, `Naive UI`, 
+and `PrimeVue` if your version is not yet supported by the tool.
 
-You can also use the importer tools to use your own list of tags for `vuetify`, `VueUse`, `quasars` & `nuxt`.
+## Why?
 
-\*See the *[Usage](#usage)* section for more `vuetify`, `VueUse`, `quasar` & `nuxt` related information.
+Why does this tool exist?  
+
+Because of migration from older codebases and toolsets to modern ones.  
+
+My experience as a developer showed me that the decision to use the top end toolset does come one day and then the 
+migration is oftentimes not a recommendation from the customer, but from the developer team. That means the migration
+is not paid work. So it is not made as a priority.   
+Using something like the unplugin for your vue project is 
+recommended. But the migration is not always easy. You have to change your codebase, and you have to make sure that you 
+do not forget any tags. This tool helps you with that. It checks your codebase for unknown tags and tells you where 
+they are. So you can easily find and fix them.
 
 ## Requirements
 
 We recommend using:
 
-- Node.js >= 24.0.0 (minimum required 20.19.1)
+- Node.js >= 24.11.1 (minimum required 20.19.1)
+
+Other versions might work but are not tested.
 
 ## Installation
 
@@ -51,200 +66,90 @@ We recommend using:
  npm i vue-auto-import-checker
 ```
 
-## CLI Options
-
-| Option                              | Alias | Description                                          | Default                |
-|-------------------------------------|-------|------------------------------------------------------|------------------------|
-| `--components-file <file>`          | `-c`  | Path to the `components.d.ts` file (relative to CWD) | `"./components.d.ts"`  |
-| `--project-path <path>`             | `-p`  | Path to the Vue source directory (relative to CWD)   | `""`                   |
-| `--stats`                           | `-s`  | Print a summary of the check                         | `false`                |
-| `--result`                          | `-r`  | Print detailed results                               | `false`                |
-| `--quiet`                           | `-q`  | Suppress all output                                  | `false`                |
-| `--customtags [customtags...]`      | —     | Ignore these tags                                    | `[]`                   |
-| `--customtagsfile <customtagsfile>` | —     | Ignore tags listed in this json file                 | `""`                   |
-| `--vuetify`                         | —     | Ignore Vuetify tags                                  | `false`                |
-| `--vueuse`                          | —     | Ignore VueUse tags                                   | `false`                |
-| `--quasar`                          | —     | Ignore quasar tags                                   | `false`                |
-| `--nuxt`                            | —     | Ignore nuxt tags                                     | `false`                |
-| `--novue`                           | —     | Do not ignore Vue tags                               | `false`                |
-| `--novuerouter`                     | —     | Do not ignore VueRouter tags                         | `false`                |
-| `--nosvg`                           | —     | Do not ignore svg element tags                       | `false`                |
-| `--nohtml`                          | —     | Do not ignore HTML element tags                      | `false`                |
-| `--tool <tool>`                     | `-t`  | use a tool to customize your checker                 | `""`                   |
-| `--version`                         | `-v`  | Show the currently installed version                 | —                      |
-| `--debug`                           | —     | Show debug log                                       | `false`                |
-| `--help`                            | `-h`  | Display help information                             | —                      |
-
 ## Usage
 
-The help of the cli tool is a good starting point, but you can also start with an example from our [examples](#examples).
+The help of the CLI tool is a good starting point, but you can also start with an example from our [examples](#examples).
 
 ``` bash
  npx vue-auto-import-checker -h
 ```
 
-### Vuetify >= 3.8.4
+## CLI Options
 
-We provide a list of `vuetify` tags from version `3.8.3` out of the box.
+| Option                          | Alias | Description                                                                                                 | Default                   |
+|---------------------------------|-------|-------------------------------------------------------------------------------------------------------------|---------------------------|
+| `--components-file <file-path>` | `-c`  | Path to a file exporting registered components (relative to current working directory)                      | `""`                      |
+| `--project-path <project-path>` | `-p`  | Directory path containing Vue project files to scan (relative to current working directory)                 | `""`                      |
+| `--cache-path <cache-path>`     | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)      | `"./node_modules/.cache"` |
+| `--tool <tool>`                 | `-t`  | Run a specific helper tool (e.g., Nuxt, PrimeVue, Quasar, VueUse, Vuetify) to generate customized tag lists | `""`                      |
+| `--stats`                       | `-s`  | Output aggregated scan statistics                                                                           | `false`                   |
+| `--result`                      | `-r`  | Output detailed result entries for each found component                                                     | `false`                   |
+| `--quiet`                       | `-q`  | Suppress all standard output                                                                                | `false`                   |
+| `--known-tags [tags...]`        | `-l`  | List of custom component tags to treat as known                                                             | `[]`                      |
+| `--known-tags-file <file-path>` | `-j`  | Path to a JSON file containing a list of component tags to treat as known                                   | `""`                      |
+| `--frameworks [frameworks...]`  | `-f`  | Predefined framework tag sets (e.g., Vuetify, VueUse, Quasar, Nuxt, Naive UI, PrimeVue) as known            | `[]`                      |
+| `--negate-known [sets...]`      | `-n`  | Explicitly treat tag sets as known (e.g., HTML, SVG, Vue, VueRouter)                                        | `[]`                      |
+| `--kafka`                       | `-k`  | Output each found tag with its framework and whether it is recognized                                       | `false`                   |
+| `--debug`                       | `-d`  | Enable detailed debug logging                                                                               | `false`                   |
+| `--imports-known`               | `-i`  | Treat tags matching imported components as known                                                            | `false`                   |
+| `--version`                     | `-v`  | Output the current version                                                                                  | `false`                   |
+| `--help`                        | `-h`  | Display help information                                                                                    | `false`                   |
 
-But you can import your own set of tags by using the `vuetify-importer` tool.
+## Known Framework tags
 
-``` bash
- npx vue-auto-import-checker -t vuetify-importer
-```
+Currently, we support:
 
-This will add a new `vuetify` tag-list from your actual `vuetify` implementation, so that the checker ignores all `vuetify`
-tags from your current `vuetify` version. (tested with vuetify v3.8.3 and v3.11.1)
+- Vuetify >= 3.8.4
+- VueUse >= 13.6.0
+- Quasar >= 1.16.0
+- Nuxt >= 4.2.1
+- Naive UI >= 2.43.2
+- PrimeVue >= 4.5.3
 
-This will add a folder (.cache) to your node_modules folder.
+Other versions might work but are not tested.
 
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/10), for which
-version the importer works.
+If you want to use a framework version that is not yet supported, you can use the importer tools to provide your own list 
+of tags.
 
-### VueUse >= 13.6.0
+We are working on more.
 
-We provide a list of `VueUse` tags from version `13.5.0` out of the box.
+### Known Framework tags
 
-But you can import your own set of tags by using the `vueuse-importer` tool.
-
-``` bash
- npx vue-auto-import-checker -t vueuse-importer
-```
-
-This will add a new `vueUse` tag-list from your actual `vueUse` implementation, so that the checker ignores all `vueUse` tags
-from your current `vueUse` version. (tested with @vueuse/components v13.5.0 and v14.0.0)
-
-This will add a folder (.cache) to your node_modules folder.
-
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which
-version the importer works.
-
-### Quasar >= 1.16.0
-
-We provide a list of `quasar` tags from version `1.15.8` out of the box.
-
-But you can import your own set of tags by using the `quasar-importer` tool.
-
-``` bash
- npx vue-auto-import-checker -t quasar-importer
-```
-
-This will add a new `quasar` tag-list from your actual `quasar` implementation, so that the checker ignores all `quasar` tags
-from your current `quasar` version. (tested with quasar v1.15.8)
-
-This will add a folder (.cache) to your node_modules folder.
-
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/11), for which
-version the importer works.
-
-### Nuxt >= 4.2.1
-
-We provide a list of `nuxt` tags from version `4.2.1` out of the box.
-
-But you can import your own set of tags by using the `nuxt-importer` tool.
+Depending on which framework you are using in the project, add the strings to the command line.
 
 ``` bash
- npx vue-auto-import-checker -t nuxt-importer
+ npx vue-auto-import-checker -f vuetify vueuse quasar nuxt naiveui primevue
 ```
-
-This will add a new `nuxt` tag-list from your actual `nuxt` implementation, so that the checker ignores all `nuxt` tags
-from your current `nuxt` version. (tested with Nuxt v4.2.1)
-
-This will add a folder (.cache) to your node_modules folder.
-
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/12), for which
-version the importer works.
-
-### Node.js
-
-Tested with Node.js 20.19.1, 22.15.1, 22.18.1 & 24.11.1
-
-Try to use other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/9), for which
-version the cli works.
 
 ## Examples
 
-### 1. Example
-
-- Your `components.d.ts` file lives at: \
-  `./tests/data/vue-test-project/components.d.ts`
-- Vue component files are located in: \
-  `./tests/data/vue-test-project/src/`
-- You are using Vuetify, VueUse and a custom component named `ToolingIcon`
-- And you want to see a report and a statistical output
-
-``` bash
- npx vue-auto-import-checker \
-  -c ./tests/data/vue-test-project/components.d.ts \
-  -p ./tests/data/vue-test-project/src/ \
-  --vuetify \
-  --vueuse \
-  --customtags ToolingIcon EcosystemIcon \
-  -r \
-  -s
-```
-
-or
-
-### 2. Example
-
-- Your `components.d.ts` file lives at: \
-  `./tests/data/vue-test-project/components.d.ts`
-- Vue component files are located in: \
-  `./tests/data/vue-test-project/src/`
-- You are using Vuetify and a custom component named `ToolingIcon`
-- And you only want to have this tool in your CI workflow to fail or pass
-
-``` bash
- npx vue-auto-import-checker \
-  -c ./tests/data/vue-test-project/components.d.ts \
-  -p ./tests/data/vue-test-project/src/ \
-  --vuetify \
-  --customtags ToolingIcon EcosystemIcon
-```
-
-or
-
-### 3. Example
-
-- Your `components.d.ts` file lives at: \
-  `./tests/data/vue-test-project/components.d.ts`
-- And you only want a list of all tags the components.d.ts file is providing
-
-``` bash
- npx vue-auto-import-checker -c ./tests/data/vue-test-project/components.d.ts
-```
+Lookup the examples in the [cookbook.md](docs/cookbook.md).
 
 ## CI/CD Integration
 
 This tool is CI-friendly
 
 - If unknown tags are detected, the CLI will exit with a non-zero status code
-- If no issues are found, it will exit successfully with code `0`
+- If no issues are found, e.g., no unknown tags are found, it will exit successfully with code `0`.
 
 This allows you to easily break builds when auto-imports are missing.
 
 ## Security
 
-The tool will need some read and write permissions on your local hard disc.
+See [security.md](docs/security.md) in the docs folder.
 
-To use the tool without any custom file (vuetify, vueUse, customTagFile), the tool needs:
+## Importers
 
-- `read`-permission to the files and folders of `project-path`
-- `read`-permission for the `components-file`-path
+Use a tag list from the specific version that your project is using by using a specific importer.
 
-If you want to use a customTagFile, the tool needs additionally:
+Every importer has its own `README.md` file so you can look up your specific use case.
 
-- `read`-permission for the `customtagsfile`-path
-
-If you want to use custom vuetify or VueUse tag-lists, the tool needs additionally:
-
-- `read`-permission for the `node_modules`-path and its subfolders
-- `write`-permission for the `node_modules`-path and its subfolders
-- `read`-permission for the `node_modules`-path and the subfolders
-
-The tool will add a folder `.cache` as a subfolder to the `node_modules`-folder for your custom vuetify or VueUse
-tag-lists.
+- Vuetify -> [README.md](src/tools/vuetify/README.md)
+- VueUse -> [README.md](src/tools/vueuse/README.md)
+- Quasar -> [README.md](src/tools/quasar/README.md)
+- Nuxt -> [README.md](src/tools/nuxt/README.md)
+- Naive UI -> [README.md](src/tools/naiveui/README.md)
+- PrimeVue -> [README.md](src/tools/primevue/README.md)
 
 ## Contributors
 
@@ -261,10 +166,10 @@ Special thanks to **Matthias** for the idea.
 If this tool helps you out, consider leaving a star on the repository — it really motivates further development!
 
 Found a bug? Something not working as expected?  
-Please open an issue on so it can be fixed quickly.
+Please open an issue so it can be fixed quickly. 
 
 Missing a feature you’d love to see?  
-Feature requests are very welcome as well!
+Feature requests are very welcome as well! 
 
 [![GitHub](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/marcelwagner/vue-auto-import-checker)
 

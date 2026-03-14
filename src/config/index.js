@@ -1,0 +1,12 @@
+import { repoUrl } from "../../config.js";
+import { default as packageJson } from '../../package.json' with { type: 'json' };
+import { getBaseTags } from "./getBaseTags.js";
+import { getFrameworksTools } from "./getFrameworksTools.js";
+const repoTreeUrl = `${repoUrl}/tree/${packageJson.version}`;
+export const baseTags = getBaseTags(repoTreeUrl);
+export const frameworksTools = getFrameworksTools(repoTreeUrl);
+export * from "../../config.js";
+export * from "./getBaseTags.js";
+export * from "./getFrameworksTools.js";
+export * from "./vue.js";
+export { packageJson, repoTreeUrl };

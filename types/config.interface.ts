@@ -1,15 +1,20 @@
 export interface VAIC_Config {
   componentsFile: string;
   projectPath: string;
-  userGeneratedPath: string;
-  customTags: string[];
-  customTagsFile: string;
-  noHtml: boolean;
-  noSvg: boolean;
-  noVue: boolean;
-  noVueRouter: boolean;
-  frameworks: Frameworks[];
-  basePath: string;
-  quiet?: boolean;
+  negateKnown: Known[];
+  knownFrameworks: Framework[];
+  knownTags: string[];
+  knownTagsFile: string;
+  cachePath: string;
+  importsKnown: boolean;
+  basePath?: string;
   debug?: boolean;
+  kafka?: boolean;
+}
+
+export interface VAIC_ComponentSearch {
+  stats: Stats;
+  tagsList: Tag[];
+  unknownTagsList: Tag[];
+  componentsList: string[];
 }

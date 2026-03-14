@@ -142,4 +142,7 @@ vite.config.ts.timestamp-*
 .idea/
 
 # Local setup
-/publish.sh
+publish.sh
+dist/
+tsconfig.tsbuildinfo
+.test-cache/

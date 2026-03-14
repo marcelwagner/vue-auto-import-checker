@@ -6,6 +6,7 @@
   "error-404",
   "error-500",
   "IslandRenderer",
+  "NuxtAnnouncer",
   "nuxt-error-boundary",
   "nuxt-error-page",
   "NuxtIsland",

@@ -1,0 +1,38 @@
+{
+  "name": "vue-auto-import-checker-test-project",
+  "version": "0.0.1",
+  "description": "Test project for vue-auto-import-checker",
+  "scripts": {
+    "test": "vitest run --reporter=tree",
+    "test:watch": "vitest --reporter=tree",
+    "lint": "oxlint --tsconfig=tsconfig.json",
+    "tsc": "tsc --noEmit",
+    "build": "tsc --outDir ./dist"
+  },
+  "engines": {
+    "node": ">=20.19.1",
+    "npm": ">=10.8.2"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^24.10.3",
+    "@vueuse/components": "^14.1.0",
+    "naive-ui": "^2.43.2",
+    "nuxt": "^4.2.2",
+    "oxlint": "^1.28.0",
+    "prettier": "^3.6.2",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "primevue": "^4.5.3",
+    "quasar": "^2.18.6",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.15",
+    "vuetify": "^3.11.3"
+  },
+  "dependencies": {
+    "commander": "14.0.2",
+    "html-tags": "5.1.0",
+    "svg-tag-names": "3.0.1",
+    "tsx": "4.21.0",
+    "winston": "3.19.0"
+  }
+}
