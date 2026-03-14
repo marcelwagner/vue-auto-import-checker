@@ -6,6 +6,7 @@ npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-che
 
 <!-- TOC -->
 * [Description](#description)
+* [Why?](#why)
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Usage](#usage)
@@ -22,7 +23,7 @@ npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-che
 ## Description
 
 A CLI tool that checks if every tag used in your Vue templates is either properly registered in `components.d.ts`
-when using [unplugin-auto-import](https://www.npmjs.com/package/unplugin-auto-import) (or similar auto-import setups), 
+when using [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) (or similar auto-import setups), 
 is a tag from a standard library like `HTML`, `SVG`, `Vue`, or `VueRouter`, or a tag from a framework like `Vuetify` or `Nuxt`.
 
 You can configure which tag sets the checker should handle as if they were known. `HTML`, `Vue`, `VueRouter`, and `SVG` 
@@ -36,6 +37,20 @@ of tags.
 
 You can also use the importer tools to use your own list of tags for `Vuetify`, `VueUse`, `Quasar`, `Nuxt`, `Naive UI`, 
 and `PrimeVue` if your version is not yet supported by the tool.
+
+## Why?
+
+Why does this tool exist?  
+
+Because of migration from older codebases and toolsets to modern ones.  
+
+My experience as a developer showed me that the decision to use the top end toolset does come one day and then the 
+migration is oftentimes not a recommendation from the customer, but from the developer team. That means the migration
+is not paid work. So it is not made as a priority.   
+Using something like the unplugin for your vue project is 
+recommended. But the migration is not always easy. You have to change your codebase, and you have to make sure that you 
+do not forget any tags. This tool helps you with that. It checks your codebase for unknown tags and tells you where 
+they are. So you can easily find and fix them.
 
 ## Requirements
 
