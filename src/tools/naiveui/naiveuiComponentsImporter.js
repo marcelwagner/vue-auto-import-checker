@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
-import { readdir, readFile, stat } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
 export async function naiveuiComponentsImporter(basePath, cachePath) {
     try {
         const naiveuiDirectory = join(basePath, 'node_modules/naive-ui/lib');
@@ -22,7 +22,7 @@ export async function naiveuiComponentsImporter(basePath, cachePath) {
             if (!existsSync(indexFile)) {
                 continue;
             }
-            const fileContent = await readFile(indexFile, 'utf8');
+            const fileContent = await getFileContent(indexFile);
             const lines = fileContent.split('\n');
             for (const line of lines) {
                 const component = line.match(/export {[a-zA-Z0-9\W]*default as (N[a-zA-Z0-9-]+)[\W]{0,1}}/);

@@ -1,14 +1,14 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { getFileContent } from "./file.js";
 export async function getKnownComponentList(basePath, componentsFile) {
     const componentsFilePath = join(basePath, componentsFile);
     if (!existsSync(componentsFilePath)) {
         return Promise.reject({ errorText: `Components file not found: ${componentsFilePath}` });
     }
     try {
-        const componentsFileContent = await readFile(componentsFilePath, 'utf8');
-        const componentsListRaw = componentsFileContent.match(/[\W]*export interface GlobalComponents \{\W[\w\W][^}]+\W  \}/m);
+        const componentsFileContent = await getFileContent(componentsFilePath);
+        const componentsListRaw = componentsFileContent.match(/\W*export interface GlobalComponents *{\W*[\w\W][^}]+\W*}/m);
         const componentsList = [];
         if (componentsListRaw?.[0]) {
             componentsListRaw[0]

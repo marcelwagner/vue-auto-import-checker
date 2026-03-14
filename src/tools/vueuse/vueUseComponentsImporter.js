@@ -1,7 +1,6 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
 export async function vueUseComponentsImporter(basePath, cachePath) {
     try {
         const indexMFile = join(basePath, 'node_modules/@vueuse/components/index.d.mts');
@@ -16,8 +15,8 @@ export async function vueUseComponentsImporter(basePath, cachePath) {
         logger.debug(`File: ${indexMFile} exists ${indexMFileExists}`);
         logger.debug(`File: ${indexFile} exists ${indexFileExists}`);
         const fileContent = indexMFileExists
-            ? await readFile(indexMFile, 'utf8')
-            : await readFile(indexFile, 'utf8');
+            ? await getFileContent(indexMFile)
+            : await getFileContent(indexFile);
         const componentsList = [];
         for (const fileContentLine of fileContent.split('\n')) {
             const component = fileContentLine.match(/declare const ([\w]+): (vue.DefineComponent|vue1.DefineSetupFnComponent|vue0.DefineSetupFnComponent)/);

@@ -1,7 +1,7 @@
 import { existsSync, type Stats } from 'node:fs';
-import { readdir, readFile, stat } from 'node:fs/promises';
+import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all naive-ui components from the naive-ui library
@@ -41,7 +41,7 @@ export async function naiveuiComponentsImporter(
         continue;
       }
 
-      const fileContent: string = await readFile(indexFile, 'utf8');
+      const fileContent: string = await getFileContent(indexFile);
       const lines: string[] = fileContent.split('\n');
 
       for (const line of lines) {

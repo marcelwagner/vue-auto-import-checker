@@ -1,7 +1,6 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all quasar components from the quasar library
@@ -20,7 +19,7 @@ export async function quasarComponentsImporter(
       return Promise.reject({ errorText: `No components.js found: ${componentsFile}` });
     }
 
-    const listOfComponents: string = await readFile(componentsFile, 'utf8');
+    const listOfComponents: string = await getFileContent(componentsFile);
 
     const componentsList: string[] = [];
 

@@ -1,5 +1,6 @@
 import type { Logger } from 'winston';
 import { getLineIndexAsString } from './index.ts';
+import { pluralArray } from './plural.ts';
 
 /**
  * Write the result to the console.
@@ -53,13 +54,13 @@ export function writeResult(tags: Tag[], kafka: boolean): void {
 
     if (isComponent && kafka) {
       logger.info(
-        `Components  : ${knownSource.map(({ file }: KnownSource): string => file).join(', ')}`
+        `Component${pluralArray(knownSource)}  : ${knownSource.map(({ file }: KnownSource): string => file).join(', ')}`
       );
     }
 
     if (!isImport && !isComponent && (kafka || !isUnknown)) {
       logger.info(
-        `Framework${knownSource.length >= 2 ? 's' : ' '}  : ${knownSource.map(({ source, file }: KnownSource): string => `${source}` + (file ? ` (${file})` : '')).join(', ')}`
+        `Framework${pluralArray(knownSource)}  : ${knownSource.map(({ source, file }: KnownSource): string => `${source}` + (file ? ` (${file})` : '')).join(', ')}`
       );
     }
 

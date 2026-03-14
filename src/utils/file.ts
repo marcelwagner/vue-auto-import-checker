@@ -17,9 +17,9 @@ export async function getFileContent(filePath: string): Promise<string> {
     return readFile(filePath, 'utf8');
   } catch (error) {
     // Normalize the rejection to a readable string so callers get a consistent error shape.
-    return Promise.reject(
-      `Error getting file content from file ${filePath} ` + JSON.stringify(error)
-    );
+    return Promise.reject({
+      errorText: `Error getting file content from file ${filePath} ` + JSON.stringify(error)
+    });
   }
 }
 
@@ -38,9 +38,9 @@ export async function getJsonFileContent(filePath: string): Promise<string[]> {
     const jsonFileContent: string = await getFileContent(filePath);
     return JSON.parse(jsonFileContent);
   } catch (error) {
-    return Promise.reject(
-      `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
-    );
+    return Promise.reject({
+      errorText: `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
+    });
   }
 }
 

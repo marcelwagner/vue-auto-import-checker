@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
 export async function vuetifyComponentsImporter(basePath, cachePath) {
     try {
         const vuetifyDirectory = join(basePath, 'node_modules/vuetify/lib/components');
@@ -16,7 +16,7 @@ export async function vuetifyComponentsImporter(basePath, cachePath) {
                 continue;
             }
             const indexFile = join(vuetifyDirectory, dir, `index.d.ts`);
-            const listOfComponents = await readFile(indexFile, 'utf8');
+            const listOfComponents = await getFileContent(indexFile);
             for (const componentExport of listOfComponents.split('\n')) {
                 const component = componentExport.match(/export \{ (\w+) } [ ./a-zA-Z';]*/);
                 if (component === null) {

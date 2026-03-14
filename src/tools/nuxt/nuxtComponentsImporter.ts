@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all nuxt components from the nuxt library
@@ -33,7 +33,7 @@ export async function nuxtComponentsImporter(
         continue;
       }
 
-      const fileContent: string = await readFile(join(nuxtDirectory, file), 'utf8');
+      const fileContent: string = await getFileContent(join(nuxtDirectory, file));
       const componentNameRaw: RegExpMatchArray | null = fileContent.match(
         /defineComponent\(\{[\W]+name: "([a-zA-Z0-9-]+)",/gm
       );

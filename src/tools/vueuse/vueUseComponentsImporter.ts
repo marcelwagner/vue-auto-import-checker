@@ -1,7 +1,6 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all vueUse components from the vueUse library
@@ -32,8 +31,8 @@ export async function vueUseComponentsImporter(
     logger.debug(`File: ${indexFile} exists ${indexFileExists}`);
 
     const fileContent: string = indexMFileExists
-      ? await readFile(indexMFile, 'utf8')
-      : await readFile(indexFile, 'utf8');
+      ? await getFileContent(indexMFile)
+      : await getFileContent(indexFile);
 
     const componentsList: string[] = [];
 

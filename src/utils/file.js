@@ -6,7 +6,9 @@ export async function getFileContent(filePath) {
         return readFile(filePath, 'utf8');
     }
     catch (error) {
-        return Promise.reject(`Error getting file content from file ${filePath} ` + JSON.stringify(error));
+        return Promise.reject({
+            errorText: `Error getting file content from file ${filePath} ` + JSON.stringify(error)
+        });
     }
 }
 export async function getJsonFileContent(filePath) {
@@ -15,7 +17,9 @@ export async function getJsonFileContent(filePath) {
         return JSON.parse(jsonFileContent);
     }
     catch (error) {
-        return Promise.reject(`Error getting json file content from files ${filePath} ` + JSON.stringify(error));
+        return Promise.reject({
+            errorText: `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
+        });
     }
 }
 export async function writeCustomPluginFile(dir, tagsFile, componentsList) {

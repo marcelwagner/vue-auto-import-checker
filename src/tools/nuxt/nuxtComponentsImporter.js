@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
 export async function nuxtComponentsImporter(basePath, cachePath) {
     try {
         const nuxtDirectory = join(basePath, 'node_modules/nuxt/dist/app/components');
@@ -17,7 +17,7 @@ export async function nuxtComponentsImporter(basePath, cachePath) {
                 componentsList.push(vueFile[1]);
                 continue;
             }
-            const fileContent = await readFile(join(nuxtDirectory, file), 'utf8');
+            const fileContent = await getFileContent(join(nuxtDirectory, file));
             const componentNameRaw = fileContent.match(/defineComponent\(\{[\W]+name: "([a-zA-Z0-9-]+)",/gm);
             if (!componentNameRaw) {
                 continue;

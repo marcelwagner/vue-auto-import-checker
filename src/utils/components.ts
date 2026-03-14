@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { getFileContent } from './file.ts';
 
 /**
  * Read a TypeScript declaration file and extract component tags from the
@@ -28,12 +28,12 @@ export async function getKnownComponentList(
 
   try {
     // Read file content as text.
-    const componentsFileContent: string = await readFile(componentsFilePath, 'utf8');
+    const componentsFileContent: string = await getFileContent(componentsFilePath);
 
     // Find the exported GlobalComponents interface block. The regex targets:
     // "export interface GlobalComponents { <anything until matching closing brace> }"
     const componentsListRaw: RegExpMatchArray | null = componentsFileContent.match(
-      /[\W]*export interface GlobalComponents \{\W[\w\W][^}]+\W  \}/m
+      /\W*export interface GlobalComponents *{\W*[\w\W][^}]+\W*}/m
     );
 
     // Accumulator for parsed component entries.

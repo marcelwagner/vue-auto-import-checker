@@ -1,4 +1,5 @@
 import { getLineIndexAsString } from "./index.js";
+import { pluralArray } from "./plural.js";
 export function writeResult(tags, kafka) {
     let currentFile = '';
     logger.info('');
@@ -25,10 +26,10 @@ export function writeResult(tags, kafka) {
             logger.info(`Import      : ${knownSource.map(({ file }) => file).join(', ')}`);
         }
         if (isComponent && kafka) {
-            logger.info(`Components  : ${knownSource.map(({ file }) => file).join(', ')}`);
+            logger.info(`Component${pluralArray(knownSource)}  : ${knownSource.map(({ file }) => file).join(', ')}`);
         }
         if (!isImport && !isComponent && (kafka || !isUnknown)) {
-            logger.info(`Framework${knownSource.length >= 2 ? 's' : ' '}  : ${knownSource.map(({ source, file }) => `${source}` + (file ? ` (${file})` : '')).join(', ')}`);
+            logger.info(`Framework${pluralArray(knownSource)}  : ${knownSource.map(({ source, file }) => `${source}` + (file ? ` (${file})` : '')).join(', ')}`);
         }
         if (kafka) {
             logger.info(`Is known    : ${knownSource.some(({ known }) => known) ? 'yes' : 'no'}`);

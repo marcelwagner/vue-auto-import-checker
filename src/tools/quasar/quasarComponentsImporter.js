@@ -1,14 +1,13 @@
 import { existsSync } from 'node:fs';
-import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
 export async function quasarComponentsImporter(basePath, cachePath) {
     try {
         const componentsFile = join(basePath, 'node_modules/quasar/src/components.js');
         if (!existsSync(componentsFile)) {
             return Promise.reject({ errorText: `No components.js found: ${componentsFile}` });
         }
-        const listOfComponents = await readFile(componentsFile, 'utf8');
+        const listOfComponents = await getFileContent(componentsFile);
         const componentsList = [];
         for (const componentExport of listOfComponents.split('\n')) {
             const component = componentExport.match(/export \* from \W.\/components\/([\w-]+)\/index.js\W/);
