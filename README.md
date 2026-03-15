@@ -11,8 +11,7 @@ npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-che
 * [Installation](#installation)
 * [Usage](#usage)
 * [CLI Options](#cli-options)
-* [Known Framework tags](#known-framework-tags)
-* [Examples](#examples)
+* [Known Frameworks](#known-frameworks)
 * [CI/CD Integration](#cicd-integration)
 * [Security](#security)
 * [Importers](#importers)
@@ -30,7 +29,7 @@ You can configure which tag sets the checker should handle as if they were known
 tags are known by default, but you can remove them from the known list if needed.
 
 To have a framework on the known list, you only need to provide its name. Look up what we support at the moment (Nuxt, 
-PrimeVue, Vuetify, ...) in the section [Known Framework tags](#known-framework-tags).
+PrimeVue, Vuetify, ...) in the section [Known Frameworks](#known-frameworks).
 
 It is also possible to provide your own list of known tags by providing a `custom-tags-file` in JSON format or a simple list 
 of tags.
@@ -54,11 +53,11 @@ they are. So you can easily find and fix them.
 
 ## Requirements
 
-We recommend using:
+We recommend using:  
 
-- Node.js >= 24.11.1 (minimum required 20.19.1)
+- Node.js >= 24.11.1 (minimum required 20.19.1)  
 
-Other versions might work but are not tested.
+Other versions might work but are not tested.  
 
 ## Installation
 
@@ -68,11 +67,13 @@ Other versions might work but are not tested.
 
 ## Usage
 
-The help of the CLI tool is a good starting point, but you can also start with an example from our [examples](#examples).
+The help of the CLI tool is a good starting point.
 
 ``` bash
  npx vue-auto-import-checker -h
 ```
+
+But you can also start with an example from our [cookbook.md](docs/cookbook.md).
 
 ## CLI Options
 
@@ -95,7 +96,7 @@ The help of the CLI tool is a good starting point, but you can also start with a
 | `--version`                     | `-v`  | Output the current version                                                                                  | `false`                   |
 | `--help`                        | `-h`  | Display help information                                                                                    | `false`                   |
 
-## Known Framework tags
+## Known Frameworks
 
 Currently, we support:
 
@@ -118,12 +119,14 @@ We are working on more.
 Depending on which framework you are using in the project, add the strings to the command line.
 
 ``` bash
- npx vue-auto-import-checker -f vuetify vueuse quasar nuxt naiveui primevue
+ # These are all known framework tags
+ vuetify
+ vueuse
+ quasar
+ nuxt
+ naiveui
+ primevue
 ```
-
-## Examples
-
-Lookup the examples in the [cookbook.md](docs/cookbook.md).
 
 ## CI/CD Integration
 
