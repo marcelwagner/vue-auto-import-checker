@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Check if the used tags are all registered within your components.d.ts",
   "type": "module",
   "types": "./types/**/*.ts",
@@ -60,20 +60,18 @@
     "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
-  },
-  "dependencies": {
-    "commander": "14.0.3",
-    "html-tags": "5.1.0",
-    "svg-tag-names": "3.0.1",
-    "winston": "3.19.0"
-  },
-  "optionalDependencies": {
+    "vitest": "^4.1.0",
     "primevue": "^4.5.4",
     "quasar": "^2.18.6",
     "vuetify": "^4.0.2",
     "naive-ui": "^2.44.1",
     "nuxt": "^4.4.2",
     "@vueuse/components": "^14.2.1"
+  },
+  "dependencies": {
+    "commander": "14.0.3",
+    "html-tags": "5.1.0",
+    "svg-tag-names": "3.0.1",
+    "winston": "3.19.0"
   }
 }
