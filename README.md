@@ -2,7 +2,7 @@
 
 npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-checker)
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![GitHub](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/marcelwagner/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker)
 
 <!-- TOC -->
 * [Description](#description)
@@ -119,7 +119,7 @@ We are working on more.
 Depending on which framework you are using in the project, add the strings to the command line.
 
 ``` bash
- # These are all known framework tags
+ # These are all known framework names
  vuetify
  vueuse
  quasar
@@ -162,7 +162,9 @@ Thanks for the contribution of code, ideas and motivation to:
 [![GitHub Profile](https://github.com/cnguyen-de.png?size=50)](https://github.com/cnguyen-de)
 [![GitHub Profile](https://github.com/mreise.png?size=50)](https://github.com/mreise)
 
-Special thanks to **Matthias** for the idea.
+Thanks to **Matthias** for the idea.
+
+Spezial thanks to my family, to my wife Jiyeop and to my son Ryan.
 
 ## Feedback & Contributions
 
@@ -172,8 +174,6 @@ Found a bug? Something not working as expected?
 Please open an issue so it can be fixed quickly. 
 
 Missing a feature you’d love to see?  
-Feature requests are very welcome as well! 
-
-[![GitHub](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/marcelwagner/vue-auto-import-checker)
+Feature requests are very welcome as well!
 
 Thanks for helping make **Vue Auto-Import Checker** better for everyone! 🙌
