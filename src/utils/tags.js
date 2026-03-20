@@ -21,7 +21,7 @@ export async function getTagsFromFile(file, tags) {
     const imports = getImportsListFromFile(fileContent);
     tagList.forEach((tagListRaw, index) => {
         tagListRaw.forEach((tagRaw) => {
-            const componentMatch = imports.find((imp) => imp.component.some((comp) => normalize(comp) === normalize(tagRaw)));
+            const componentMatch = imports.find(({ tag }) => normalize(tag) === normalize(tagRaw));
             tags.push({
                 line: index + 1,
                 tagName: tagRaw,
@@ -153,19 +153,32 @@ export function matchesOneOf(tag, regexMatchResult) {
 export function getImportsListFromFile(fileContent) {
     const importsList = [];
     const importMatches = [
-        ...fileContent.matchAll(/[ ]*import [{ \n\r]*[ ]*([\w,\-\n\r ]+)[} ]* from ['"]*([@.\-/\w]+)['"]*[;]*|[ ]*import ([\w,\-\n\r ]*) [{ \n\r]*[ ]*([\w,\-\n\r ]+)[} ]* from ['"]*([@.\-/\w]+)['"]*[;]*/g)
+        ...fileContent.matchAll(/import\s+((?:[A-Za-z_$][\w$]*)\s*(?:,\s*)?)?(?:\*\s+as\s+([A-Za-z_$][\w$]*)|\{\s*([^}]+?)\s*\})?\s*from\s*(['"])([^'"]+)\4/g)
     ];
     for (const match of importMatches) {
-        const component = match[1]
-            .replace(/as/gm, '')
-            .replace(/default/gm, '')
-            .replace(/,/gm, '')
-            .replace(/ /gm, '')
-            .replace(/\n/gm, ',')
-            .split(',');
-        const path = match[2];
-        logger.debug(`Found import: ${component.join(', ')} ${path}.`);
-        importsList.push({ component, path });
+        if (match[1]) {
+            const tag = match[1]
+                .replace(/as/gm, '')
+                .replace(/default/gm, '')
+                .replace(/,/gm, '')
+                .replace(/ /gm, '');
+            const path = match[5];
+            importsList.push({ tag, path });
+            logger.debug(`Found import: ${tag} ${path}.`);
+        }
+        if (match[3]) {
+            const separatedMatches = match[3].split(',');
+            separatedMatches.forEach((separatedMatch) => {
+                const tag = separatedMatch
+                    .replace(/as/gm, '')
+                    .replace(/default/gm, '')
+                    .replace(/ /gm, '')
+                    .replace(/\n/gm, '');
+                const path = match[5];
+                importsList.push({ tag, path });
+                logger.debug(`Found import: ${tag} ${path}.`);
+            });
+        }
     }
     return importsList;
 }

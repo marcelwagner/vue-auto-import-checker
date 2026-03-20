@@ -36,7 +36,7 @@ type WriteStatsProps = {
 };
 
 type ComponentImport = {
-  component: string[];
+  tag: string;
   path: string;
 };
 

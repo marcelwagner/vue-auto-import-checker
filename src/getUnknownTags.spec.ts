@@ -37,7 +37,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 23,
+      lines: 24,
       tags: [
         'v-responsive',
         'v-app',
@@ -47,6 +47,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -104,7 +105,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 56,
+      lines: 57,
       tags: [
         'div',
         'img',
@@ -128,6 +129,7 @@ describe('getUnknownTags', async () => {
         'q-avatar',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -173,7 +175,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 28,
+      lines: 29,
       tags: [
         'path',
         'v-responsive',
@@ -186,6 +188,7 @@ describe('getUnknownTags', async () => {
         'q-avatar',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -231,7 +234,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 23,
+      lines: 24,
       tags: [
         'v-responsive',
         'v-app',
@@ -241,6 +244,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -294,10 +298,11 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 15,
+      lines: 16,
       tags: [
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -347,10 +352,11 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 15,
+      lines: 16,
       tags: [
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -404,7 +410,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 23,
+      lines: 24,
       tags: [
         'v-responsive',
         'v-app',
@@ -414,6 +420,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -463,7 +470,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 23,
+      lines: 24,
       tags: [
         'v-responsive',
         'v-app',
@@ -473,6 +480,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -526,7 +534,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 22,
+      lines: 23,
       tags: [
         'v-responsive',
         'v-app',
@@ -536,6 +544,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -584,7 +593,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 22,
+      lines: 23,
       tags: [
         'v-responsive',
         'v-app',
@@ -594,6 +603,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -646,7 +656,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 23,
+      lines: 24,
       tags: [
         'v-responsive',
         'v-app',
@@ -656,6 +666,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -705,7 +716,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 23,
+      lines: 24,
       tags: [
         'v-responsive',
         'v-app',
@@ -715,6 +726,7 @@ describe('getUnknownTags', async () => {
         'v-icon',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -762,7 +774,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 19,
+      lines: 20,
       tags: [
         'v-responsive',
         'v-app',
@@ -771,6 +783,7 @@ describe('getUnknownTags', async () => {
         'v-btn',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -817,7 +830,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 20,
+      lines: 21,
       tags: [
         'v-responsive',
         'v-app',
@@ -826,6 +839,7 @@ describe('getUnknownTags', async () => {
         'v-btn',
         'v-icon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -872,9 +886,10 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 10,
+      lines: 11,
       tags: [
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -919,9 +934,10 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 86,
+      lines: 87,
       tags: [
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',
@@ -992,7 +1008,7 @@ describe('getUnknownTags', async () => {
 
     // Expected result
     const { lines, tags, files } = {
-      lines: 96,
+      lines: 97,
       tags: [
         'v-responsive',
         'v-app',
@@ -1014,6 +1030,7 @@ describe('getUnknownTags', async () => {
         'template',
         'DocumentationIcon',
         'ToolingIcon',
+        'ToolingIcon0',
         'ToolingIcon1',
         'ToolingIcon2',
         'ToolingIcon3',

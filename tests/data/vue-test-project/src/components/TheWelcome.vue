@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ToolingIcon from '@/components/icons/IconTooling.vue';
-import {
+import ToolingIcon0, {
   default as ToolingIcon1,
   default as ToolingIcon2,
   default as ToolingIcon3
@@ -25,6 +25,7 @@ const openReadmeInEditor = () => fetch('/__open-in-editor?file=README.md');
   <WelcomeItem>
     <template #icon>
       <ToolingIcon />
+      <ToolingIcon0 />
       <ToolingIcon1 />
       <ToolingIcon2 />
       <ToolingIcon3 />
