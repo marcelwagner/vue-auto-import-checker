@@ -1,5 +1,9 @@
 [
   "Component",
   "DefineTemplate",
-  "ReuseTemplate"
+  "ReuseTemplate",
+  "Transition",
+  "TransitionGroup",
+  "KeepAlive",
+  "Teleport"
 ]

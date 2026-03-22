@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Check if the used tags are all registered within your components.d.ts",
   "type": "module",
   "types": "./types/**/*.ts",
