@@ -15,7 +15,7 @@ vi.stubGlobal('logger', {
 });
 
 describe('vuetify-importer tool', () => {
-  const tags = 153;
+  const tags = 177;
 
   test(`should return ${tags} vuetify tags`, async () => {
     const result = await vuetifyComponentsImporter(basePath, cachePath);

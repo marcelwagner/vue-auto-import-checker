@@ -9,6 +9,7 @@ Currently, we support:
 - 3.8.4
 - 3.11.3
 - 4.0.1
+- 4.0.4
 
 ## Usage
 

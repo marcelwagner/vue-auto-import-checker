@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Check if the used tags are all registered within your components.d.ts",
   "type": "module",
   "types": "./types/**/*.ts",
@@ -63,7 +63,7 @@
     "vitest": "^4.1.0",
     "primevue": "^4.5.4",
     "quasar": "^2.18.6",
-    "vuetify": "^4.0.2",
+    "vuetify": "^4.0.4",
     "naive-ui": "^2.44.1",
     "nuxt": "^4.4.2",
     "@vueuse/components": "^14.2.1"

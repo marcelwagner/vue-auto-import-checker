@@ -7,6 +7,7 @@ Use the tags from the specific version your project is using by using this impor
 Currently, we support:
 
 - 2.43.2
+- 2.44.1
 
 ## Usage
 

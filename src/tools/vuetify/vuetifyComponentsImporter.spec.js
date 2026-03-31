@@ -12,7 +12,7 @@ vi.stubGlobal('logger', {
     info: vi.fn()
 });
 describe('vuetify-importer tool', () => {
-    const tags = 153;
+    const tags = 177;
     test(`should return ${tags} vuetify tags`, async () => {
         const result = await vuetifyComponentsImporter(basePath, cachePath);
         expect(result.length).to.equal(tags);
