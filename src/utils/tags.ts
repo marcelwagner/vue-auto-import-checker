@@ -18,9 +18,9 @@ import {
  * - Extracts candidate tags from template lines and filters them against the
  *   aggregated ignore list and the registered components list.
  *
- * @param {string} file - absolute path to the file to process
- * @param {Tag[]} tags - array to append discovered unknown tag occurrences
- * @returns {Promise<void>} resolves when the file has been processed
+ * @param file - absolute path to the file to process
+ * @param tags - array to append discovered unknown tag occurrences
+ * @returns promise resolves when the file has been processed
  */
 export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]> {
   stats.fileCounter++;
@@ -82,6 +82,33 @@ export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]>
 }
 
 /**
+ * Recursively traverse the directory list and process each file and directory.
+ *
+ * - Increments directory counters.
+ * - For each filesystem entry: if file -> process via `getTagsFromFile`, if directory -> recurse.
+ * - Errors while reading files/directories are converted to rejected Promises unless `quiet` is enabled,
+ *   in which case they are swallowed to continue best-effort scanning.
+ * - Symlinks and non-file/directory entries are ignored.
+ *
+ * @param basePath - base path to resolve relative paths against
+ * @param directoryPathList - path list of the directories to traverse
+ * @returns promise resolves when the directory and its children have been processed
+ */
+
+export async function getTagsFromDirectoryList(
+  basePath: string,
+  directoryPathList: string[]
+): Promise<Tag[]> {
+  let tagList: Tag[] = [];
+
+  for (const directoryPath of directoryPathList) {
+    tagList = await getTagsFromDirectory(basePath, directoryPath, tagList);
+  }
+
+  return tagList;
+}
+
+/**
  * Recursively traverse a directory and process each file.
  *
  * - Increments directory counters.
@@ -91,9 +118,9 @@ export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]>
  * - Symlinks and non-file/directory entries are ignored.
  *
  * @param basePath - base path to resolve relative paths against
- * @param {Tag[]} tags - array to append discovered unknown tag occurrences
- * @param {string} directoryPath - path of the directory to traverse
- * @returns {Promise<void>} resolves when the directory and its children have been processed
+ * @param directoryPath - path of the directory to traverse
+ * @param tags - array to append discovered unknown tag occurrences
+ * @returns promise resolves when the directory and its children have been processed
  */
 export async function getTagsFromDirectory(
   basePath: string,
@@ -145,7 +172,7 @@ export async function getTagsFromDirectory(
  * Filter the list of tags to return only those that are unknown (i.e., not marked as known).
  *
  * @param tags - array with all tag occurrences
- * @returns Promise resolving to an array of Tag objects representing the unknown tags
+ * @returns promise resolving to an array of Tag objects representing the unknown tags
  */
 export async function getUnknownTagsList(tags: Tag[]): Promise<Tag[]> {
   return tags.filter((tag: Tag): boolean => {
@@ -170,7 +197,7 @@ export async function getUnknownTagsList(tags: Tag[]): Promise<Tag[]> {
  * @param componentsFile - path to the JSON file containing components
  * @param tags - array with all tag occurrences
  * @param importsKnown - whether to consider imports as known
- * @returns Promise resolving to an array of Tag objects representing the identified tags
+ * @returns promise resolving to an array of Tag objects representing the identified tags
  */
 export async function getIdentifiedTagsList({
   knownTagsList,
@@ -237,7 +264,7 @@ export async function getIdentifiedTagsList({
  * @param knownTags - list of known tags from cli
  * @param knownTagsFile - path to the JSON file containing known tags
  * @param cachePath - path to the user-generated JSON file
- * @returns Promise resolving to an array of KnownList objects representing the aggregated known tags and their sources
+ * @returns promise resolving to an array of KnownList objects representing the aggregated known tags and their sources
  */
 export async function getKnownLists({
   negateKnown,

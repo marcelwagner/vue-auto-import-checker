@@ -24,6 +24,11 @@ export function createLogger(debug: boolean): void {
   });
 }
 
+/**
+ * Get the current date and time as a string.
+ *
+ * @returns string - current date and time
+ */
 export function currentDateTime(): string {
   return new Date().toLocaleString();
 }

@@ -6,7 +6,7 @@ import {
   getIdentifiedTagsList,
   getKnownComponentList,
   getKnownLists,
-  getTagsFromDirectory,
+  getTagsFromDirectoryList,
   getUnknownTagsList
 } from './utils/index.ts';
 
@@ -23,11 +23,11 @@ import {
  *  - Return aggregated `stats`, found `tagList` and `unknownTags` and the `componentsList`.
  *
  * @param config - configuration object adhering to `VAIC_Config`
- * @returns Promise<VAIC_ComponentSearch> - Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
+ * @returns promise resolving to ComponentSearch containing stats, unknownTags and componentsList
  */
 export async function getUnknownTags({
   componentsFile,
-  projectPath,
+  projectPaths,
   negateKnown,
   knownFrameworks,
   knownTags,
@@ -58,7 +58,7 @@ export async function getUnknownTags({
   };
 
   // Start the recursive scan of the project directory.
-  const rawTagsList: Tag[] = await getTagsFromDirectory(base, projectPath, []);
+  const rawTagsList: Tag[] = await getTagsFromDirectoryList(base, projectPaths);
 
   // Build the aggregated known list from framework plugins, base tags, user-supplied tags and user-supplied JSON file.
   const knownTagsList: KnownList[] = await getKnownLists({

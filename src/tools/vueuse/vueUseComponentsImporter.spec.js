@@ -20,7 +20,7 @@ describe('tool vuuse-importer', () => {
     describe('produced', async () => {
         const vueUseConfig = {
             componentsFile: 'tests/data/vue-test-project/components.d.ts',
-            projectPath: 'tests/data/vue-test-project/src',
+            projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
             knownTags: [],
             knownTagsFile: '',
             negateKnown: [],
@@ -39,7 +39,7 @@ describe('tool vuuse-importer', () => {
         await vueUseComponentsImporter(basePath, cachePath);
         const customConfig = {
             componentsFile: 'tests/data/vue-test-project/components.d.ts',
-            projectPath: 'tests/data/vue-test-project/src',
+            projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
             knownTags: [],
             knownTagsFile: join(cachePath, 'vueUseTags.json'),
             negateKnown: [],

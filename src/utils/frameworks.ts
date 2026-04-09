@@ -8,7 +8,7 @@ import { getJsonFileContent, normalize } from './index.ts';
  *
  * @param knownFrameworks - list of known frameworks
  * @param cachePath - path to the cache directory
- * @returns Promise of KnownList[]
+ * @returns promise of KnownList[]
  */
 export async function getFrameworkTools(
   knownFrameworks: Framework[],

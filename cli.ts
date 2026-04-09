@@ -35,7 +35,7 @@ import getUnknownTags, {
     showStats,
     showResult,
     componentsFile,
-    projectPath,
+    projectPaths,
     tool,
     cachePath,
     kafka,
@@ -90,7 +90,7 @@ import getUnknownTags, {
   }
 
   // Component-list mode: when only a component file path is specified, list components and exit.
-  if (componentsFile && !projectPath) {
+  if (componentsFile && projectPaths.length <= 0) {
     try {
       const componentsFilePath: string = join(basePath, componentsFile);
 
@@ -136,7 +136,7 @@ import getUnknownTags, {
 
   const config: VAIC_Config = {
     componentsFile,
-    projectPath,
+    projectPaths,
     negateKnown: baseTagsList,
     knownFrameworks: knownFrameworkList,
     knownTags,

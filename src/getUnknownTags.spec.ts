@@ -21,7 +21,7 @@ describe('getUnknownTags', async () => {
   describe('no ignored frameworks', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -75,8 +75,8 @@ describe('getUnknownTags', async () => {
       expect(uniqueFiles).toHaveLength(files);
     });
 
-    test('should return scanned 5 dirs', () => {
-      expect(stats.dirCounter).toEqual(5);
+    test('should return scanned 6 dirs', () => {
+      expect(stats.dirCounter).toEqual(6);
     });
     test('should return scanned 13 total files', () => {
       expect(stats.fileCounter).toEqual(13);
@@ -89,7 +89,7 @@ describe('getUnknownTags', async () => {
   describe('no ignored html', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: ['html'],
@@ -159,7 +159,7 @@ describe('getUnknownTags', async () => {
   describe('no ignored svg', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: ['svg'],
@@ -218,7 +218,7 @@ describe('getUnknownTags', async () => {
   describe('no ignored vue', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: ['vue'],
@@ -276,7 +276,7 @@ describe('getUnknownTags', async () => {
   describe('vuetify as ignored framework (no custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -334,7 +334,7 @@ describe('getUnknownTags', async () => {
   describe('vuetify as ignored framework (with custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -388,7 +388,7 @@ describe('getUnknownTags', async () => {
   describe('vueUse as ignored framework (no custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -452,7 +452,7 @@ describe('getUnknownTags', async () => {
   describe('vueUse as ignored framework (with custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -512,7 +512,7 @@ describe('getUnknownTags', async () => {
   describe('quasar as ignored framework (no custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -575,7 +575,7 @@ describe('getUnknownTags', async () => {
   describe('quasar as ignored framework (with custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -634,7 +634,7 @@ describe('getUnknownTags', async () => {
   describe('nuxt as ignored framework (no custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -698,7 +698,7 @@ describe('getUnknownTags', async () => {
   describe('nuxt as ignored framework (with custom file)', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
@@ -758,7 +758,7 @@ describe('getUnknownTags', async () => {
   describe("ignore tags: 'v-date-input', 'v-icon'", async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: ['v-date-input', 'v-icon'],
       knownTagsFile: '',
       negateKnown: [],
@@ -814,7 +814,7 @@ describe('getUnknownTags', async () => {
   describe('ignore tags from file tests/data/customTagsFile.json', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: 'tests/data/customTagsFile.json',
       negateKnown: [],
@@ -870,7 +870,7 @@ describe('getUnknownTags', async () => {
   describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.json and frameworks vuetify, vueUse, quasar & nuxt", async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: ['SupportIcon'],
       knownTagsFile: 'tests/data/customTagsFile.json',
       negateKnown: [],
@@ -918,7 +918,7 @@ describe('getUnknownTags', async () => {
   describe('ignored no tags html & svg', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: ['html', 'svg'],
@@ -991,7 +991,7 @@ describe('getUnknownTags', async () => {
   describe('kafka', async () => {
     const config: VAIC_Config = {
       componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPath: 'tests/data/vue-test-project/src',
+      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],

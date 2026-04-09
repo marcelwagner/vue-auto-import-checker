@@ -1,7 +1,7 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createLogger, getIdentifiedTagsList, getKnownComponentList, getKnownLists, getTagsFromDirectory, getUnknownTagsList } from "./utils/index.js";
-export async function getUnknownTags({ componentsFile, projectPath, negateKnown, knownFrameworks, knownTags, knownTagsFile, cachePath, basePath, importsKnown, debug, kafka }) {
+import { createLogger, getIdentifiedTagsList, getKnownComponentList, getKnownLists, getTagsFromDirectoryList, getUnknownTagsList } from "./utils/index.js";
+export async function getUnknownTags({ componentsFile, projectPaths, negateKnown, knownFrameworks, knownTags, knownTagsFile, cachePath, basePath, importsKnown, debug, kafka }) {
     const base = basePath ? basePath : dirname(fileURLToPath(import.meta.url));
     if (!global?.logger) {
         createLogger(Boolean(debug));
@@ -14,7 +14,7 @@ export async function getUnknownTags({ componentsFile, projectPath, negateKnown,
         startTime,
         endTime: startTime
     };
-    const rawTagsList = await getTagsFromDirectory(base, projectPath, []);
+    const rawTagsList = await getTagsFromDirectoryList(base, projectPaths);
     const knownTagsList = await getKnownLists({
         negateKnown,
         knownFrameworks,

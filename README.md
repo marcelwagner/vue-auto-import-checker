@@ -80,7 +80,7 @@ But you can also start with an example from our [cookbook.md](docs/cookbook.md).
 | Option                          | Alias | Description                                                                                                 | Default                   |
 |---------------------------------|-------|-------------------------------------------------------------------------------------------------------------|---------------------------|
 | `--components-file <file-path>` | `-c`  | Path to a file exporting registered components (relative to current working directory)                      | `""`                      |
-| `--project-path <project-path>` | `-p`  | Directory path containing Vue project files to scan (relative to current working directory)                 | `""`                      |
+| `--project-paths [path...]`     | `-p`  | List of directorys path`s containing Vue project files to scan (relative to current working directory)      | `[]`                      |
 | `--cache-path <cache-path>`     | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)      | `"./node_modules/.cache"` |
 | `--tool <tool>`                 | `-t`  | Run a specific helper tool (e.g., Nuxt, PrimeVue, Quasar, VueUse, Vuetify) to generate customized tag lists | `""`                      |
 | `--stats`                       | `-s`  | Output aggregated scan statistics                                                                           | `false`                   |

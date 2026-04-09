@@ -5,8 +5,8 @@ export function writeConfig(config, showResult) {
     logger.info('');
     logger.info(`>> Config                         <<`);
     logger.info('');
-    if (config.projectPath) {
-        logger.info(`Project Path              : ${config.projectPath}`);
+    if (config.projectPaths) {
+        logger.info(`Project Path              : ${config.projectPaths}`);
     }
     if (config.componentsFile) {
         logger.info(`Components File           : ${config.componentsFile}`);

@@ -1,6 +1,6 @@
 export interface VAIC_Config {
   componentsFile: string;
-  projectPath: string;
+  projectPaths: string[];
   negateKnown: Known[];
   knownFrameworks: Framework[];
   knownTags: string[];

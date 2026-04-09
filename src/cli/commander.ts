@@ -14,8 +14,8 @@ export function prepareCommander(): CommanderInit {
       ''
     )
     .option(
-      '-p, --project-path <project-path>',
-      'Directory path containing Vue project files to scan (relative to current working directory)',
+      '-p, --project-paths [path...]',
+      'List of directory path`s containing Vue project files to scan (relative to current working directory)',
       ''
     )
     .option(
@@ -73,7 +73,7 @@ export function prepareCommander(): CommanderInit {
     showStats: Boolean(options.stats || false),
     showResult: Boolean(options.result || false),
     componentsFile: options.componentsFile || '',
-    projectPath: options.projectPath || '',
+    projectPaths: options.projectPaths || [],
 
     tool: options.tool || '',
     cachePath: options.cachePath || defaultCachePath,

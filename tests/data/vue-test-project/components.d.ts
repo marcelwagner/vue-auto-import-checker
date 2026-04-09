@@ -1,4 +1,4 @@
-/* eslint-disable */
+/**/
 // @ts-nocheck
 // biome-ignore lint: disable
 // oxlint-disable
@@ -12,13 +12,13 @@ export {};
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
-    IconCommunity: typeof import('./src/components/icons/IconCommunity.vue')['default']
-    IconDocumentation: typeof import('./src/components/icons/IconDocumentation.vue')['default']
-    IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
-    IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
-    IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
-    TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
-    WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
+    HelloWorld: typeof import('./lib/components/HelloWorld.vue')['default']
+    IconCommunity: typeof import('./lib/components/icons/IconCommunity.vue')['default']
+    IconDocumentation: typeof import('./lib/components/icons/IconDocumentation.vue')['default']
+    IconEcosystem: typeof import('./lib/components/icons/IconEcosystem.vue')['default']
+    IconSupport: typeof import('./lib/components/icons/IconSupport.vue')['default']
+    IconTooling: typeof import('./lib/components/icons/IconTooling.vue')['default']
+    TheWelcome: typeof import('./lib/components/TheWelcome.vue')['default']
+    WelcomeItem: typeof import('./lib/components/WelcomeItem.vue')['default']
   }
 }

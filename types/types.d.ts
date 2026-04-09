@@ -86,7 +86,7 @@ type CommanderInit = {
   showStats: boolean;
   showResult: boolean;
   componentsFile: string;
-  projectPath: string;
+  projectPaths: string[];
 
   tool: string;
   cachePath: string;

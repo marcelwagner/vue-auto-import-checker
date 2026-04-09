@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, getBaseTagsList, getFrameworkList, getKnownComponentList, getUniqueFromList, prepareCommander, writeComponents, writeConfig, writeFinalState, writeResult, writeStats, writeToolsResult } from "./index.js";
 (async () => {
     const basePath = process.cwd() || '';
-    const { knownFrameworks, negateKnown, knownTags, knownTagsFile, showStats, showResult, componentsFile, projectPath, tool, cachePath, kafka, importsKnown, quiet, debug } = prepareCommander();
+    const { knownFrameworks, negateKnown, knownTags, knownTagsFile, showStats, showResult, componentsFile, projectPaths, tool, cachePath, kafka, importsKnown, quiet, debug } = prepareCommander();
     global.quiet = Boolean(quiet);
     createLogger(debug);
     if (tool) {
@@ -34,7 +34,7 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
         logger.end();
         return;
     }
-    if (componentsFile && !projectPath) {
+    if (componentsFile && projectPaths.length <= 0) {
         try {
             const componentsFilePath = join(basePath, componentsFile);
             if (!existsSync(componentsFilePath)) {
@@ -64,7 +64,7 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
     const baseTagsList = negateKnown.length >= 1 ? getBaseTagsList(negateKnown) : [];
     const config = {
         componentsFile,
-        projectPath,
+        projectPaths,
         negateKnown: baseTagsList,
         knownFrameworks: knownFrameworkList,
         knownTags,

@@ -36,6 +36,13 @@ export async function getTagsFromFile(file, tags) {
     });
     return tags;
 }
+export async function getTagsFromDirectoryList(basePath, directoryPathList) {
+    let tagList = [];
+    for (const directoryPath of directoryPathList) {
+        tagList = await getTagsFromDirectory(basePath, directoryPath, tagList);
+    }
+    return tagList;
+}
 export async function getTagsFromDirectory(basePath, directoryPath, tags) {
     stats.dirCounter++;
     const directory = join(basePath, directoryPath);

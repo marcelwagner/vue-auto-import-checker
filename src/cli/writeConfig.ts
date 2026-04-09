@@ -15,8 +15,8 @@ export function writeConfig(config: VAIC_Config, showResult: boolean): void {
   logger.info(`>> Config                         <<`);
   logger.info('');
 
-  if (config.projectPath) {
-    logger.info(`Project Path              : ${config.projectPath}`);
+  if (config.projectPaths) {
+    logger.info(`Project Path              : ${config.projectPaths}`);
   }
 
   if (config.componentsFile) {

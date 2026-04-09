@@ -50,6 +50,7 @@ export async function getJsonFileContent(filePath: string): Promise<string[]> {
  * @param dir - directory to write the file in
  * @param tagsFile - name of the file to write (e.g., 'vuetifyTags.json')
  * @param componentsList - array of component tags to write to the file
+ * @returns promise that resolves when the file is written successfully
  */
 export async function writeCustomPluginFile(
   dir: string,
