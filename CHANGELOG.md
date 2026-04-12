@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.1] - 2026-04-12
+
+### Added
+- workflows.md to describe how to use this tool in github actions
+
+### Changed
+- Node version 24 LTS
+- Updated the github workflows file to automatically use Node version 20.19 and 24.x
+
 ## [1.1.0] - 2026-04-09
 
 ### Changed

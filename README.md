@@ -53,11 +53,34 @@ they are. So you can easily find and fix them.
 
 ## Requirements
 
+### Node
+
 We recommend using:  
 
-- Node.js >= 24.11.1 (minimum required 20.19.1)  
+- Latest Node.js 24.x LTS (minimum required 20.19.1)  
 
-Other versions might work but are not tested.  
+Other versions might work but are not tested.
+
+## Vue
+
+The supported Vue files should use Single-File Components (also known as *.vue files, abbreviated as SFC).
+That means we assume to have files in your project path that are looking like this:
+
+``` vue
+<script>
+/* Typescript or Javascript content */
+</script>
+
+<template>
+  <!-- HTML content -->
+</template>
+
+<style>
+/* CSS content */
+</style>
+```
+
+We also assume to have at minimum the `template` section in your files.
 
 ## Installation
 
