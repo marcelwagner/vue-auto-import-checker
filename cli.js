@@ -31,7 +31,6 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
                 exitCode: -1
             });
         }
-        logger.end();
         return;
     }
     if (componentsFile && projectPaths.length <= 0) {
@@ -57,7 +56,6 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
                 exitCode: -1
             });
         }
-        logger.end();
         return;
     }
     const knownFrameworkList = knownFrameworks.length >= 1 ? getFrameworkList(knownFrameworks) : [];
@@ -101,7 +99,6 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
                 exitCode: -1
             });
         }
-        logger.end();
         return;
     }
     try {
@@ -136,6 +133,5 @@ import getUnknownTags, { createLogger, currentDateTime, findFrameworkByName, get
             exitCode: -1
         });
     }
-    logger.end();
     return;
 })();

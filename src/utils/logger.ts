@@ -1,27 +1,27 @@
-import winston from 'winston';
-
 /**
- * Create a logger instance.
+ * Create the logger instance.
  *
  * @param debug - whether to enable debug logging
  */
 export function createLogger(debug: boolean): void {
   global.debug = debug;
 
-  const { combine, timestamp, printf } = winston.format;
+  const level: 'debug' | 'info' = debug ? 'debug' : 'info';
 
-  global.logger = winston.createLogger({
-    levels: winston.config.syslog.levels,
-    level: debug ? 'debug' : 'info',
-    format: combine(
-      timestamp(),
-      printf(({ level, message, timestamp }) => {
-        return debug ? `${timestamp} [${level.toUpperCase()}]: ${message}` : `${message}`;
-      })
-    ),
-    defaultMeta: { service: 'user-service' },
-    transports: [new winston.transports.Console({ level: debug ? 'debug' : 'info' })]
-  });
+  global.logger = {
+    info: (message: string): void => {
+      // oxlint-disable-next-line no-console
+      console.log(
+        debug ? `${new Date().toLocaleString()} [${level.toUpperCase()}]: ${message}` : message
+      );
+    },
+    debug: (message: string): void => {
+      if (debug) {
+        // oxlint-disable-next-line no-console
+        console.log(`${new Date().toLocaleString()} [${level.toUpperCase()}]: ${message}`);
+      }
+    }
+  };
 }
 
 /**

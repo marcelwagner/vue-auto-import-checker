@@ -1,6 +1,6 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Check if the used tags are all registered within your components.d.ts",
   "type": "module",
   "types": "./types/**/*.ts",
@@ -71,7 +71,6 @@
   "dependencies": {
     "commander": "14.0.3",
     "html-tags": "5.1.0",
-    "svg-tag-names": "3.0.1",
-    "winston": "3.19.0"
+    "svg-tag-names": "3.0.1"
   }
 }

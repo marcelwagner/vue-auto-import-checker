@@ -85,7 +85,6 @@ import getUnknownTags, {
       });
     }
 
-    logger.end();
     return;
   }
 
@@ -124,7 +123,6 @@ import getUnknownTags, {
       });
     }
 
-    logger.end();
     return;
   }
 
@@ -186,7 +184,6 @@ import getUnknownTags, {
       });
     }
 
-    logger.end();
     return;
   }
 
@@ -240,6 +237,5 @@ import getUnknownTags, {
     });
   }
 
-  logger.end();
   return;
 })();

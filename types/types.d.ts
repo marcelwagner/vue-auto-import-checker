@@ -98,6 +98,11 @@ type CommanderInit = {
   debug: boolean;
 };
 
+type CustomLogger = {
+  info: (message: string) => void;
+  debug: (message: string) => void;
+};
+
 type Framework = 'vuetify' | 'vueuse' | 'quasar' | 'nuxt' | 'primevue' | 'naiveui';
 type Known = 'html' | 'svg' | 'vue' | 'vuerouter';
 type UserGenerated = 'cli' | 'file';

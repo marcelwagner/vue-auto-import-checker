@@ -1,4 +1,3 @@
-import type { Logger } from 'winston';
 import { getLineIndexAsString } from './index.ts';
 import { pluralArray } from './plural.ts';
 
@@ -28,9 +27,8 @@ export function writeResult(tags: Tag[], kafka: boolean): void {
 
     logger.info('');
 
-    lines.forEach(
-      ({ text, index }: UnknownTagLine): Logger =>
-        logger.info(`${getLineIndexAsString(index, lines[lines.length - 1].index)}: ${text}`)
+    lines.forEach(({ text, index }: UnknownTagLine): void =>
+      logger.info(`${getLineIndexAsString(index, lines[lines.length - 1].index)}: ${text}`)
     );
 
     logger.info('');

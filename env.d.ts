@@ -1,9 +1,9 @@
 // Extend the NodeJS global type to include config
-import type { Logger } from 'winston';
+export const thisIsAModule = true;
 
 declare global {
   var debug: boolean;
-  var logger: Logger;
+  var logger: CustomLogger;
   var stats: Stats;
   var quiet: boolean;
 }

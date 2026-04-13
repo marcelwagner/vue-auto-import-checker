@@ -1,16 +1,16 @@
-import winston from 'winston';
 export function createLogger(debug) {
     global.debug = debug;
-    const { combine, timestamp, printf } = winston.format;
-    global.logger = winston.createLogger({
-        levels: winston.config.syslog.levels,
-        level: debug ? 'debug' : 'info',
-        format: combine(timestamp(), printf(({ level, message, timestamp }) => {
-            return debug ? `${timestamp} [${level.toUpperCase()}]: ${message}` : `${message}`;
-        })),
-        defaultMeta: { service: 'user-service' },
-        transports: [new winston.transports.Console({ level: debug ? 'debug' : 'info' })]
-    });
+    const level = debug ? 'debug' : 'info';
+    global.logger = {
+        info: (message) => {
+            console.log(debug ? `${new Date().toLocaleString()} [${level.toUpperCase()}]: ${message}` : message);
+        },
+        debug: (message) => {
+            if (debug) {
+                console.log(`${new Date().toLocaleString()} [${level.toUpperCase()}]: ${message}`);
+            }
+        }
+    };
 }
 export function currentDateTime() {
     return new Date().toLocaleString();

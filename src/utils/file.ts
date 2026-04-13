@@ -67,7 +67,7 @@ export async function writeCustomPluginFile(
 
     const localTagsFile: string = join(dir, tagsFile);
 
-    logger.debug('localTagsFile', localTagsFile);
+    logger.debug(`localTagsFile ${localTagsFile}`);
 
     await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
       flag: 'w+',
