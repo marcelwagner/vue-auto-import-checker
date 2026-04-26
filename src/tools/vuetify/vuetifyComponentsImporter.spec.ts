@@ -2,7 +2,12 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test, vi } from 'vitest';
-import { getUniqueFromList, default as getUnknownTags, type VAIC_Config } from '../../../index.ts';
+import {
+  getUniqueFromList,
+  default as getUnknownTags,
+  statistics,
+  type VAIC_Config
+} from '../../../index.ts';
 import { vuetifyComponentsImporter } from '../index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,15 +30,20 @@ describe('vuetify-importer tool', () => {
 
   describe('produced', async () => {
     const vuetifyConfig: VAIC_Config = {
-      componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
+      componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+      projectPaths: [
+        'tests/data/vue-test-project-error/src',
+        'tests/data/vue-test-project-error/lib'
+      ],
+      tool: '',
       knownTags: [],
       knownTagsFile: '',
       negateKnown: [],
       knownFrameworks: ['vuetify'],
       cachePath,
       importsKnown: false,
-      basePath
+      basePath,
+      outputFormat: 'text'
     };
 
     const customFile = join(basePath, cachePath, 'vuetifyTags.json');
@@ -42,36 +52,47 @@ describe('vuetify-importer tool', () => {
       rmSync(customFile);
     }
 
+    statistics._stats = { ...statistics._initialState };
+
     const vuetifyResult = await getUnknownTags(vuetifyConfig);
     const vuetifyUniqueTags = getUniqueFromList(
-      vuetifyResult.tagsList.map((tag: Tag) => tag.tagName)
+      vuetifyResult.map((tag: Tag) => tag.tagName)
     );
     const vuetifyUniqueFiles = getUniqueFromList(
-      vuetifyResult.tagsList.map((tag: Tag) => tag.file)
+      vuetifyResult.map((tag: Tag) => tag.file)
     );
 
     await vuetifyComponentsImporter(basePath, cachePath);
 
     const customConfig: VAIC_Config = {
-      componentsFile: 'tests/data/vue-test-project/components.d.ts',
-      projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
+      componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+      projectPaths: [
+        'tests/data/vue-test-project-error/src',
+        'tests/data/vue-test-project-error/lib'
+      ],
+      tool: '',
       knownTags: [],
       knownTagsFile: join(cachePath, 'vuetifyTags.json'),
       negateKnown: [],
       knownFrameworks: [],
       cachePath,
       importsKnown: false,
-      basePath
+      basePath,
+      outputFormat: 'text'
     };
+
+    statistics._stats = { ...statistics._initialState };
 
     const customResult = await getUnknownTags(customConfig);
     const customUniqueTags = getUniqueFromList(
-      customResult.tagsList.map((tag: Tag) => tag.tagName)
+      customResult.map((tag: Tag) => tag.tagName)
     );
-    const customUniqueFiles = getUniqueFromList(customResult.tagsList.map((tag: Tag) => tag.file));
+    const customUniqueFiles = getUniqueFromList(
+      customResult.map((tag: Tag) => tag.file)
+    );
 
     test('customVuetifyFile should report same length of tags total as vuetify build in', () => {
-      expect(vuetifyResult.tagsList.length).to.equal(customResult.tagsList.length);
+      expect(vuetifyResult.length).to.equal(customResult.length);
     });
 
     test('customVuetifyFile should report same length of unique tags as vuetify build in', () => {

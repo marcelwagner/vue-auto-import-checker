@@ -2,7 +2,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test, vi } from 'vitest';
-import { getUniqueFromList, default as getUnknownTags } from "../../../index.js";
+import { getUniqueFromList, default as getUnknownTags, statistics } from "../../../index.js";
 import { primevueComponentsImporter } from "../index.js";
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../../../');
@@ -19,40 +19,52 @@ describe('primevue-importer tool', () => {
     });
     describe('produced', async () => {
         const primevueConfig = {
-            componentsFile: 'tests/data/vue-test-project/components.d.ts',
-            projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
+            componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+            projectPaths: [
+                'tests/data/vue-test-project-error/src',
+                'tests/data/vue-test-project-error/lib'
+            ],
+            tool: '',
             knownTags: [],
             knownTagsFile: '',
             negateKnown: [],
             knownFrameworks: ['primevue'],
             cachePath,
             importsKnown: false,
-            basePath
+            basePath,
+            outputFormat: 'text'
         };
         const customFile = join(basePath, cachePath, 'primevueTags.json');
         if (existsSync(customFile)) {
             rmSync(customFile);
         }
+        statistics._stats = { ...statistics._initialState };
         const primevueResult = await getUnknownTags(primevueConfig);
-        const primevueUniqueTags = getUniqueFromList(primevueResult.tagsList.map((tag) => tag.tagName));
-        const primevueUniqueFiles = getUniqueFromList(primevueResult.tagsList.map((tag) => tag.file));
+        const primevueUniqueTags = getUniqueFromList(primevueResult.map((tag) => tag.tagName));
+        const primevueUniqueFiles = getUniqueFromList(primevueResult.map((tag) => tag.file));
         await primevueComponentsImporter(basePath, cachePath);
         const customConfig = {
-            componentsFile: 'tests/data/vue-test-project/components.d.ts',
-            projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
+            componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+            projectPaths: [
+                'tests/data/vue-test-project-error/src',
+                'tests/data/vue-test-project-error/lib'
+            ],
+            tool: '',
             knownTags: [],
             knownTagsFile: join(cachePath, 'primevueTags.json'),
             negateKnown: [],
             knownFrameworks: [],
             cachePath,
             importsKnown: false,
-            basePath
+            basePath,
+            outputFormat: 'text'
         };
+        statistics._stats = { ...statistics._initialState };
         const customResult = await getUnknownTags(customConfig);
-        const customUniqueTags = getUniqueFromList(customResult.tagsList.map((tag) => tag.tagName));
-        const customUniqueFiles = getUniqueFromList(customResult.tagsList.map((tag) => tag.file));
+        const customUniqueTags = getUniqueFromList(customResult.map((tag) => tag.tagName));
+        const customUniqueFiles = getUniqueFromList(customResult.map((tag) => tag.file));
         test('customprimevueFile should report same as primevue flag', () => {
-            expect(primevueResult.tagsList.length).to.equal(customResult.tagsList.length);
+            expect(primevueResult.length).to.equal(customResult.length);
             expect(primevueUniqueTags.length).to.equal(customUniqueTags.length);
             expect(primevueUniqueFiles.length).to.equal(customUniqueFiles.length);
         });

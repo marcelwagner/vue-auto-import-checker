@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { frameworksTools, toolsFileExt } from '../config/index.ts';
-import { getJsonFileContent, normalize } from './index.ts';
+import { getJsonFileContent, logger, normalize } from './index.ts';
 
 /**
  * Load the list of known frameworks and their tags from the user-provided JSON files.
@@ -15,10 +15,14 @@ export async function getFrameworkTools(
   cachePath: string
 ): Promise<KnownList[]> {
   return Promise.all(
-    frameworksTools.map((frameworkTool: FrameworkToolItem): Promise<KnownList> => {
-      const known: boolean = knownFrameworks.includes(frameworkTool.name as Framework);
-      return getFramework(cachePath, frameworkTool, known);
-    })
+    frameworksTools.map(
+      (frameworkTool: FrameworkToolItem): Promise<KnownList> => {
+        const known: boolean = knownFrameworks.includes(
+          frameworkTool.name as Framework
+        );
+        return getFramework(cachePath, frameworkTool, known);
+      }
+    )
   );
 }
 
@@ -31,7 +35,8 @@ export function getFrameworkList(knownFrameworks: string[]): Framework[] {
   const frameworks: Framework[] = [];
 
   knownFrameworks.forEach((framework: string): void => {
-    const foundFramework: FrameworkToolItem | undefined = findFrameworkByName(framework);
+    const foundFramework: FrameworkToolItem | undefined =
+      findFrameworkByName(framework);
     if (foundFramework) {
       frameworks.push(foundFramework.name as Framework);
     } else {
@@ -61,7 +66,10 @@ export async function getFramework(
   known: boolean
 ): Promise<KnownList> {
   // Build the path to a potential user-provided JSON file, e.g. /path/to/user/<file>.json
-  const localPluginFile: string = join(userGeneratedPath, `${frameworkTool?.file}.${toolsFileExt}`);
+  const localPluginFile: string = join(
+    userGeneratedPath,
+    `${frameworkTool?.file}.${toolsFileExt}`
+  );
 
   // Quick synchronous existence check to decide which file to load
   const localPluginFileExists: boolean = existsSync(localPluginFile);
@@ -83,8 +91,11 @@ export async function getFramework(
  * @param name - name of the framework
  * @returns FrameworkToolItem | undefined
  */
-export function findFrameworkByName(name: string): FrameworkToolItem | undefined {
+export function findFrameworkByName(
+  name: string
+): FrameworkToolItem | undefined {
   return frameworksTools.find(
-    (framework: FrameworkToolItem): boolean => framework.name === normalize(name)
+    (framework: FrameworkToolItem): boolean =>
+      framework.name === normalize(name)
   );
 }

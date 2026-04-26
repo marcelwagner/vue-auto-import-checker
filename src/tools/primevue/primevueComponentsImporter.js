@@ -1,12 +1,14 @@
 import { existsSync } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { writeCustomPluginFile } from "../../utils/index.js";
+import { logger, writeCustomPluginFile } from "../../utils/index.js";
 export async function primevueComponentsImporter(basePath, cachePath) {
     try {
         const primevueDirectory = join(basePath, 'node_modules/primevue');
         if (!existsSync(primevueDirectory)) {
-            return Promise.reject({ errorText: `PrimeVue Directory not found: ${primevueDirectory}` });
+            return Promise.reject({
+                errorText: `PrimeVue Directory not found: ${primevueDirectory}`
+            });
         }
         const listOfDirectories = await readdir(primevueDirectory);
         const componentsList = [];
@@ -31,6 +33,8 @@ export async function primevueComponentsImporter(basePath, cachePath) {
         return componentsList;
     }
     catch (error) {
-        return Promise.reject({ errorText: 'Error importing primevue components:' + error });
+        return Promise.reject({
+            errorText: 'Error importing primevue components:' + error
+        });
     }
 }

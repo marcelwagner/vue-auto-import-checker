@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, logger, writeCustomPluginFile } from "../../utils/index.js";
 export async function vueUseComponentsImporter(basePath, cachePath) {
     try {
         const indexMFile = join(basePath, 'node_modules/@vueuse/components/index.d.mts');
@@ -31,6 +31,8 @@ export async function vueUseComponentsImporter(basePath, cachePath) {
         return componentsList;
     }
     catch (error) {
-        return Promise.reject({ errorText: 'Error importing VueUse components:' + error });
+        return Promise.reject({
+            errorText: 'Error importing VueUse components:' + error
+        });
     }
 }

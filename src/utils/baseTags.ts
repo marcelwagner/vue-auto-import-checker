@@ -1,4 +1,5 @@
 import { baseTags } from '../config/index.ts';
+import { logger } from './logger.ts';
 import { normalize } from './normalize.ts';
 
 /**
@@ -7,7 +8,7 @@ import { normalize } from './normalize.ts';
  * @param negateKnown - list of known base tags
  * @returns KnownList[] - list of base tags
  */
-export function getBaseTags(negateKnown: Known[]): KnownList[] {
+export function getKnownBaseTags(negateKnown: Known[]): KnownList[] {
   return baseTags.map(
     (base: BaseTags): KnownList => ({
       tags: base.tags,
@@ -24,7 +25,7 @@ export function getBaseTags(negateKnown: Known[]): KnownList[] {
  * @param negateKnown - list of known base tags
  * @returns Known[] - list of base names
  */
-export function getBaseTagsList(negateKnown: string[]): Known[] {
+export function getKnownBaseTagsList(negateKnown: string[]): Known[] {
   const baseTags: Known[] = [];
 
   negateKnown.forEach((base: string): void => {
@@ -46,5 +47,7 @@ export function getBaseTagsList(negateKnown: string[]): Known[] {
  * @returns BaseTags | undefined
  */
 export function findBaseTagsByName(name: string): BaseTags | undefined {
-  return baseTags.find((base: BaseTags): boolean => base.name === normalize(name));
+  return baseTags.find(
+    (base: BaseTags): boolean => base.name === normalize(name)
+  );
 }

@@ -1,3 +1,5 @@
+import { logger } from '../utils/index.ts';
+
 /**
  * Write the list of components to the console.
  *

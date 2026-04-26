@@ -1,5 +1,10 @@
 {
-  "exclude": ["tests", "node_modules", "tsconfig.json", "vitest.config.ts"],
+  "exclude": [
+    "tests",
+    "node_modules",
+    "tsconfig.json",
+    "vitest.config.ts"
+  ],
   "include": [
     "./*.ts",
     "./**/*.ts",
@@ -10,12 +15,19 @@
   "compilerOptions": {
     "incremental": false,
     "target": "esnext",
-    "lib": ["ESNext"],
+    "lib": [
+      "ESNext"
+    ],
     "module": "NodeNext",
     "moduleResolution": "nodenext",
-    "paths": {},
-    "typeRoots": [".", "./types", "./node_modules/@types"],
-    "types": ["node"],
+    "typeRoots": [
+      ".",
+      "./types",
+      "./node_modules/@types"
+    ],
+    "types": [
+      "node"
+    ],
     "allowImportingTsExtensions": true,
     "rewriteRelativeImportExtensions": true,
     "resolveJsonModule": true,

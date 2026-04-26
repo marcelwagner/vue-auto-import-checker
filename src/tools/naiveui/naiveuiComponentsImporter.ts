@@ -1,7 +1,7 @@
 import { existsSync, type Stats } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all naive-ui components from the naive-ui library
@@ -14,10 +14,15 @@ export async function naiveuiComponentsImporter(
   cachePath: string
 ): Promise<string[]> {
   try {
-    const naiveuiDirectory: string = join(basePath, 'node_modules/naive-ui/lib');
+    const naiveuiDirectory: string = join(
+      basePath,
+      'node_modules/naive-ui/lib'
+    );
 
     if (!existsSync(naiveuiDirectory)) {
-      return Promise.reject({ errorText: `Naive-UI Directory not found: ${naiveuiDirectory}` });
+      return Promise.reject({
+        errorText: `Naive-UI Directory not found: ${naiveuiDirectory}`
+      });
     }
 
     const listOfDirs: string[] = await readdir(naiveuiDirectory);
@@ -53,7 +58,9 @@ export async function naiveuiComponentsImporter(
           continue;
         }
 
-        logger.debug(`found naiveui component: ${JSON.stringify(component[1])}`);
+        logger.debug(
+          `found naiveui component: ${JSON.stringify(component[1])}`
+        );
 
         componentsList.push(component[1]);
       }
@@ -61,10 +68,16 @@ export async function naiveuiComponentsImporter(
 
     const customPluginPath: string = join(basePath, cachePath);
 
-    await writeCustomPluginFile(customPluginPath, 'naiveuiTags.json', componentsList);
+    await writeCustomPluginFile(
+      customPluginPath,
+      'naiveuiTags.json',
+      componentsList
+    );
 
     return componentsList;
   } catch (error) {
-    return Promise.reject({ errorText: 'Error importing naiveui components:' + error });
+    return Promise.reject({
+      errorText: 'Error importing naiveui components:' + error
+    });
   }
 }

@@ -1,8 +1,51 @@
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { vueTemplateEnd, vueTemplateStart } from "../config/index.js";
-import { getBaseTags, getFileContent, getFrameworkTools, getJsonFileContent, normalize } from "./index.js";
+import { getFileContent, getFrameworkTools, getJsonFileContent, getKnownBaseTags, logger, normalize, statistics } from "./index.js";
+export async function getTagsFromDirectoryPaths(basePath, directoryPathList) {
+    let tagList = [];
+    for (const directoryPath of directoryPathList) {
+        tagList = await getTagsFromDirectory(basePath, directoryPath, tagList);
+    }
+    return tagList;
+}
+export async function getTagsFromDirectory(basePath, directoryPath, tags) {
+    const stats = statistics.getStats();
+    stats.dirCounter++;
+    const directory = join(basePath, directoryPath);
+    logger.debug(`Dir: ${directory}`);
+    const entries = await readdir(directory, {
+        withFileTypes: true
+    });
+    for (const entry of entries) {
+        const fullPath = join(directory, entry.name);
+        if (entry.isFile()) {
+            try {
+                await getTagsFromFile(fullPath, tags);
+            }
+            catch (error) {
+                return Promise.reject({
+                    errorText: `Error getting Tags from file ${fullPath}: ${JSON.stringify(error)}`
+                });
+            }
+        }
+        else if (entry.isDirectory()) {
+            try {
+                await getTagsFromDirectory(basePath, join(directoryPath, entry.name), tags);
+            }
+            catch (error) {
+                return Promise.reject({
+                    errorText: `Error getting Tags from path ${fullPath}: ${JSON.stringify(error)}`
+                });
+            }
+        }
+        else {
+        }
+    }
+    return tags;
+}
 export async function getTagsFromFile(file, tags) {
+    const stats = statistics.getStats();
     stats.fileCounter++;
     const fileContent = await getFileContent(file);
     logger.debug(`File: ${file}`);
@@ -29,54 +72,17 @@ export async function getTagsFromFile(file, tags) {
                 file,
                 known: false,
                 knownSource: componentMatch
-                    ? [{ source: 'import', known: true, file: componentMatch.path }]
+                    ? [
+                        {
+                            source: 'import',
+                            known: true,
+                            file: componentMatch.path
+                        }
+                    ]
                     : []
             });
         });
     });
-    return tags;
-}
-export async function getTagsFromDirectoryList(basePath, directoryPathList) {
-    let tagList = [];
-    for (const directoryPath of directoryPathList) {
-        tagList = await getTagsFromDirectory(basePath, directoryPath, tagList);
-    }
-    return tagList;
-}
-export async function getTagsFromDirectory(basePath, directoryPath, tags) {
-    stats.dirCounter++;
-    const directory = join(basePath, directoryPath);
-    logger.debug(`Dir: ${directory}`);
-    const entries = await readdir(directory, { withFileTypes: true });
-    for (const entry of entries) {
-        const fullPath = join(directory, entry.name);
-        if (entry.isFile()) {
-            try {
-                await getTagsFromFile(fullPath, tags);
-            }
-            catch (error) {
-                if (!quiet) {
-                    return Promise.reject({
-                        errorText: `Error getting Tags from file ${fullPath}: ${JSON.stringify(error)}`
-                    });
-                }
-            }
-        }
-        else if (entry.isDirectory()) {
-            try {
-                await getTagsFromDirectory(basePath, join(directoryPath, entry.name), tags);
-            }
-            catch (error) {
-                if (!quiet) {
-                    return Promise.reject({
-                        errorText: `Error getting Tags from path ${fullPath}: ${JSON.stringify(error)}`
-                    });
-                }
-            }
-        }
-        else {
-        }
-    }
     return tags;
 }
 export async function getUnknownTagsList(tags) {
@@ -105,7 +111,11 @@ export async function getIdentifiedTagsList({ knownTagsList, componentsList, com
             }
             if (knownLists.length >= 1) {
                 knownLists.forEach((list) => {
-                    tag.knownSource.push({ source: list.name, known: list.known, file: list.file });
+                    tag.knownSource.push({
+                        source: list.name,
+                        known: list.known,
+                        file: list.file
+                    });
                     if (list.known) {
                         tag.known = true;
                     }
@@ -115,7 +125,11 @@ export async function getIdentifiedTagsList({ knownTagsList, componentsList, com
         }
         if (componentsList.length >= 1) {
             if (componentsList.some((rawTag) => normalize(rawTag) === tagName)) {
-                tag.knownSource.push({ source: 'components', known: true, file: componentsFile });
+                tag.knownSource.push({
+                    source: 'components',
+                    known: true,
+                    file: componentsFile
+                });
                 tag.known = true;
                 logger.debug(`tag ${tagName} is in components list`);
             }
@@ -144,13 +158,18 @@ export async function getKnownLists({ negateKnown, knownFrameworks, knownTags, k
     const knownTagsList = knownTags.length >= 1
         ? [{ name: 'cli', tags: knownTags, known: true, file: '' }]
         : [];
-    const baseTags = getBaseTags(negateKnown);
+    const baseTags = getKnownBaseTags(negateKnown);
     const frameworkTags = await getFrameworkTools(knownFrameworks, cachePath);
     logger.debug(`baseTags: ${JSON.stringify(baseTags, null, 2)}`);
     logger.debug(`frameworkTags: ${JSON.stringify(frameworkTags, null, 2)}`);
     logger.debug(`knownTagsList: ${JSON.stringify(knownTagsList, null, 2)}`);
     logger.debug(`knownTagsFileContentList: ${JSON.stringify(knownTagsFileContentList, null, 2)}`);
-    return [...knownTagsList, ...knownTagsFileContentList, ...frameworkTags, ...baseTags];
+    return [
+        ...knownTagsList,
+        ...knownTagsFileContentList,
+        ...frameworkTags,
+        ...baseTags
+    ];
 }
 export function matchesOneOf(tag, regexMatchResult) {
     return regexMatchResult
@@ -231,6 +250,8 @@ export function getLinesForReport(linesOfFile, index) {
     return [
         ...(index - 1 >= 1 ? [{ text: linesOfFile[index - 1], index: index }] : []),
         { text: linesOfFile[index], index: index + 1 },
-        ...(index + 1 <= linesOfFile.length ? [{ text: linesOfFile[index + 1], index: index + 2 }] : [])
+        ...(index + 1 <= linesOfFile.length
+            ? [{ text: linesOfFile[index + 1], index: index + 2 }]
+            : [])
     ];
 }

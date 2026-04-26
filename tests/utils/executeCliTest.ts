@@ -9,15 +9,15 @@ export async function executeTest(command: string) {
       let returnedData: string = '';
       let errorData: string = '';
 
-      commandExec.stdout?.on('data', data => {
+      commandExec.stdout?.on('data', (data: unknown): void => {
         returnedData = returnedData + data;
       });
 
-      commandExec.stderr?.on('data', data => {
+      commandExec.stderr?.on('data', (data: unknown): void => {
         errorData = errorData + data;
       });
 
-      commandExec.on('close', () => {
+      commandExec.on('close', (): void => {
         commandExec.kill('SIGTERM');
         resolve({ success: returnedData, error: errorData });
       });

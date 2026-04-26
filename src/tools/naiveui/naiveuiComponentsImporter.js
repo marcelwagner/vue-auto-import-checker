@@ -1,12 +1,14 @@
 import { existsSync } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, logger, writeCustomPluginFile } from "../../utils/index.js";
 export async function naiveuiComponentsImporter(basePath, cachePath) {
     try {
         const naiveuiDirectory = join(basePath, 'node_modules/naive-ui/lib');
         if (!existsSync(naiveuiDirectory)) {
-            return Promise.reject({ errorText: `Naive-UI Directory not found: ${naiveuiDirectory}` });
+            return Promise.reject({
+                errorText: `Naive-UI Directory not found: ${naiveuiDirectory}`
+            });
         }
         const listOfDirs = await readdir(naiveuiDirectory);
         const componentsList = [];
@@ -38,6 +40,8 @@ export async function naiveuiComponentsImporter(basePath, cachePath) {
         return componentsList;
     }
     catch (error) {
-        return Promise.reject({ errorText: 'Error importing naiveui components:' + error });
+        return Promise.reject({
+            errorText: 'Error importing naiveui components:' + error
+        });
     }
 }

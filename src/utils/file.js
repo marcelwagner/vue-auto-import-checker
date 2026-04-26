@@ -1,13 +1,15 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { logger } from "./logger.js";
 export async function getFileContent(filePath) {
     try {
         return readFile(filePath, 'utf8');
     }
     catch (error) {
         return Promise.reject({
-            errorText: `Error getting file content from file ${filePath} ` + JSON.stringify(error)
+            errorText: `Error getting file content from file ${filePath} ` +
+                JSON.stringify(error)
         });
     }
 }
@@ -18,7 +20,8 @@ export async function getJsonFileContent(filePath) {
     }
     catch (error) {
         return Promise.reject({
-            errorText: `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
+            errorText: `Error getting json file content from files ${filePath} ` +
+                JSON.stringify(error)
         });
     }
 }

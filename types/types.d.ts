@@ -26,15 +26,6 @@ type Stats = {
   endTime: number;
 };
 
-type WriteStatsProps = {
-  stats: Stats;
-  filesList: string[];
-  tagsList: Tag[];
-  uniqueTagsList: string[];
-  showResult: boolean;
-  kafka: boolean;
-};
-
 type ComponentImport = {
   tag: string;
   path: string;
@@ -77,33 +68,75 @@ type BaseTags = {
   source: string;
 };
 
-type CommanderInit = {
-  knownFrameworks: string[];
-  negateKnown: string[];
+type InternalConfig = {
+  componentsFile: string;
+  projectPaths: string[];
+  tool: string;
+  negateKnown: Known[];
+  knownFrameworks: Framework[];
   knownTags: string[];
   knownTagsFile: string;
+  cachePath: string;
+  importsKnown: boolean;
+  basePath: string;
+  kafka?: boolean;
+  outputFormat: OutputFormat;
+  quiet?: boolean;
+  showStats?: boolean;
+  showResult?: boolean;
+  debug?: boolean;
+};
 
-  showStats: boolean;
-  showResult: boolean;
+type UserConfig = InternalConfig & {
+  set(config: InternalConfig): void;
+};
+
+type CommanderInit = {
   componentsFile: string;
   projectPaths: string[];
 
-  tool: string;
   cachePath: string;
+  tool: string;
+
+  showStats: boolean;
+  showResult: boolean;
+  quiet: boolean;
+
+  knownTags: string[];
+  knownTagsFile: string;
+  knownFrameworks: string[];
+  negateKnown: string[];
 
   kafka: boolean;
 
+  outputFormat: string;
+
   importsKnown: boolean;
-  quiet: boolean;
   debug: boolean;
+  showConfig: boolean;
 };
 
 type CustomLogger = {
   info: (message: string) => void;
   debug: (message: string) => void;
+  exit: (message: string, json: Record<string, unknown>) => void;
 };
 
-type Framework = 'vuetify' | 'vueuse' | 'quasar' | 'nuxt' | 'primevue' | 'naiveui';
+type OutputFormat = 'text' | 'md' | 'json';
+
+type Framework =
+  | 'vuetify'
+  | 'vueuse'
+  | 'quasar'
+  | 'nuxt'
+  | 'primevue'
+  | 'naiveui';
 type Known = 'html' | 'svg' | 'vue' | 'vuerouter';
 type UserGenerated = 'cli' | 'file';
-type Source = Framework | Known | UserGenerated | 'import' | 'components' | 'unknown';
+type Source =
+  | Framework
+  | Known
+  | UserGenerated
+  | 'import'
+  | 'components'
+  | 'unknown';

@@ -1,11 +1,12 @@
 {
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
   "singleQuote": true,
   "quoteProps": "as-needed",
   "bracketSpacing": true,
   "trailingComma": "none",
   "semi": true,
   "arrowParens": "avoid",
-  "plugins": [
-    "prettier-plugin-organize-imports"
-  ]
+  "printWidth": 80,
+  "sortPackageJson": false,
+  "ignorePatterns": []
 }

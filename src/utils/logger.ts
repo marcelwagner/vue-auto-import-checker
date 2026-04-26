@@ -1,34 +1,73 @@
+import { userConfig } from '../config/index.ts';
+
 /**
  * Create the logger instance.
- *
- * @param debug - whether to enable debug logging
  */
-export function createLogger(debug: boolean): void {
-  global.debug = debug;
+class Logger {
+  log: { info: string[]; debug: string[] };
 
-  const level: 'debug' | 'info' = debug ? 'debug' : 'info';
+  constructor() {
+    this.log = { info: [], debug: [] };
+  }
 
-  global.logger = {
-    info: (message: string): void => {
-      // oxlint-disable-next-line no-console
-      console.log(
-        debug ? `${new Date().toLocaleString()} [${level.toUpperCase()}]: ${message}` : message
-      );
-    },
-    debug: (message: string): void => {
-      if (debug) {
+  get level(): 'debug' | 'info' {
+    return userConfig.debug ? 'debug' : 'info';
+  }
+
+  get upperCaseLevel(): 'DEBUG' | 'INFO' {
+    return this.level.toUpperCase() as 'DEBUG' | 'INFO';
+  }
+
+  info(message: string): void {
+    if (userConfig.outputFormat !== 'json') {
+      if (!userConfig.quiet) {
         // oxlint-disable-next-line no-console
-        console.log(`${new Date().toLocaleString()} [${level.toUpperCase()}]: ${message}`);
+        console.log(
+          userConfig.debug
+            ? `${new Date().toLocaleString()} [${this.upperCaseLevel}]: ${message}`
+            : message
+        );
+      }
+    } else {
+      if (userConfig.debug) {
+        this.log.debug.push(
+          `${new Date().toLocaleString()} [${this.upperCaseLevel}]: ${message}`
+        );
+      } else {
+        this.log.info.push(message);
       }
     }
-  };
+  }
+  debug(message: string): void {
+    if (userConfig.debug) {
+      if (userConfig.outputFormat !== 'json') {
+        // oxlint-disable-next-line no-console
+        console.log(
+          `${new Date().toLocaleString()} [${this.upperCaseLevel}]: ${message}`
+        );
+      } else {
+        this.log.debug.push(
+          `${new Date().toLocaleString()} [${this.upperCaseLevel}]: ${message}`
+        );
+      }
+    }
+  }
+  exit(message: string, json: Record<string, unknown> = {}): void {
+    if (userConfig.outputFormat === 'json') {
+      const output = {
+        ...json,
+        ...(!userConfig.debug && this.log.info.length >= 1
+          ? { info: this.log.info }
+          : {}),
+        exitMessage: message
+      };
+      // oxlint-disable-next-line no-console
+      console.log(JSON.stringify(output, null, 2));
+    } else {
+      // oxlint-disable-next-line no-console
+      console.log(message);
+    }
+  }
 }
 
-/**
- * Get the current date and time as a string.
- *
- * @returns string - current date and time
- */
-export function currentDateTime(): string {
-  return new Date().toLocaleString();
-}
+export const logger = new Logger();
