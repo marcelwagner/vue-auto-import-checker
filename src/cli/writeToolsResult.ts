@@ -1,4 +1,5 @@
-import { pluralArray } from './plural.ts';
+import { logger } from '../utils/index.ts';
+import { pluralArray } from './index.ts';
 
 /**
  * Write the tool result to the console.
@@ -17,7 +18,9 @@ export function writeToolsResult(toolName: string, toolTags: string[]): void {
     });
 
     logger.info('');
-    logger.info(`Found unique tag${pluralArray(toolTags, '')}: ${toolTags.length}`);
+    logger.info(
+      `Found unique tag${pluralArray(toolTags, '')}: ${toolTags.length}`
+    );
     logger.info('');
   } else {
     logger.info(`No ${toolName} tags found.`);

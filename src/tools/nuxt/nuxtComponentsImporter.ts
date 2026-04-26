@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all nuxt components from the nuxt library
@@ -14,10 +14,15 @@ export async function nuxtComponentsImporter(
   cachePath: string
 ): Promise<string[]> {
   try {
-    const nuxtDirectory: string = join(basePath, 'node_modules/nuxt/dist/app/components');
+    const nuxtDirectory: string = join(
+      basePath,
+      'node_modules/nuxt/dist/app/components'
+    );
 
     if (!existsSync(nuxtDirectory)) {
-      return Promise.reject({ errorText: `Nuxt Directory not found: ${nuxtDirectory}` });
+      return Promise.reject({
+        errorText: `Nuxt Directory not found: ${nuxtDirectory}`
+      });
     }
 
     const listOfFiles: string[] = await readdir(nuxtDirectory);
@@ -25,7 +30,8 @@ export async function nuxtComponentsImporter(
     const componentsList: string[] = [];
 
     for (const file of listOfFiles) {
-      const vueFile: RegExpMatchArray | null = file.match(/([a-zA-Z0-9-]+).vue$/);
+      const vueFile: RegExpMatchArray | null =
+        file.match(/([a-zA-Z0-9-]+).vue$/);
 
       if (vueFile) {
         logger.debug(`found vueFile: ${vueFile}`);
@@ -33,7 +39,9 @@ export async function nuxtComponentsImporter(
         continue;
       }
 
-      const fileContent: string = await getFileContent(join(nuxtDirectory, file));
+      const fileContent: string = await getFileContent(
+        join(nuxtDirectory, file)
+      );
       const componentNameRaw: RegExpMatchArray | null = fileContent.match(
         /defineComponent\(\{[\W]+name: "([a-zA-Z0-9-]+)",/gm
       );
@@ -53,10 +61,16 @@ export async function nuxtComponentsImporter(
 
     const customPluginPath: string = join(basePath, cachePath);
 
-    await writeCustomPluginFile(customPluginPath, 'nuxtTags.json', componentsList);
+    await writeCustomPluginFile(
+      customPluginPath,
+      'nuxtTags.json',
+      componentsList
+    );
 
     return componentsList;
   } catch (error) {
-    return Promise.reject({ errorText: 'Error importing Nuxt components:' + error });
+    return Promise.reject({
+      errorText: 'Error importing Nuxt components:' + error
+    });
   }
 }

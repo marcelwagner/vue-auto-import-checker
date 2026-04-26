@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, logger, writeCustomPluginFile } from "../../utils/index.js";
 export async function vuetifyComponentsImporter(basePath, cachePath) {
     try {
         const vuetifyComponentsDirectory = join(basePath, 'node_modules/vuetify/lib/components');
@@ -78,6 +78,8 @@ export async function vuetifyComponentsImporter(basePath, cachePath) {
         return [...new Set(componentsList)];
     }
     catch (error) {
-        return Promise.reject({ errorText: 'Error importing Vuetify components:' + error });
+        return Promise.reject({
+            errorText: 'Error importing Vuetify components:' + error
+        });
     }
 }

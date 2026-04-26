@@ -2,7 +2,7 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test, vi } from 'vitest';
-import { getUniqueFromList, default as getUnknownTags } from "../../../index.js";
+import { getUniqueFromList, default as getUnknownTags, statistics } from "../../../index.js";
 import { nuxtComponentsImporter } from "./nuxtComponentsImporter.js";
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../../../');
@@ -19,40 +19,52 @@ describe('nuxt-importer tool', () => {
     });
     describe('produced', async () => {
         const quasarConfig = {
-            componentsFile: 'tests/data/vue-test-project/components.d.ts',
-            projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
+            componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+            projectPaths: [
+                'tests/data/vue-test-project-error/src',
+                'tests/data/vue-test-project-error/lib'
+            ],
+            tool: '',
             knownTags: [],
             knownTagsFile: '',
             negateKnown: [],
             knownFrameworks: ['nuxt'],
             cachePath,
             importsKnown: false,
-            basePath
+            basePath,
+            outputFormat: 'text'
         };
         const customFile = join(basePath, cachePath, 'nuxtTags.json');
         if (existsSync(customFile)) {
             rmSync(customFile);
         }
+        statistics._stats = { ...statistics._initialState };
         const nuxtResult = await getUnknownTags(quasarConfig);
-        const nuxtUniqueTags = getUniqueFromList(nuxtResult.tagsList.map((tag) => tag.tagName));
-        const nuxtUniqueFiles = getUniqueFromList(nuxtResult.tagsList.map((tag) => tag.file));
+        const nuxtUniqueTags = getUniqueFromList(nuxtResult.map((tag) => tag.tagName));
+        const nuxtUniqueFiles = getUniqueFromList(nuxtResult.map((tag) => tag.file));
         await nuxtComponentsImporter(basePath, cachePath);
         const customConfig = {
-            componentsFile: 'tests/data/vue-test-project/components.d.ts',
-            projectPaths: ['tests/data/vue-test-project/src', 'tests/data/vue-test-project/lib'],
+            componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+            projectPaths: [
+                'tests/data/vue-test-project-error/src',
+                'tests/data/vue-test-project-error/lib'
+            ],
+            tool: '',
             knownTags: [],
             knownTagsFile: join(cachePath, 'nuxtTags.json'),
             negateKnown: [],
             knownFrameworks: [],
             cachePath,
             importsKnown: false,
-            basePath
+            basePath,
+            outputFormat: 'text'
         };
+        statistics._stats = { ...statistics._initialState };
         const customResult = await getUnknownTags(customConfig);
-        const customUniqueTags = getUniqueFromList(customResult.tagsList.map((tag) => tag.tagName));
-        const customUniqueFiles = getUniqueFromList(customResult.tagsList.map((tag) => tag.file));
+        const customUniqueTags = getUniqueFromList(customResult.map((tag) => tag.tagName));
+        const customUniqueFiles = getUniqueFromList(customResult.map((tag) => tag.file));
         test('customNuxtFile should report same as nuxt flag', () => {
-            expect(nuxtResult.tagsList.length).to.equal(customResult.tagsList.length);
+            expect(nuxtResult.length).to.equal(customResult.length);
             expect(nuxtUniqueTags.length).to.equal(customUniqueTags.length);
             expect(nuxtUniqueFiles.length).to.equal(customUniqueFiles.length);
         });

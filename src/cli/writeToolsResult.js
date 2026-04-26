@@ -1,4 +1,5 @@
-import { pluralArray } from "./plural.js";
+import { logger } from "../utils/index.js";
+import { pluralArray } from "./index.js";
 export function writeToolsResult(toolName, toolTags) {
     if (toolTags.length >= 1) {
         logger.info('');

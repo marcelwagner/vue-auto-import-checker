@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all quasar components from the quasar library
@@ -13,10 +13,15 @@ export async function quasarComponentsImporter(
   cachePath: string
 ): Promise<string[]> {
   try {
-    const componentsFile: string = join(basePath, 'node_modules/quasar/src/components.js');
+    const componentsFile: string = join(
+      basePath,
+      'node_modules/quasar/src/components.js'
+    );
 
     if (!existsSync(componentsFile)) {
-      return Promise.reject({ errorText: `No components.js found: ${componentsFile}` });
+      return Promise.reject({
+        errorText: `No components.js found: ${componentsFile}`
+      });
     }
 
     const listOfComponents: string = await getFileContent(componentsFile);
@@ -32,17 +37,25 @@ export async function quasarComponentsImporter(
         continue;
       }
 
-      logger.debug(`found quasar component: ${JSON.stringify(`q-${component[1]}`)}`);
+      logger.debug(
+        `found quasar component: ${JSON.stringify(`q-${component[1]}`)}`
+      );
 
       componentsList.push(`q-${component[1]}`);
     }
 
     const customPluginPath: string = join(basePath, cachePath);
 
-    await writeCustomPluginFile(customPluginPath, 'quasarTags.json', componentsList);
+    await writeCustomPluginFile(
+      customPluginPath,
+      'quasarTags.json',
+      componentsList
+    );
 
     return componentsList;
   } catch (error) {
-    return Promise.reject({ errorText: 'Error importing Quasar components:' + error });
+    return Promise.reject({
+      errorText: 'Error importing Quasar components:' + error
+    });
   }
 }

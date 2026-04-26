@@ -1,7 +1,7 @@
 import { existsSync, type Stats } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all vuetify components from the vuetify library
@@ -25,19 +25,26 @@ export async function vuetifyComponentsImporter(
       });
     }
 
-    const listOfComponents: string[] = await readdir(vuetifyComponentsDirectory);
+    const listOfComponents: string[] = await readdir(
+      vuetifyComponentsDirectory
+    );
 
     const componentsList: string[] = [];
 
     for (const dir of listOfComponents) {
-      const componentDir: RegExpMatchArray | null = dir.match(/^V[A-Z][a-zA-Z0-9]+/);
+      const componentDir: RegExpMatchArray | null =
+        dir.match(/^V[A-Z][a-zA-Z0-9]+/);
       const transitionDir: RegExpMatchArray | null = dir.match(/^transitions/);
 
       if (componentDir === null && transitionDir === null) {
         continue;
       }
 
-      const indexFile: string = join(vuetifyComponentsDirectory, dir, `index.d.ts`);
+      const indexFile: string = join(
+        vuetifyComponentsDirectory,
+        dir,
+        `index.d.ts`
+      );
 
       logger.debug(`vuetify component dir: ${dir}`);
 
@@ -53,7 +60,9 @@ export async function vuetifyComponentsImporter(
         }
 
         componentMatchList.forEach((componentMatch: RegExpExecArray): void => {
-          logger.debug(`found vuetify component: ${JSON.stringify(componentMatch[1])}`);
+          logger.debug(
+            `found vuetify component: ${JSON.stringify(componentMatch[1])}`
+          );
 
           componentsList.push(componentMatch[1]);
         });
@@ -68,7 +77,9 @@ export async function vuetifyComponentsImporter(
         }
 
         componentMatchList.forEach((componentMatch: RegExpExecArray): void => {
-          logger.debug(`found vuetify component: ${JSON.stringify(componentMatch[1])}`);
+          logger.debug(
+            `found vuetify component: ${JSON.stringify(componentMatch[1])}`
+          );
 
           componentsList.push(componentMatch[1]);
         });
@@ -86,10 +97,16 @@ export async function vuetifyComponentsImporter(
       });
     }
 
-    const listOfDirectives: string[] = await readdir(vuetifyDirectivesDirectory);
+    const listOfDirectives: string[] = await readdir(
+      vuetifyDirectivesDirectory
+    );
 
     for (const dir of listOfDirectives) {
-      const indexFile: string = join(vuetifyDirectivesDirectory, dir, `index.d.ts`);
+      const indexFile: string = join(
+        vuetifyDirectivesDirectory,
+        dir,
+        `index.d.ts`
+      );
 
       const dirStat: Stats = await stat(join(vuetifyDirectivesDirectory, dir));
       const isDir: boolean = dirStat.isDirectory();
@@ -109,7 +126,9 @@ export async function vuetifyComponentsImporter(
       }
 
       directiveMatchList.forEach((directiveMatch: RegExpExecArray): void => {
-        logger.debug(`found vuetify directive: ${JSON.stringify(directiveMatch[1])}`);
+        logger.debug(
+          `found vuetify directive: ${JSON.stringify(directiveMatch[1])}`
+        );
 
         componentsList.push(`V${directiveMatch[1]}`);
       });
@@ -117,10 +136,16 @@ export async function vuetifyComponentsImporter(
 
     const customPluginPath: string = join(basePath, cachePath);
 
-    await writeCustomPluginFile(customPluginPath, 'vuetifyTags.json', componentsList);
+    await writeCustomPluginFile(
+      customPluginPath,
+      'vuetifyTags.json',
+      componentsList
+    );
 
     return [...new Set(componentsList)];
   } catch (error) {
-    return Promise.reject({ errorText: 'Error importing Vuetify components:' + error });
+    return Promise.reject({
+      errorText: 'Error importing Vuetify components:' + error
+    });
   }
 }

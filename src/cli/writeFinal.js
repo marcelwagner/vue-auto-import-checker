@@ -1,7 +1,9 @@
 import { program } from 'commander';
-export function writeFinalState(error, text, errorCode) {
-    if (error) {
+import { userConfig } from "../config/index.js";
+import { logger } from "../utils/index.js";
+export function writeFinalState(error, text, errorCode, json = {}) {
+    if (error && userConfig.outputFormat === 'text') {
         program.error(text, { exitCode: errorCode });
     }
-    logger.info(text);
+    logger.exit(text, json);
 }

@@ -1,38 +1,22 @@
-export function writeConfig(config, showResult) {
-    if (showResult) {
-        logger.info('....................................');
+import { userConfig } from "../config/index.js";
+import { logger } from "../utils/index.js";
+export function writeConfig(commanderOptions = null) {
+    if (!commanderOptions?.showConfig) {
+        if (userConfig.showResult) {
+            logger.info('....................................');
+        }
+        logger.info('');
+        logger.info(`>> Config                         <<`);
+        logger.info('');
     }
+    logger.info('Commander options:');
+    logger.info(JSON.stringify(commanderOptions, null, 2));
     logger.info('');
-    logger.info(`>> Config                         <<`);
-    logger.info('');
-    if (config.projectPaths) {
-        logger.info(`Project Path              : ${config.projectPaths}`);
+    logger.info('Config options:');
+    logger.info(JSON.stringify(userConfig, null, 2));
+    if (!commanderOptions?.showConfig) {
+        logger.debug('');
+        logger.debug('....................................');
+        logger.debug('');
     }
-    if (config.componentsFile) {
-        logger.info(`Components File           : ${config.componentsFile}`);
-    }
-    if (config.knownTags.length >= 1) {
-        logger.info(`Known Tags                : ${config.knownTags.join(', ')}`);
-    }
-    if (config.knownTagsFile) {
-        logger.info(`Known Tags File           : ${config.knownTagsFile}`);
-    }
-    if (config.knownFrameworks.length >= 1) {
-        logger.info(`Known Frameworks          : ${config.knownFrameworks.join(', ')}`);
-    }
-    if (config.negateKnown.length >= 1) {
-        logger.info(`Ignored known Frameworks  : ${config.negateKnown.join(', ')}`);
-    }
-    if (config.cachePath) {
-        logger.info(`Cache path                : ${config.cachePath}`);
-    }
-    if (config.basePath) {
-        logger.info(`Base path                 : ${config.basePath}`);
-    }
-    if (config.debug) {
-        logger.info(`Debug mode                : ${config.debug}`);
-    }
-    logger.info('');
-    logger.info('....................................');
-    logger.info('');
 }

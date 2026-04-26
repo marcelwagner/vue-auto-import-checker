@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
+import { logger } from './logger.ts';
 
 /**
  * Read a file as UTF-8 text.
@@ -18,7 +19,9 @@ export async function getFileContent(filePath: string): Promise<string> {
   } catch (error) {
     // Normalize the rejection to a readable string so callers get a consistent error shape.
     return Promise.reject({
-      errorText: `Error getting file content from file ${filePath} ` + JSON.stringify(error)
+      errorText:
+        `Error getting file content from file ${filePath} ` +
+        JSON.stringify(error)
     });
   }
 }
@@ -39,7 +42,9 @@ export async function getJsonFileContent(filePath: string): Promise<string[]> {
     return JSON.parse(jsonFileContent);
   } catch (error) {
     return Promise.reject({
-      errorText: `Error getting json file content from files ${filePath} ` + JSON.stringify(error)
+      errorText:
+        `Error getting json file content from files ${filePath} ` +
+        JSON.stringify(error)
     });
   }
 }
@@ -69,9 +74,13 @@ export async function writeCustomPluginFile(
 
     logger.debug(`localTagsFile ${localTagsFile}`);
 
-    await writeFile(localTagsFile, `${JSON.stringify(componentsList, null, 2)}\n`, {
-      flag: 'w+',
-      encoding: 'utf-8'
-    });
+    await writeFile(
+      localTagsFile,
+      `${JSON.stringify(componentsList, null, 2)}\n`,
+      {
+        flag: 'w+',
+        encoding: 'utf-8'
+      }
+    );
   }
 }

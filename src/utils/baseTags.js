@@ -1,6 +1,7 @@
 import { baseTags } from "../config/index.js";
+import { logger } from "./logger.js";
 import { normalize } from "./normalize.js";
-export function getBaseTags(negateKnown) {
+export function getKnownBaseTags(negateKnown) {
     return baseTags.map((base) => ({
         tags: base.tags,
         name: base.name,
@@ -8,7 +9,7 @@ export function getBaseTags(negateKnown) {
         file: base.source
     }));
 }
-export function getBaseTagsList(negateKnown) {
+export function getKnownBaseTagsList(negateKnown) {
     const baseTags = [];
     negateKnown.forEach((base) => {
         const foundBase = findBaseTagsByName(base);

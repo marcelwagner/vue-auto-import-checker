@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from '../../utils/index.ts';
+import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
 
 /**
  * Imports all vueUse components from the vueUse library
@@ -14,9 +14,15 @@ export async function vueUseComponentsImporter(
 ): Promise<string[]> {
   try {
     // index.d.mts for vuetify 13.5.0
-    const indexMFile: string = join(basePath, 'node_modules/@vueuse/components/index.d.mts');
+    const indexMFile: string = join(
+      basePath,
+      'node_modules/@vueuse/components/index.d.mts'
+    );
     // index.d.mts for vuetify 14.0.0
-    const indexFile: string = join(basePath, 'node_modules/@vueuse/components/dist/index.d.ts');
+    const indexFile: string = join(
+      basePath,
+      'node_modules/@vueuse/components/dist/index.d.ts'
+    );
 
     const indexMFileExists: boolean = existsSync(indexMFile);
     const indexFileExists: boolean = existsSync(indexFile);
@@ -52,10 +58,16 @@ export async function vueUseComponentsImporter(
 
     const customPluginPath: string = join(basePath, cachePath);
 
-    await writeCustomPluginFile(customPluginPath, 'vueUseTags.json', componentsList);
+    await writeCustomPluginFile(
+      customPluginPath,
+      'vueUseTags.json',
+      componentsList
+    );
 
     return componentsList;
   } catch (error) {
-    return Promise.reject({ errorText: 'Error importing VueUse components:' + error });
+    return Promise.reject({
+      errorText: 'Error importing VueUse components:' + error
+    });
   }
 }

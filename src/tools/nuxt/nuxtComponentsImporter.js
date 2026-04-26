@@ -1,12 +1,14 @@
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, writeCustomPluginFile } from "../../utils/index.js";
+import { getFileContent, logger, writeCustomPluginFile } from "../../utils/index.js";
 export async function nuxtComponentsImporter(basePath, cachePath) {
     try {
         const nuxtDirectory = join(basePath, 'node_modules/nuxt/dist/app/components');
         if (!existsSync(nuxtDirectory)) {
-            return Promise.reject({ errorText: `Nuxt Directory not found: ${nuxtDirectory}` });
+            return Promise.reject({
+                errorText: `Nuxt Directory not found: ${nuxtDirectory}`
+            });
         }
         const listOfFiles = await readdir(nuxtDirectory);
         const componentsList = [];
@@ -33,6 +35,8 @@ export async function nuxtComponentsImporter(basePath, cachePath) {
         return componentsList;
     }
     catch (error) {
-        return Promise.reject({ errorText: 'Error importing Nuxt components:' + error });
+        return Promise.reject({
+            errorText: 'Error importing Nuxt components:' + error
+        });
     }
 }

@@ -1,70 +1,111 @@
-import { pluralArray, pluralLength } from './plural.ts';
+import { userConfig } from '../config/index.ts';
+import { getUniqueFromList, logger, statistics } from '../utils/index.ts';
+import { getDuration, pluralArray, pluralLength } from './index.ts';
 
 /**
  * Write the stats to the console.
  *
- * @param stats - scan stats
- * @param filesList - list of files scanned
  * @param tagsList - list of tags found
- * @param uniqueTagsList - list of unique tags found
- * @param showResult - whether to show the result stats
- * @param kafka - whether to show all stats or only unknown stats
  */
-export function writeStats({
-  stats,
-  filesList,
-  tagsList,
-  uniqueTagsList,
-  showResult,
-  kafka
-}: WriteStatsProps): void {
-  const duration: number = stats.endTime - stats.startTime;
-  const durationInSeconds: number = duration / 1000;
-  const durationAboveSecond: boolean = durationInSeconds >= 1;
-  const durationNumber: number = durationAboveSecond ? durationInSeconds : duration;
-  const durationUnit: 's' | 'ms' = durationAboveSecond ? 's' : 'ms';
+export function writeStats(tagsList: Tag[]): void {
+  statistics.end();
 
-  // Print line between stats & results
-  if (showResult) {
+  const stats: Stats = statistics.getStats();
+
+  const duration: string = getDuration();
+
+  const uniqueTagsList: string[] = getUniqueFromList(
+    tagsList.map((tag: Tag): string => tag.tagName)
+  );
+  const filesList: string[] = getUniqueFromList(
+    tagsList.map((tag: Tag): string => tag.file)
+  );
+
+  if (userConfig.outputFormat === 'text') {
+    if (userConfig.showResult) {
+      // Print line between stats & results
+      logger.info('');
+      logger.info(`>> Result stats                   <<`);
+      logger.info('');
+      logger.info(
+        `Tag${pluralArray(tagsList)}                      : ${tagsList.length}`
+      );
+      logger.info(
+        `Unique Tag${pluralArray(uniqueTagsList)}               : ${uniqueTagsList.length}`
+      );
+      logger.info(
+        `File${pluralArray(filesList)}                     : ${filesList.length}`
+      );
+      logger.info('');
+      logger.info('....................................');
+      logger.info('');
+    }
+
+    logger.info(`>> Scan stats                     <<`);
     logger.info('');
-    logger.info(`>> Result stats                   <<`);
-    logger.info('');
-    logger.info(`Tag${pluralArray(tagsList)}                      : ${tagsList.length}`);
     logger.info(
-      `Unique Tag${pluralArray(uniqueTagsList)}               : ${uniqueTagsList.length}`
+      `Directorie${pluralLength(stats.dirCounter)}               : ${stats.dirCounter}`
     );
-    logger.info(`File${pluralArray(filesList)}                     : ${filesList.length}`);
+    logger.info(
+      `File${pluralLength(stats.fileCounter)}                     : ${stats.fileCounter}`
+    );
+    logger.info(
+      `Template file${pluralLength(stats.templateFiles)}            : ${stats.templateFiles}`
+    );
+    logger.info(`Duration                  : ${duration}`);
+
     logger.info('');
     logger.info('....................................');
     logger.info('');
+
+    logger.info(
+      `>> Unique ${userConfig.kafka ? '' : 'unknown '}tag${pluralArray(uniqueTagsList, ' ', 's ')}found${userConfig.kafka ? '        ' : ''}      <<`
+    );
+    logger.info('');
+
+    uniqueTagsList.forEach((tag: string): void => {
+      logger.info(` - ${tag}`);
+    });
+
+    logger.info('');
+    logger.info(`Total                     : ${uniqueTagsList.length}`);
+
+    logger.info('');
+    logger.info('....................................');
+    logger.info('');
+  } else if (userConfig.outputFormat === 'md') {
+    logger.info(`# Stats`);
+    if (userConfig.showResult) {
+      logger.info(`## Result stats`);
+      logger.info(`Tag${pluralArray(tagsList)}: ${tagsList.length} \\`);
+      logger.info(
+        `Unique Tag${pluralArray(uniqueTagsList)}: ${uniqueTagsList.length} \\`
+      );
+      logger.info(`File${pluralArray(filesList)}: ${filesList.length}`);
+    }
+
+    logger.info(`## Scan stats`);
+    logger.info(
+      `Directorie${pluralLength(stats.dirCounter)}: ${stats.dirCounter} \\`
+    );
+    logger.info(
+      `File${pluralLength(stats.fileCounter)}: ${stats.fileCounter} \\`
+    );
+    logger.info(
+      `Template file${pluralLength(stats.templateFiles)}: ${stats.templateFiles} \\`
+    );
+    logger.info(`Duration: ${duration}`);
+    logger.info('');
+    logger.info(
+      `Unique ${userConfig.kafka ? '' : 'unknown '}tag${pluralArray(uniqueTagsList, ' ', 's ')}found`
+    );
+
+    uniqueTagsList.forEach((tag: string): void => {
+      logger.info(` - ${tag}`);
+    });
+    logger.info('');
+
+    logger.info(`Total: ${uniqueTagsList.length}`);
+    logger.info('');
   }
-
-  logger.info(`>> Scan stats                     <<`);
-  logger.info('');
-  logger.info(`Directorie${pluralLength(stats.dirCounter)}               : ${stats.dirCounter}`);
-  logger.info(`File${pluralLength(stats.fileCounter)}                     : ${stats.fileCounter}`);
-  logger.info(
-    `Template file${pluralLength(stats.templateFiles)}            : ${stats.templateFiles}`
-  );
-  logger.info(`Duration                  : ${durationNumber}${durationUnit}`);
-
-  logger.info('');
-  logger.info('....................................');
-  logger.info('');
-
-  logger.info(
-    `>> Unique ${kafka ? '' : 'unknown '}tag${pluralArray(uniqueTagsList, ' ', 's ')}found${kafka ? '        ' : ''}      <<`
-  );
-  logger.info('');
-
-  uniqueTagsList.forEach((tag: string): void => {
-    logger.info(` - ${tag}`);
-  });
-
-  logger.info('');
-  logger.info(`Total                     : ${uniqueTagsList.length}`);
-
-  logger.info('');
-  logger.info('....................................');
-  logger.info('');
 }

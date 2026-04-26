@@ -1,3 +1,4 @@
+import { logger } from "../utils/index.js";
 export function writeComponents(componentsList) {
     if (componentsList.length >= 1) {
         logger.info('');

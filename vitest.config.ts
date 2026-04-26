@@ -4,8 +4,7 @@ export default defineConfig({
   test: {
     include: ['./**/*.spec.ts'],
     exclude: ['node_modules'],
-    environment: 'node',
-    globals: true,
+    fileParallelism: false,
     testTimeout: 30000
   }
 });

@@ -3,83 +3,14 @@ import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import { vueTemplateEnd, vueTemplateStart } from '../config/index.ts';
 import {
-  getBaseTags,
   getFileContent,
   getFrameworkTools,
   getJsonFileContent,
-  normalize
+  getKnownBaseTags,
+  logger,
+  normalize,
+  statistics
 } from './index.ts';
-
-/**
- * Process a single file and collect unknown tags.
- *
- * - Reads the file content and performs a fast check for `<template>`.
- * - Skips lines that are inside `<script>` or `<style>` blocks.
- * - Extracts candidate tags from template lines and filters them against the
- *   aggregated ignore list and the registered components list.
- *
- * @param file - absolute path to the file to process
- * @param tags - array to append discovered unknown tag occurrences
- * @returns promise resolves when the file has been processed
- */
-export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]> {
-  stats.fileCounter++;
-
-  const fileContent: string = await getFileContent(file);
-
-  logger.debug(`File: ${file}`);
-
-  // Split file into lines to provide accurate line numbers for reporting.
-  const linesOfFile: string[] = fileContent.split(/\n/);
-
-  logger.debug(`All lines length: ${linesOfFile.length}`);
-
-  const templateStartIndex: number = linesOfFile.findIndex((line: string): boolean =>
-    line.trim().includes(vueTemplateStart)
-  );
-  const templateEndIndex: number = linesOfFile.findLastIndex((line: string): boolean =>
-    line.trim().includes(vueTemplateEnd)
-  );
-
-  if (templateStartIndex === -1) {
-    logger.debug(`Did not find ${vueTemplateStart}`);
-    return tags;
-  }
-
-  stats.templateFiles++;
-
-  logger.debug(`Index of first ${vueTemplateStart}: ${templateStartIndex}`);
-  logger.debug(`Index of last ${vueTemplateEnd}: ${templateEndIndex}`);
-
-  const tagList: string[][] = getTagsFromTemplate(
-    linesOfFile,
-    templateStartIndex,
-    templateEndIndex
-  );
-
-  const imports: ComponentImport[] = getImportsListFromFile(fileContent);
-
-  tagList.forEach((tagListRaw: string[], index: number): void => {
-    tagListRaw.forEach((tagRaw: string): void => {
-      const componentMatch: ComponentImport | undefined = imports.find(
-        ({ tag }: ComponentImport): boolean => normalize(tag) === normalize(tagRaw)
-      );
-
-      tags.push({
-        line: index + 1,
-        tagName: tagRaw,
-        lines: getLinesForReport(linesOfFile, index),
-        file,
-        known: false,
-        knownSource: componentMatch
-          ? [{ source: 'import' as Source, known: true, file: componentMatch.path }]
-          : []
-      });
-    });
-  });
-
-  return tags;
-}
 
 /**
  * Recursively traverse the directory list and process each file and directory.
@@ -94,8 +25,7 @@ export async function getTagsFromFile(file: string, tags: Tag[]): Promise<Tag[]>
  * @param directoryPathList - path list of the directories to traverse
  * @returns promise resolves when the directory and its children have been processed
  */
-
-export async function getTagsFromDirectoryList(
+export async function getTagsFromDirectoryPaths(
   basePath: string,
   directoryPathList: string[]
 ): Promise<Tag[]> {
@@ -127,13 +57,16 @@ export async function getTagsFromDirectory(
   directoryPath: string,
   tags: Tag[]
 ): Promise<Tag[]> {
+  const stats: Stats = statistics.getStats();
   stats.dirCounter++;
 
   const directory: string = join(basePath, directoryPath);
 
   logger.debug(`Dir: ${directory}`);
 
-  const entries: Dirent<string>[] = await readdir(directory, { withFileTypes: true });
+  const entries: Dirent<string>[] = await readdir(directory, {
+    withFileTypes: true
+  });
 
   for (const entry of entries) {
     const fullPath: string = join(directory, entry.name);
@@ -143,27 +76,109 @@ export async function getTagsFromDirectory(
       try {
         await getTagsFromFile(fullPath, tags);
       } catch (error) {
-        if (!quiet) {
-          return Promise.reject({
-            errorText: `Error getting Tags from file ${fullPath}: ${JSON.stringify(error)}`
-          });
-        }
+        return Promise.reject({
+          errorText: `Error getting Tags from file ${fullPath}: ${JSON.stringify(error)}`
+        });
       }
     } else if (entry.isDirectory()) {
       // Recurse into subdirectories.
       try {
-        await getTagsFromDirectory(basePath, join(directoryPath, entry.name), tags);
+        await getTagsFromDirectory(
+          basePath,
+          join(directoryPath, entry.name),
+          tags
+        );
       } catch (error) {
-        if (!quiet) {
-          return Promise.reject({
-            errorText: `Error getting Tags from path ${fullPath}: ${JSON.stringify(error)}`
-          });
-        }
+        return Promise.reject({
+          errorText: `Error getting Tags from path ${fullPath}: ${JSON.stringify(error)}`
+        });
       }
     } else {
       // Other entry types (symlinks, sockets, device nodes) are ignored intentionally.
     }
   }
+
+  return tags;
+}
+
+/**
+ * Process a single file and collect unknown tags.
+ *
+ * - Reads the file content and performs a fast check for `<template>`.
+ * - Skips lines that are inside `<script>` or `<style>` blocks.
+ * - Extracts candidate tags from template lines and filters them against the
+ *   aggregated ignore list and the registered components list.
+ *
+ * @param file - absolute path to the file to process
+ * @param tags - array to append discovered unknown tag occurrences
+ * @returns promise resolves when the file has been processed
+ */
+export async function getTagsFromFile(
+  file: string,
+  tags: Tag[]
+): Promise<Tag[]> {
+  const stats: Stats = statistics.getStats();
+  stats.fileCounter++;
+
+  const fileContent: string = await getFileContent(file);
+
+  logger.debug(`File: ${file}`);
+
+  // Split file into lines to provide accurate line numbers for reporting.
+  const linesOfFile: string[] = fileContent.split(/\n/);
+
+  logger.debug(`All lines length: ${linesOfFile.length}`);
+
+  const templateStartIndex: number = linesOfFile.findIndex(
+    (line: string): boolean => line.trim().includes(vueTemplateStart)
+  );
+  const templateEndIndex: number = linesOfFile.findLastIndex(
+    (line: string): boolean => line.trim().includes(vueTemplateEnd)
+  );
+
+  if (templateStartIndex === -1) {
+    logger.debug(`Did not find ${vueTemplateStart}`);
+    return tags;
+  }
+
+  stats.templateFiles++;
+
+  logger.debug(`Index of first ${vueTemplateStart}: ${templateStartIndex}`);
+  logger.debug(`Index of last ${vueTemplateEnd}: ${templateEndIndex}`);
+
+  const tagList: string[][] = getTagsFromTemplate(
+    linesOfFile,
+    templateStartIndex,
+    templateEndIndex
+  );
+
+  const imports: ComponentImport[] = getImportsListFromFile(fileContent);
+
+  tagList.forEach((tagListRaw: string[], index: number): void => {
+    tagListRaw.forEach((tagRaw: string): void => {
+      const componentMatch: ComponentImport | undefined = imports.find(
+        ({ tag }: ComponentImport): boolean =>
+          normalize(tag) === normalize(tagRaw)
+      );
+
+      tags.push({
+        line: index + 1,
+        tagName: tagRaw,
+        lines: getLinesForReport(linesOfFile, index),
+        file,
+        known: false,
+        knownSource: componentMatch
+          ? [
+              {
+                source: 'import' as Source,
+                known: true,
+                file: componentMatch.path
+              }
+            ]
+          : []
+      });
+    });
+  });
 
   return tags;
 }
@@ -211,8 +226,11 @@ export async function getIdentifiedTagsList({
 
     if (knownTagsList.length >= 1) {
       // Compare each candidate after removing hyphens and lowercasing.
-      const knownLists: KnownList[] = knownTagsList.filter((list: KnownList): boolean =>
-        list.tags.some((tagFromList: string): boolean => normalize(tagFromList) === tagName)
+      const knownLists: KnownList[] = knownTagsList.filter(
+        (list: KnownList): boolean =>
+          list.tags.some(
+            (tagFromList: string): boolean => normalize(tagFromList) === tagName
+          )
       );
 
       if (tag.knownSource.length >= 1) {
@@ -226,7 +244,11 @@ export async function getIdentifiedTagsList({
 
       if (knownLists.length >= 1) {
         knownLists.forEach((list: KnownList): void => {
-          tag.knownSource.push({ source: list.name, known: list.known, file: list.file });
+          tag.knownSource.push({
+            source: list.name,
+            known: list.known,
+            file: list.file
+          });
 
           if (list.known) {
             tag.known = true;
@@ -238,8 +260,16 @@ export async function getIdentifiedTagsList({
     }
 
     if (componentsList.length >= 1) {
-      if (componentsList.some((rawTag: string): boolean => normalize(rawTag) === tagName)) {
-        tag.knownSource.push({ source: 'components', known: true, file: componentsFile });
+      if (
+        componentsList.some(
+          (rawTag: string): boolean => normalize(rawTag) === tagName
+        )
+      ) {
+        tag.knownSource.push({
+          source: 'components',
+          known: true,
+          file: componentsFile
+        });
         tag.known = true;
 
         logger.debug(`tag ${tagName} is in components list`);
@@ -249,7 +279,9 @@ export async function getIdentifiedTagsList({
     if (tag.knownSource.length <= 0) {
       tag.knownSource.push({ source: 'unknown', known: false, file: '' });
 
-      logger.debug(`tag ${tagName} is not in components list or in a known list`);
+      logger.debug(
+        `tag ${tagName} is not in components list or in a known list`
+      );
     }
 
     return tag;
@@ -291,15 +323,25 @@ export async function getKnownLists({
     knownTags.length >= 1
       ? [{ name: 'cli' as Source, tags: knownTags, known: true, file: '' }]
       : [];
-  const baseTags: KnownList[] = getBaseTags(negateKnown);
-  const frameworkTags: KnownList[] = await getFrameworkTools(knownFrameworks, cachePath);
+  const baseTags: KnownList[] = getKnownBaseTags(negateKnown);
+  const frameworkTags: KnownList[] = await getFrameworkTools(
+    knownFrameworks,
+    cachePath
+  );
 
   logger.debug(`baseTags: ${JSON.stringify(baseTags, null, 2)}`);
   logger.debug(`frameworkTags: ${JSON.stringify(frameworkTags, null, 2)}`);
   logger.debug(`knownTagsList: ${JSON.stringify(knownTagsList, null, 2)}`);
-  logger.debug(`knownTagsFileContentList: ${JSON.stringify(knownTagsFileContentList, null, 2)}`);
+  logger.debug(
+    `knownTagsFileContentList: ${JSON.stringify(knownTagsFileContentList, null, 2)}`
+  );
 
-  return [...knownTagsList, ...knownTagsFileContentList, ...frameworkTags, ...baseTags];
+  return [
+    ...knownTagsList,
+    ...knownTagsFileContentList,
+    ...frameworkTags,
+    ...baseTags
+  ];
 }
 
 /**
@@ -309,7 +351,10 @@ export async function getKnownLists({
  * @param regexMatchResult - RegExpMatchArray or null returned by `String.prototype.match`
  * @returns boolean - true if any captured group equals the provided tag
  */
-export function matchesOneOf(tag: string, regexMatchResult: RegExpMatchArray | null): boolean {
+export function matchesOneOf(
+  tag: string,
+  regexMatchResult: RegExpMatchArray | null
+): boolean {
   return regexMatchResult
     ? regexMatchResult.some((result: string): boolean => result === tag)
     : false;
@@ -383,7 +428,11 @@ export function getTagsFromTemplate(
 ): string[][] {
   const tagList: string[][] = [];
 
-  for (let index: number = templateStartIndex + 1; index <= templateEndIndex; index++) {
+  for (
+    let index: number = templateStartIndex + 1;
+    index <= templateEndIndex;
+    index++
+  ) {
     const line: string = linesOfFile[index];
 
     logger.debug(`Line content: "${line}"`);
@@ -429,14 +478,17 @@ export function getTagFromLine(line: string): string[] {
     .map((tag: string): string => tag.replace(/</, '').trim())
     .filter((tag: string): boolean => {
       // Attempt to find a full opening tag to compare with the raw candidate.
-      const completeTag: RegExpMatchArray | null = line.match(/<([\w]+?[^ ]+?)[\W]*?>/);
+      const completeTag: RegExpMatchArray | null = line.match(
+        /<([\w]+?[^ ]+?)[\W]*?>/
+      );
 
       // If the complete tag contains stray angle brackets it's likely malformed/multiple tags.
       const multipleTags: boolean | undefined =
         completeTag?.[1].includes('>') || completeTag?.[1].includes('<');
 
       // Detect an explicit closing tag on the same line.
-      const endTag: RegExpMatchArray | null = line.match(/<\/([a-zA-Z0-9-_]+)>/);
+      const endTag: RegExpMatchArray | null =
+        line.match(/<\/([a-zA-Z0-9-_]+)>/);
 
       // Detect constructs where a "<" appears inside a property or a typed expression,
       // which can be mistaken for an actual tag.
@@ -476,10 +528,15 @@ export function getTagFromLine(line: string): string[] {
  * @param index - current zero-based line index
  * @returns UnknownTagLine[] - up to three lines of context with their display indices
  */
-export function getLinesForReport(linesOfFile: string[], index: number): UnknownTagLine[] {
+export function getLinesForReport(
+  linesOfFile: string[],
+  index: number
+): UnknownTagLine[] {
   return [
     ...(index - 1 >= 1 ? [{ text: linesOfFile[index - 1], index: index }] : []),
     { text: linesOfFile[index], index: index + 1 },
-    ...(index + 1 <= linesOfFile.length ? [{ text: linesOfFile[index + 1], index: index + 2 }] : [])
+    ...(index + 1 <= linesOfFile.length
+      ? [{ text: linesOfFile[index + 1], index: index + 2 }]
+      : [])
   ];
 }

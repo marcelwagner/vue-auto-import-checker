@@ -1,14 +1,6 @@
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import type { VAIC_ComponentSearch, VAIC_Config } from '../types/config.interface.ts';
-import {
-  createLogger,
-  getIdentifiedTagsList,
-  getKnownComponentList,
-  getKnownLists,
-  getTagsFromDirectoryList,
-  getUnknownTagsList
-} from './utils/index.ts';
+import { userConfig } from './config/index.ts';
+import { getTags } from './getTags.ts';
+import { getUnknownTagsList, statistics } from './utils/index.ts';
 
 /**
  * Scan a project directory for unknown component tags used inside template blocks.
@@ -25,73 +17,24 @@ import {
  * @param config - configuration object adhering to `VAIC_Config`
  * @returns promise resolving to ComponentSearch containing stats, unknownTags and componentsList
  */
-export async function getUnknownTags({
-  componentsFile,
-  projectPaths,
-  negateKnown,
-  knownFrameworks,
-  knownTags,
-  knownTagsFile,
-  cachePath,
-  basePath,
-  importsKnown,
-  debug,
-  kafka
-}: VAIC_Config): Promise<VAIC_ComponentSearch> {
-  // Base path for resolving relative paths if not provided.
-  const base: string = basePath ? basePath : dirname(fileURLToPath(import.meta.url));
+export async function getUnknownTags(config: InternalConfig): Promise<Tag[]> {
+  try {
+    userConfig.set(config);
 
-  // Ensure a global logger exists (created with the provided debug flag).
-  if (!global?.logger) {
-    createLogger(Boolean(debug));
+    // Start the timer.
+    statistics.start();
+
+    // Run the actual tag identification logic.
+    const tagsList: Tag[] = await getTags(userConfig);
+
+    // Run the actual unknown tag detection logic.
+    const unknownTagsList: Tag[] = await getUnknownTagsList(tagsList);
+
+    statistics.end();
+
+    return unknownTagsList;
+  } catch (error) {
+    // Propagate a structured rejection so callers can handle errors consistently.
+    return Promise.reject({ errorText: `Error in getUnknownTags: ${error}` });
   }
-
-  // Record start time for performance/statistics.
-  const startTime: number = Date.now();
-
-  global.stats = {
-    fileCounter: 0,
-    dirCounter: 0,
-    templateFiles: 0,
-    startTime,
-    endTime: startTime
-  };
-
-  // Start the recursive scan of the project directory.
-  const rawTagsList: Tag[] = await getTagsFromDirectoryList(base, projectPaths);
-
-  // Build the aggregated known list from framework plugins, base tags, user-supplied tags and user-supplied JSON file.
-  const knownTagsList: KnownList[] = await getKnownLists({
-    negateKnown,
-    knownFrameworks,
-    knownTags,
-    knownTagsFile: knownTagsFile ? join(base, knownTagsFile) : '',
-    cachePath: join(base, cachePath)
-  });
-
-  // Build the list of registered components to exclude them from unknown detection.
-  const componentsList: string[] = componentsFile
-    ? await getKnownComponentList(base, componentsFile)
-    : [];
-
-  // Run the actual tag identification logic.
-  const tagsList: Tag[] = await getIdentifiedTagsList({
-    knownTagsList,
-    componentsList,
-    componentsFile,
-    tags: rawTagsList,
-    importsKnown
-  });
-
-  // Run the actual unknown tag detection logic.
-  const unknownTagsList: Tag[] = kafka ? [] : await getUnknownTagsList(tagsList);
-
-  stats.endTime = Date.now();
-
-  return {
-    stats,
-    tagsList,
-    unknownTagsList,
-    componentsList
-  };
 }
