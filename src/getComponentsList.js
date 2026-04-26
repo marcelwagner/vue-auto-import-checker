@@ -18,8 +18,8 @@ export async function getComponentList(config) {
         const componentsList = [];
         if (componentsListRaw?.[0]) {
             componentsListRaw[0]
-                .replace(/[\W]*export interface GlobalComponents \{\W/, '')
-                .replace(/[\W]*\}/, '')
+                .replace(/\W*export interface GlobalComponents \{\W/, '')
+                .replace(/\W*}/, '')
                 .split(/\n/)
                 .forEach((line) => {
                 const rawMatch = line

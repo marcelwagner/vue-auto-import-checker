@@ -179,7 +179,7 @@ export function matchesOneOf(tag, regexMatchResult) {
 export function getImportsListFromFile(fileContent) {
     const importsList = [];
     const importMatches = [
-        ...fileContent.matchAll(/import\s+((?:[A-Za-z_$][\w$]*)\s*(?:,\s*)?)?(?:\*\s+as\s+([A-Za-z_$][\w$]*)|\{\s*([^}]+?)\s*\})?\s*from\s*(['"])([^'"]+)\4/g)
+        ...fileContent.matchAll(/import\s+((?:[A-Za-z_$][\w$]*)\s*(?:,\s*)?)?(?:\*\s+as\s+([A-Za-z_$][\w$]*)|\{\s*([^}]+?)\s*})?\s*from\s*(['"])([^'"]+)\4/g)
     ];
     for (const match of importMatches) {
         if (match[1]) {

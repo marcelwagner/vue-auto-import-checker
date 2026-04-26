@@ -372,7 +372,7 @@ export function getImportsListFromFile(fileContent: string): ComponentImport[] {
 
   const importMatches: RegExpExecArray[] = [
     ...fileContent.matchAll(
-      /import\s+((?:[A-Za-z_$][\w$]*)\s*(?:,\s*)?)?(?:\*\s+as\s+([A-Za-z_$][\w$]*)|\{\s*([^}]+?)\s*\})?\s*from\s*(['"])([^'"]+)\4/g
+      /import\s+((?:[A-Za-z_$][\w$]*)\s*(?:,\s*)?)?(?:\*\s+as\s+([A-Za-z_$][\w$]*)|\{\s*([^}]+?)\s*})?\s*from\s*(['"])([^'"]+)\4/g
     )
   ];
 

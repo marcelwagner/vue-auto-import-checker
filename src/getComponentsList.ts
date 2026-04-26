@@ -52,8 +52,8 @@ export async function getComponentList(
     if (componentsListRaw?.[0]) {
       // Remove the interface header and trailing brace, then split into lines.
       componentsListRaw[0]
-        .replace(/[\W]*export interface GlobalComponents \{\W/, '')
-        .replace(/[\W]*\}/, '')
+        .replace(/\W*export interface GlobalComponents \{\W/, '')
+        .replace(/\W*}/, '')
         .split(/\n/)
         .forEach((line: string): void => {
           // Trim whitespace and remove the TypeScript type suffix that looks like:
