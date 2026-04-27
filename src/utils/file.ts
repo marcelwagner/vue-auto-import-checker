@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { logger } from './logger.ts';
+import { logger } from './index.ts';
 
 /**
  * Read a file as UTF-8 text.

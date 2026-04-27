@@ -2,20 +2,24 @@
 
 import { program } from 'commander';
 import {
-  getComponentList,
   getFrameworkList,
   getKnownBaseTagsList,
-  getTags,
-  getToolTags,
-  getUnknownTags,
-  prepareCommander,
-  statistics,
+  statistics
+} from './utils/index.ts';
+import { userConfig } from './config/index.ts';
+import {
   writeComponentsOutput,
   writeConfig,
   writeTagsOutput,
-  writeToolOutput
+  writeToolOutput,
+  prepareCommander
+} from './cli/index.ts';
+import {
+  getComponentList,
+  getTags,
+  getToolTags,
+  getUnknownTags
 } from './index.ts';
-import { userConfig } from './src/config/index.ts';
 
 // Main async entry: choose between tool execution, listing components or full scan.
 async function main(): Promise<void> {

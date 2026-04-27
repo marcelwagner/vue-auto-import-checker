@@ -1,7 +1,6 @@
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getUnknownTags } from './src/getUnknownTags.ts';
-import type { VAIC_Config } from './types/config.interface.ts';
+import { getUnknownTags } from './getUnknownTags.ts';
 
 /**
  * Scan a project directory for unknown component tags used inside template blocks.
@@ -16,14 +15,9 @@ export default async function (config: VAIC_Config): Promise<Tag[]> {
   } as InternalConfig);
 }
 
-export * from './src/cli/index.ts';
-export * from './src/config/index.ts';
-export * from './src/getComponentsList.ts';
-export * from './src/getTags.ts';
-export * from './src/getToolTags.ts';
-export * from './src/getUnknownTags.js';
-export * from './src/tools/index.ts';
-export * from './src/utils/index.ts';
+export * from './getComponentsList.ts';
+export * from './getTags.ts';
+export * from './getToolTags.ts';
+export * from './getUnknownTags.js';
 
 export { getUnknownTags };
-export type { VAIC_Config };

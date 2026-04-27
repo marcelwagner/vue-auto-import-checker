@@ -1,5 +1,5 @@
 import { Option } from 'commander';
-import { defaultCachePath } from '../../config.ts';
+import { config } from './index.ts';
 
 export const commanderOptionsList: Option[] = [
   new Option(
@@ -13,8 +13,11 @@ export const commanderOptionsList: Option[] = [
   new Option(
     '-a, --cache-path <cache-path>',
     'Directory for storing and looking up cached/custom known files (relative to current working directory)'
-  ).default(defaultCachePath),
-  new Option('-t, --tool <tool>', 'Run a specific helper tool to generate customized tag lists')
+  ).default(config.defaultCachePath),
+  new Option(
+    '-t, --tool <tool>',
+    'Run a specific helper tool to generate customized tag lists'
+  )
     .choices(['naiveui', 'nuxt', 'primevue', 'quasar', 'vuetify', 'vueuse'])
     .implies({ projectPaths: '' })
     .implies({ componentsFile: '' })
@@ -35,13 +38,17 @@ export const commanderOptionsList: Option[] = [
     '-n, --negate-known [sets...]',
     'Explicitly treat tag sets as known (e.g., html, svg, vue, vuerouter)'
   ).default([]),
-  new Option('-i, --imports-known', 'Treat tags matching imported components as known').default(
-    false
-  ),
+  new Option(
+    '-i, --imports-known',
+    'Treat tags matching imported components as known'
+  ).default(false),
   new Option('-s, --stats', 'Output aggregated scan statistics')
     .implies({ quiet: false })
     .default(false),
-  new Option('-r, --result', 'Output detailed result entries for each found component')
+  new Option(
+    '-r, --result',
+    'Output detailed result entries for each found component'
+  )
     .implies({ quiet: false })
     .default(false),
   new Option('-q, --quiet', 'Suppress all standard output')
@@ -50,7 +57,10 @@ export const commanderOptionsList: Option[] = [
     .implies({ stats: false })
     .implies({ result: false })
     .default(false),
-  new Option('-k, --kafka', 'Output each found tag with its framework and whether it is recognized')
+  new Option(
+    '-k, --kafka',
+    'Output each found tag with its framework and whether it is recognized'
+  )
     .conflicts('tool')
     .default(false),
   new Option(

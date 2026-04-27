@@ -1,17 +1,17 @@
-import { userConfig } from '../config/index.ts';
+import { getUniqueFromList } from '../utils/index.ts';
 import {
   currentDateTime,
-  writeFinalState,
-  writeToolsResult,
-  getJsonResultFromToolTags,
-  writeResult,
-  writeConfig,
-  writeStats,
+  getJsonResultFromComponents,
   getJsonResultFromTags,
+  getJsonResultFromToolTags,
   writeComponents,
-  getJsonResultFromComponents
+  writeConfig,
+  writeFinalState,
+  writeResult,
+  writeStats,
+  writeToolsResult
 } from './index.ts';
-import { getUniqueFromList } from '../utils/index.ts';
+import { userConfig } from '../config/index.ts';
 
 export function writeToolOutput(toolTags: string[], toolName: string): void {
   if (userConfig.outputFormat !== 'json') {

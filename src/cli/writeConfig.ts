@@ -1,5 +1,5 @@
-import { userConfig } from '../config/index.ts';
 import { logger } from '../utils/index.ts';
+import { userConfig } from '../config/index.ts';
 
 /**
  * Write the config to the console.

@@ -1,12 +1,12 @@
 import { join } from 'node:path';
-import { userConfig } from './config/index.ts';
-import { getComponentList } from './getComponentsList.ts';
+import { getComponentList } from './index.ts';
 import {
   getIdentifiedTagsList,
   getKnownLists,
   getTagsFromDirectoryPaths,
   statistics
 } from './utils/index.ts';
+import { userConfig } from './config/index.ts';
 
 /**
  * Recursively traverse the directory list and process each file and directory.

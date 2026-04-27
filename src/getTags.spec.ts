@@ -1,7 +1,7 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { getTags } from '../index.ts';
+import { getTags } from './index.ts';
 import { getUniqueFromList, statistics } from './utils/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);

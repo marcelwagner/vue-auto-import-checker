@@ -1,11 +1,27 @@
 ---
 name: vue-auto-import-checker
-description: Use this skill when a user wants an agent to run vue-auto-import-checker against one or more Vue project paths, with interactive choices for components.d.ts, known frameworks, negated base known sets, known tags, and preferred output presentation.
+description: Use this skill when a user wants an agent to scan one or more Vue projects with vue-auto-import-checker to find tags that are not registered in components.d.ts, with interactive run configuration and output preferences.
 ---
 
 # Vue Auto-Import Checker Agent Skill
 
-Use this workflow when the user asks to scan a Vue project to discover unimported tags from `components.d.ts`.
+Use this workflow when the user asks to scan a Vue project for tags that are not registered in
+`components.d.ts`. Supported files are Vue Single-File Components (`*.vue` / SFC). At minimum, each file
+must contain a `<template>` block.
+
+```vue
+<script>
+/* TypeScript or JavaScript content */
+</script>
+
+<template>
+  <!-- HTML content -->
+</template>
+
+<style>
+/* CSS content */
+</style>
+```
 
 ## 1. Collect Required Inputs
 
@@ -20,14 +36,14 @@ Do not run the checker until both are provided.
 
 Ask the user these questions in order:
 
-1. `frameworksToInclude`: optional explicit list of frameworks to treat as known (`-f`).
+1. `frameworks`: optional list of frameworks to treat as known (`-f`).
    Allowed values: `naiveui`, `nuxt`, `primevue`, `quasar`, `vuetify`, `vueuse`.
-2. `negateKnownSets`: optional explicit list of known tags from base sets to treat as not known (`-n`).
+2. `negateKnown`: optional list of base sets to treat as not known (`-n`).
    Allowed values: `html`, `svg`, `vue`, `vuerouter`.
-3. `knownTags`: optional explicit list of known tags (`-l`).
-4. `knownTagsFile`: optional explicit file with a list of known tags as json (`-j`).
+3. `knownTags`: optional list of known tags (`-l`).
+4. `knownTagsFile`: optional file path that contains known tags (`-j`).
 
-Also ask whether imports should be treated as known (`-i`).
+Also ask whether imported components should be treated as known (`-i`).
 
 ## 3. Ask Output Preference
 
@@ -36,10 +52,22 @@ Ask how the user wants output presented:
 1. Output format: `text`, `md`, or `json` (`-o`).
 2. Include detailed entries (`-r`) or summary only.
 3. Include scan stats (`-s`) or not.
-4. Show all tags (known & unknown, `-k`) or unknown-only default.
-5. Quiet mode (`-q`) only when user wants exit behavior without details.
+4. Show all tags (known and unknown, `-k`) or unknown-only (default).
+5. Quiet mode (`-q`) only if the user wants exit behavior without details.
 
-## 4. Build and Run Command
+## 4. Validate Inputs
+
+Before execution, validate all user inputs:
+
+1. `componentsFile` exists and is a file.
+2. Every entry in `projectPaths` exists and is a directory.
+3. `knownTagsFile` exists and is a file, if provided.
+4. `frameworks` only contains allowed framework names.
+5. `negateKnown` only contains allowed set names.
+
+If a value is invalid, ask for correction and do not run the checker.
+
+## 5. Build and Run Command
 
 Run from the repository root (or where `vue-auto-import-checker` is installed):
 
@@ -48,8 +76,9 @@ npx vue-auto-import-checker \
   -c <componentsFile> \
   -p <projectPath1> <projectPath2> ... \
   [ -f <framework1> <framework2> ... ] \
-  [ -n <html|svg|vue|vuerouter> ... ] \
+  [ -n <set1> <set2> ... ] \
   [ -l <tag1> <tag2> ... ] \
+  [ -j <filePath> ] \
   [ -i ] \
   [ -r ] \
   [ -s ] \
@@ -58,17 +87,25 @@ npx vue-auto-import-checker \
   -o <text|md|json>
 ```
 
-## 5. Present Results As Requested
+Rules:
+
+1. Use only flags requested by the user.
+2. Keep user-provided path values unchanged unless the user asks for normalization.
+3. If the user requests multiple runs, confirm whether to reuse the previous configuration.
+
+## 6. Present Results
 
 After execution:
 
 1. Report exit code.
-2. Present output exactly as written in the console.
-3. If unknown tags exist and the user wanted no results and no stats, ask if they want to run again with `-r` and `-s`.
+2. Present output in the user-requested style:
+   - exact console output when requested, or
+   - concise summary when requested.
+3. If unknown tags are found and output was too minimal to diagnose the issue, ask whether to run again with `-r` and `-s`.
 
-## 6. Safety and Consistency
+## 7. Safety and Consistency
 
 - Never invent framework names.
 - Keep framework names normalized to lowercase.
 - Preserve tag casing passed by the user for `-l`.
-- If the user asks for multiple runs, repeat from Step 3 unless they confirm prior settings should be reused.
+- If the user asks for multiple runs, repeat from Step 3 unless they confirm that previous settings should be reused.

@@ -80,7 +80,6 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
 
 # Gatsby files
 .cache/
@@ -143,6 +142,6 @@ vite.config.ts.timestamp-*
 
 # Local setup
 publish.sh
-dist/
 tsconfig.tsbuildinfo
 .test-cache/
+dist/

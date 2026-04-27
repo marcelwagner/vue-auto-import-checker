@@ -1,6 +1,6 @@
-import { userConfig } from './config/index.ts';
-import { getTags } from './getTags.ts';
+import { getTags } from './index.ts';
 import { getUnknownTagsList, statistics } from './utils/index.ts';
+import { userConfig } from './config/index.ts';
 
 /**
  * Scan a project directory for unknown component tags used inside template blocks.

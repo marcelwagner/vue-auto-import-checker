@@ -1,15 +1,15 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { getToolTags } from '../index.ts';
+import { getToolTags } from './index.ts';
 import { statistics } from './utils/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../');
 
-describe('naiveui as tool', async () => {
-  const cachePath = 'node_modules/.cache';
+const cachePath = 'node_modules/.cache';
 
+describe('naiveui as tool', async () => {
   const config: InternalConfig = {
     componentsFile: '',
     projectPaths: [],

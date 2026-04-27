@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { frameworksTools, toolsFileExt } from '../config/index.ts';
+import { config, frameworksTools } from '../config/index.ts';
 import { getJsonFileContent, logger, normalize } from './index.ts';
 
 /**
@@ -68,7 +68,7 @@ export async function getFramework(
   // Build the path to a potential user-provided JSON file, e.g. /path/to/user/<file>.json
   const localPluginFile: string = join(
     userGeneratedPath,
-    `${frameworkTool?.file}.${toolsFileExt}`
+    `${frameworkTool?.file}.${config.toolsFileExt}`
   );
 
   // Quick synchronous existence check to decide which file to load
@@ -94,6 +94,8 @@ export async function getFramework(
 export function findFrameworkByName(
   name: string
 ): FrameworkToolItem | undefined {
+  console.log('frameworksTools', frameworksTools);
+
   return frameworksTools.find(
     (framework: FrameworkToolItem): boolean =>
       framework.name === normalize(name)

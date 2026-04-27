@@ -2,70 +2,73 @@
 
 npm: [vue-auto-import-checker](https://www.npmjs.com/package/vue-auto-import-checker)
 
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![GitHub](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/marcelwagner/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![npm version](https://img.shields.io/npm/v/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) [![GitHub](https://img.shields.io/badge/GitHub-Repo-blue?logo=github)](https://github.com/marcelwagner/vue-auto-import-checker) [![npm downloads](https://img.shields.io/npm/dm/vue-auto-import-checker.svg)](https://www.npmjs.com/package/vue-auto-import-checker) ![NPM Unpacked Size](https://img.shields.io/npm/unpacked-size/vue-auto-import-checker)
 
 <!-- TOC -->
-* [Description](#description)
-* [Why?](#why)
-* [Node](#node)
-* [Vue](#vue)
-* [Installation](#installation)
-* [Usage](#usage)
-* [CLI Options](#cli-options)
-* [Known Frameworks](#known-frameworks)
-* [CI/CD Integration](#cicd-integration)
-* [Security](#security)
-* [Importers](#importers)
-* [Contributors](#contributors)
-* [Feedback & Contributions](#feedback--contributions)
+
+- [Description](#description)
+- [Why?](#why)
+- [Node](#node)
+- [Vue](#vue)
+- [Installation](#installation)
+- [Usage](#usage)
+- [CLI Options](#cli-options)
+- [Known Frameworks](#known-frameworks)
+- [CI/CD Integration](#cicd-integration)
+- [Security](#security)
+- [Importers](#importers)
+- [Contributors](#contributors)
+- [Feedback & Contributions](#feedback--contributions)
+
 <!-- TOC -->
 
 ## Description
 
 A CLI tool that checks if every tag used in your Vue templates is either properly registered in `components.d.ts`
-when using [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) (or similar auto-import setups), 
-is a tag from a standard library like `HTML`, `SVG`, `Vue`, or `VueRouter`, or a tag from a framework like `Vuetify` or `Nuxt`.
+when using [unplugin-vue-components](https://github.com/unplugin/unplugin-vue-components) (or similar auto-import
+setups), is a tag from a standard library like `HTML`, `SVG`, `Vue`, or `VueRouter`, or a tag from a framework like
+`Vuetify` or `Nuxt`.
 
-You can configure which tag sets the checker should handle as if they were known. `HTML`, `Vue`, `VueRouter`, and `SVG` 
+You can configure which tag sets the checker should handle as if they were known. `HTML`, `Vue`, `VueRouter`, and `SVG`
 tags are known by default, but you can remove them from the known list if needed.
 
-To have a framework on the known list, you only need to provide its name. Look up what we support at the moment (Nuxt, 
+To have a framework on the known list, you only need to provide its name. Look up what we support at the moment (Nuxt,
 PrimeVue, Vuetify, ...) in the section [Known Frameworks](#known-frameworks).
 
-It is also possible to provide your own list of known tags by providing a `custom-tags-file` in JSON format or a simple list 
-of tags.
+It is also possible to provide your own list of known tags by providing a `custom-tags-file` in JSON format or a simple
+list of tags.
 
-You can also use the importer tools to use your own list of tags for `Vuetify`, `VueUse`, `Quasar`, `Nuxt`, `Naive UI`, 
+You can also use the importer tools to use your own list of tags for `Vuetify`, `VueUse`, `Quasar`, `Nuxt`, `Naive UI`,
 and `PrimeVue` if your version is not yet supported by the tool.
 
 ## Why?
 
-Why does this tool exist?  
+Why does this tool exist?
 
-Because of migration from older codebases and toolsets to modern ones.  
+Because of migration from older codebases and toolsets to modern ones.
 
-My experience as a developer showed me that the decision to use the top end toolset does come one day and then the 
+My experience as a developer showed me that the decision to use the top end toolset does come one day and then the
 migration is oftentimes not a recommendation from the customer, but from the developer team. That means the migration
-is not paid work. So it is not made as a priority.   
-Using something like the unplugin for your vue project is 
-recommended. But the migration is not always easy. You have to change your codebase, and you have to make sure that you 
-do not forget any tags. This tool helps you with that. It checks your codebase for unknown tags and tells you where 
+is not paid work. So it is not made as a priority.  
+Using something like the unplugin for your vue project is
+recommended. But the migration is not always easy. You have to change your codebase, and you have to make sure that you
+do not forget any tags. This tool helps you with that. It checks your codebase for unknown tags and tells you where
 they are. So you can easily find and fix them.
 
 ## Node
 
-We recommend using:  
+We recommend using:
 
-- Latest Node.js 24.x LTS (minimum required 20.19.1)  
+- Latest Node.js 24.x LTS (minimum required 20.19.1)
 
 Other versions might work but are not tested.
 
 ## Vue
 
-The supported Vue files should use Single-File Components (also known as *.vue files, abbreviated as SFC).
-That means we assume to have files in your project path that are looking like this:
+The supported Vue files should use Single-File Components (also known as \*.vue files, abbreviated as SFC).
+That means the tool is assuming to have files in your project path that are looking like this:
 
-``` vue
+```vue
 <script>
 /* Typescript or Javascript content */
 </script>
@@ -79,11 +82,19 @@ That means we assume to have files in your project path that are looking like th
 </style>
 ```
 
-We also assume to have at minimum the `template` section in your files.
+The tool also assumes to have at minimum the `template` section in your files.
 
 ## Installation
 
-``` bash
+Use the package as a globally installed CLI tool (to use it, for example, for multiple projects).
+
+```bash
+ npm i vue-auto-import-checker -g
+```
+
+Use the package as a locally installed dev-dependency (to use it, for example, in the ci/cd pipeline).
+
+```bash
  npm i vue-auto-import-checker -D
 ```
 
@@ -91,34 +102,34 @@ We also assume to have at minimum the `template` section in your files.
 
 The help of the CLI tool is a good starting point.
 
-``` bash
- npx vue-auto-import-checker -h
+```bash
+ vue-auto-import-checker -h
 ```
 
 But you can also start with an example from our [cookbook.md](docs/cookbook.md).
 
 ## CLI Options
 
-| Option                             | Alias | Description                                                                                                 | Default                   |
-|------------------------------------|-------|-------------------------------------------------------------------------------------------------------------|---------------------------|
-| `--components-file <file-path>`    | `-c`  | Path to a file exporting registered components (relative to current working directory)                      | `""`                      |
-| `--project-paths [path...]`        | `-p`  | List of directorys path`s containing Vue project files to scan (relative to current working directory)      | `[]`                      |
-| `--cache-path <cache-path>`        | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)      | `"./node_modules/.cache"` |
-| `--tool <tool>`                    | `-t`  | Run a specific helper tool (e.g., nuxt, primevue, quasar, vueuse, vuetify) to generate customized tag lists | `""`                      |
-| `--known-tags [tags...]`           | `-l`  | List of custom component tags to treat as known                                                             | `[]`                      |
-| `--known-tags-file <file-path>`    | `-j`  | Path to a JSON file containing a list of component tags to treat as known                                   | `""`                      |
-| `--frameworks [frameworks...]`     | `-f`  | Predefined framework tag sets (e.g., vuetify, vueuse, quasar, nuxt, naiveui, primevue) as known             | `[]`                      |
-| `--negate-known [sets...]`         | `-n`  | Explicitly treat tag sets as known (e.g., html, svg, vue, vuerouter)                                        | `[]`                      |
-| `--imports-known`                  | `-i`  | Treat tags matching imported components as known                                                            | `false`                   |
-| `--stats`                          | `-s`  | Output aggregated scan statistics                                                                           | `false`                   |
-| `--result`                         | `-r`  | Output detailed result entries for each found component                                                     | `false`                   |
-| `--quiet`                          | `-q`  | Suppress all standard output                                                                                | `false`                   |
-| `--kafka`                          | `-k`  | Output each found tag with its framework and whether it is recognized                                       | `false`                   |
-| `--output-format <output-format>`  | `-o`  | Choose between plain text, markdown or json output                                                          | `"text"`                  |
-| `--debug`                          | `-d`  | Enable detailed debug logging                                                                               | `false`                   |
-| `--show-config`                    | `-y`  | Show config                                                                                                 | `false`                   |
-| `--version`                        | `-v`  | Output the current version                                                                                  | `false`                   |
-| `--help`                           | `-h`  | Display help information                                                                                    | `false`                   |
+| Option                            | Alias | Description                                                                                                 | Default                   |
+| --------------------------------- | ----- | ----------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `--components-file <file-path>`   | `-c`  | Path to a file exporting registered components (relative to current working directory)                      | `""`                      |
+| `--project-paths [path...]`       | `-p`  | List of directorys path`s containing Vue project files to scan (relative to current working directory)      | `[]`                      |
+| `--cache-path <cache-path>`       | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)      | `"./node_modules/.cache"` |
+| `--tool <tool>`                   | `-t`  | Run a specific helper tool (e.g., nuxt, primevue, quasar, vueuse, vuetify) to generate customized tag lists | `""`                      |
+| `--known-tags [tags...]`          | `-l`  | List of custom component tags to treat as known                                                             | `[]`                      |
+| `--known-tags-file <file-path>`   | `-j`  | Path to a JSON file containing a list of component tags to treat as known                                   | `""`                      |
+| `--frameworks [frameworks...]`    | `-f`  | Predefined framework tag sets (e.g., vuetify, vueuse, quasar, nuxt, naiveui, primevue) as known             | `[]`                      |
+| `--negate-known [sets...]`        | `-n`  | Explicitly treat tag sets as known (e.g., html, svg, vue, vuerouter)                                        | `[]`                      |
+| `--imports-known`                 | `-i`  | Treat tags matching imported components as known                                                            | `false`                   |
+| `--stats`                         | `-s`  | Output aggregated scan statistics                                                                           | `false`                   |
+| `--result`                        | `-r`  | Output detailed result entries for each found component                                                     | `false`                   |
+| `--quiet`                         | `-q`  | Suppress all standard output                                                                                | `false`                   |
+| `--kafka`                         | `-k`  | Output each found tag with its framework and whether it is recognized                                       | `false`                   |
+| `--output-format <output-format>` | `-o`  | Choose between plain text, markdown or json output                                                          | `"text"`                  |
+| `--debug`                         | `-d`  | Enable detailed debug logging                                                                               | `false`                   |
+| `--show-config`                   | `-y`  | Show config                                                                                                 | `false`                   |
+| `--version`                       | `-v`  | Output the current version                                                                                  | `false`                   |
+| `--help`                          | `-h`  | Display help information                                                                                    | `false`                   |
 
 ## Known Frameworks
 
@@ -133,24 +144,10 @@ Currently, we support:
 
 Other versions might work but are not tested.
 
-If you want to use a framework version that is not yet supported, you can use the importer tools to provide your own list 
-of tags.
+If you want to use a framework version that is not yet supported, you can use the importer tools to provide your own
+list of tags.
 
 We are working on more.
-
-### Known Framework tags
-
-Depending on which framework you are using in the project, add the strings to the command line.
-
-``` bash
- # These are all known framework names
- vuetify
- vueuse
- quasar
- nuxt
- naiveui
- primevue
-```
 
 ## CI/CD Integration
 
@@ -195,7 +192,7 @@ Spezial thanks to my family, to my wife Jiyeop and to my son Ryan.
 If this tool helps you out, consider leaving a star on the repository — it really motivates further development!
 
 Found a bug? Something not working as expected?  
-Please open an issue so it can be fixed quickly. 
+Please open an issue so it can be fixed quickly.
 
 Missing a feature you’d love to see?  
 Feature requests are very welcome as well!

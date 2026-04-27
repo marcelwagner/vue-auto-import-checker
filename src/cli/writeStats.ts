@@ -1,6 +1,6 @@
-import { userConfig } from '../config/index.ts';
 import { getUniqueFromList, logger, statistics } from '../utils/index.ts';
-import { getDuration, pluralArray, pluralLength } from './index.ts';
+import { userConfig } from '../config/index.ts';
+import { pluralArray, pluralLength, getDuration } from './index.ts';
 
 /**
  * Write the stats to the console.

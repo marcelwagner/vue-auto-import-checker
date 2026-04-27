@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] - 2026-04-27
+
+### Changed
+
+- js files now in dist folder
+- npm packaging now without ts source files, tests and other dev dependencies
+- package is now 159kB in size unpacked (28.0kB in size gzipped)
+
 ## [1.2.0] - 2026-04-26
 
 ### Changed
@@ -70,10 +78,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support more implemented components from Vue:
-    - Transition
-    - TransitionGroup
-    - KeepAlive
-    - Teleport
+  - Transition
+  - TransitionGroup
+  - KeepAlive
+  - Teleport
 
 ## [1.0.3] - 2026-03-20
 
@@ -98,11 +106,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Support for newer versions of frameworks:
-    - Nuxt >= 4.2.1 (added 4.2.2, 4.3.1, 4.4.2)
-    - PrimeVue >= 4.5.3 (added 4.5.4)
-    - Vuetify >= 3.8.4 (added 3.11.3, 4.0.1)
-    - VueUse >= 13.6.0 (added 14.1.0, 14.2.1)
-    - Quasar >= 1.16.0 (added 2.18.6)
+  - Nuxt >= 4.2.1 (added 4.2.2, 4.3.1, 4.4.2)
+  - PrimeVue >= 4.5.3 (added 4.5.4)
+  - Vuetify >= 3.8.4 (added 3.11.3, 4.0.1)
+  - VueUse >= 13.6.0 (added 14.1.0, 14.2.1)
+  - Quasar >= 1.16.0 (added 2.18.6)
 - New `--kafka` option to output each found tag with its framework and recognition status.
 - New `--imports-known` option to output found tag which are imported components as known tags.
 - Added js files to use JavaScript instead of TypeScript.

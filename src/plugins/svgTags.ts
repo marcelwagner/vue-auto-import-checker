@@ -1,1 +1,1 @@
-export {svgTagNames as svgTags} from 'svg-tag-names'
+export { svgTagNames as svgTags } from 'svg-tag-names';

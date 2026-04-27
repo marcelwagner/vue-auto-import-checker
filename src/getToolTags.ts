@@ -1,6 +1,6 @@
 import { program } from 'commander';
-import { userConfig } from './config/index.ts';
 import { findFrameworkByName, statistics } from './utils/index.ts';
+import { userConfig } from './config/index.ts';
 
 export async function getToolTags(config: InternalConfig): Promise<{
   toolTags: string[];

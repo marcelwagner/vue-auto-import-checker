@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { userConfig } from './config/index.ts';
 import { getFileContent, logger, statistics } from './utils/index.ts';
+import { userConfig } from './config/index.ts';
 
 /**
  * Read a TypeScript declaration file and extract component tags from the

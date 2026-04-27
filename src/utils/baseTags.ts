@@ -1,6 +1,5 @@
+import { logger, normalize } from './index.ts';
 import { baseTags } from '../config/index.ts';
-import { logger } from './logger.ts';
-import { normalize } from './normalize.ts';
 
 /**
  * Get the list of base tags to search for.
