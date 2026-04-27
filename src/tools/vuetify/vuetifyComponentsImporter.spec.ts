@@ -2,17 +2,13 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test, vi } from 'vitest';
-import {
-  getUniqueFromList,
-  default as getUnknownTags,
-  statistics,
-  type VAIC_Config
-} from '../../../index.ts';
-import { vuetifyComponentsImporter } from '../index.ts';
+import { getUniqueFromList, statistics } from '../../utils/index.ts';
+import { getUnknownTags } from '../../index.ts';
+import { vuetifyComponentsImporter } from './vuetifyComponentsImporter.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../../../');
-const cachePath = '.test-cache';
+const cachePath = 'node_modules/.cache';
 
 vi.stubGlobal('logger', {
   debug: vi.fn(),
@@ -29,7 +25,7 @@ describe('vuetify-importer tool', () => {
   });
 
   describe('produced', async () => {
-    const vuetifyConfig: VAIC_Config = {
+    const vuetifyConfig: InternalConfig = {
       componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
       projectPaths: [
         'tests/data/vue-test-project-error/src',
@@ -64,7 +60,7 @@ describe('vuetify-importer tool', () => {
 
     await vuetifyComponentsImporter(basePath, cachePath);
 
-    const customConfig: VAIC_Config = {
+    const customConfig: InternalConfig = {
       componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
       projectPaths: [
         'tests/data/vue-test-project-error/src',

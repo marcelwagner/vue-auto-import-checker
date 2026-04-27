@@ -1,0 +1,22 @@
+{
+  "extends": "@tsconfig/node24/tsconfig.json",
+  "include": [
+    "tests",
+    "src",
+    "types",
+    "node_modules",
+    "vitest.config.ts",
+    "tsconfig.node.json",
+    ".oxfmtrc.json",
+    ".oxlintrc.json",
+    "node_modules/vitest/globals.d.ts"
+  ],
+  "compilerOptions": {
+    "noEmit": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "types": ["node"]
+  }
+}

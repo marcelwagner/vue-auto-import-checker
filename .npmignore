@@ -1,0 +1,11 @@
+src
+tests
+.idea
+tsconfig.*
+vitest.*
+.oxfmtrc.json
+.oxlintrc.json
+.editorconfig
+.github
+.gitignore
+.nvmrc

@@ -1,4 +1,4 @@
-export interface VAIC_Config {
+interface VAIC_Config {
   componentsFile: string;
   projectPaths: string[];
   tool: string;

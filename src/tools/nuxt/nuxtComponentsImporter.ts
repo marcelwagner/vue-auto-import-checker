@@ -1,7 +1,11 @@
 import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
+import {
+  getFileContent,
+  logger,
+  writeCustomPluginFile
+} from '../../utils/index.ts';
 
 /**
  * Imports all nuxt components from the nuxt library

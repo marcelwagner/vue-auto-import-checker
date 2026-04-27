@@ -14,7 +14,7 @@ Currently, we support:
 
 ## Usage
 
-``` bash
+```bash
  npx vue-auto-import-checker -t vuetify
 ```
 
@@ -34,7 +34,7 @@ We are working on more.
 
 Depending on which framework you are using in your project, add the strings to the command line.
 
-``` bash
+```bash
  npx vue-auto-import-checker \
  -c ./tests/data/vue-test-project/components.d.ts \
  -p ./tests/data/vue-test-project/src/ \

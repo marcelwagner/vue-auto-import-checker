@@ -1,25 +1,35 @@
 {
   "name": "vue-auto-import-checker",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Check if the used tags are all registered within your components.d.ts",
   "type": "module",
-  "types": "./types/**/*.ts",
   "exports": {
-    ".": "./index.js"
+    ".": "./dist/index.js",
+    "./types": "./types/*.*"
   },
+  "files": [
+    "dist",
+    "skills",
+    "docs",
+    "types",
+    "config.json"
+  ],
   "scripts": {
     "test": "vitest run --reporter=tree",
-    "test:watch": "vitest --reporter=tree",
     "lint": "oxlint --tsconfig=tsconfig.json",
+    "format": "oxfmt",
     "tsc": "tsc --noEmit",
-    "build": "tsc --build"
+    "build": "tsc --project tsconfig.app.json",
+    "build:clean": "tsc --build --clean",
+    "prepublishOnly": "npm run lint && npm run format && npm run build:clean && npm run build && npm run test",
+    "prepare": "npm run lint && npm run format && npm run build:clean && npm run build"
   },
   "engines": {
     "node": ">=20.19.1",
     "npm": ">=10.8.2"
   },
   "bin": {
-    "vue-auto-import-checker": "cli.js"
+    "vue-auto-import-checker": "./dist/cli.js"
   },
   "keywords": [
     "vue",
@@ -55,7 +65,8 @@
     "url": "git+https://github.com/marcelwagner/vue-auto-import-checker.git"
   },
   "devDependencies": {
-    "@types/node": "^20.19.1",
+    "@tsconfig/node24": "^24.0.4",
+    "@types/node": "^24.12.2",
     "@vueuse/components": "^14.2.1",
     "naive-ui": "^2.44.1",
     "nuxt": "^4.4.2",
@@ -63,13 +74,17 @@
     "oxlint": "^1.61.0",
     "primevue": "^4.5.5",
     "quasar": "^2.19.3",
+    "simple-git-hooks": "^2.13.1",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.4",
-    "vuetify": "^4.0.5"
+    "vitest": "^4.1.5",
+    "vuetify": "^4.0.6"
   },
   "dependencies": {
     "commander": "14.0.3",
     "html-tags": "5.1.0",
     "svg-tag-names": "3.0.1"
+  },
+  "simple-git-hooks": {
+    "pre-push": "npm run prepare"
   }
 }

@@ -7,19 +7,29 @@ vi.stubGlobal('logger', {
 
 describe('getTagFromLine', () => {
   test('get "The" and "Welcome" from "<The><Welcome>Hello</Welcome></The>"', () => {
-    expect(getTagFromLine('<The><Welcome>Hello</Welcome></The>')).to.eql(['The', 'Welcome']);
+    expect(getTagFromLine('<The><Welcome>Hello</Welcome></The>')).to.eql([
+      'The',
+      'Welcome'
+    ]);
   });
 
   test('get "The" and "Welcome" from "<The><Welcome />Hello</The>"', () => {
-    expect(getTagFromLine('<The><Welcome />Hello</The>')).to.eql(['The', 'Welcome']);
+    expect(getTagFromLine('<The><Welcome />Hello</The>')).to.eql([
+      'The',
+      'Welcome'
+    ]);
   });
 
   test('get "TheWelcome" from "<TheWelcome msg="You did it!" />"', () => {
-    expect(getTagFromLine('<TheWelcome msg="You did it!" />')).to.eql(['TheWelcome']);
+    expect(getTagFromLine('<TheWelcome msg="You did it!" />')).to.eql([
+      'TheWelcome'
+    ]);
   });
 
   test('get "TheWelcome" from "<TheWelcome msg="You did it!""', () => {
-    expect(getTagFromLine('<TheWelcome msg="You did it!"')).to.eql(['TheWelcome']);
+    expect(getTagFromLine('<TheWelcome msg="You did it!"')).to.eql([
+      'TheWelcome'
+    ]);
   });
 
   test('get "TheWelcome" from "<TheWelcome />"', () => {
@@ -59,34 +69,48 @@ describe('getTagFromLine', () => {
   });
 
   test('get nothing from "@click="(someVar: SomeType<Type>) => openReadmeInEditor"', () => {
-    expect(getTagFromLine('@click="(someVar: SomeType<Type>) => openReadmeInEditor"')).to.eql([]);
+    expect(
+      getTagFromLine('@click="(someVar: SomeType<Type>) => openReadmeInEditor"')
+    ).to.eql([]);
   });
 
   test('get nothing from "@click="(someVar: SomeType<Type<\'bar\'>>) => openReadmeInEditor"', () => {
     expect(
-      getTagFromLine('@click="(someVar: SomeType<Type<\'bar\'>>) => openReadmeInEditor"')
+      getTagFromLine(
+        '@click="(someVar: SomeType<Type<\'bar\'>>) => openReadmeInEditor"'
+      )
     ).to.eql([]);
   });
 
   test('get nothing from "@click="(someVar: SomeType<Type<bar>>) => openReadmeInEditor"', () => {
-    expect(getTagFromLine('@click="(someVar: SomeType<Type<bar>>) => openReadmeInEditor"')).to.eql(
-      []
-    );
+    expect(
+      getTagFromLine(
+        '@click="(someVar: SomeType<Type<bar>>) => openReadmeInEditor"'
+      )
+    ).to.eql([]);
   });
 
   test('get nothing from "property="openReadmeInEditor as Type<OfType>"', () => {
-    expect(getTagFromLine('property="openReadmeInEditor as Type<OfType>"')).to.eql([]);
+    expect(
+      getTagFromLine('property="openReadmeInEditor as Type<OfType>"')
+    ).to.eql([]);
   });
 
   test('get nothing from "property="openReadmeInEditor as Type<OfType<\'bar\'>>"', () => {
-    expect(getTagFromLine('property="openReadmeInEditor as Type<OfType<\'bar\'>>"')).to.eql([]);
+    expect(
+      getTagFromLine('property="openReadmeInEditor as Type<OfType<\'bar\'>>"')
+    ).to.eql([]);
   });
 
   test('get nothing from "property="openReadmeInEditor as Type<OfType<bar>>"', () => {
-    expect(getTagFromLine('property="openReadmeInEditor as Type<OfType<bar>>"')).to.eql([]);
+    expect(
+      getTagFromLine('property="openReadmeInEditor as Type<OfType<bar>>"')
+    ).to.eql([]);
   });
 
   test('get nothing from "<!-- text here <https://urlhere.com> hello-->"', () => {
-    expect(getTagFromLine('<!-- text here <https://urlhere.com> hello-->')).to.eql([]);
+    expect(
+      getTagFromLine('<!-- text here <https://urlhere.com> hello-->')
+    ).to.eql([]);
   });
 });

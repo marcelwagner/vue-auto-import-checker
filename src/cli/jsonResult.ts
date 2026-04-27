@@ -1,6 +1,6 @@
-import { userConfig } from '../config/index.ts';
 import { getUniqueFromList, statistics } from '../utils/index.ts';
 import { getDuration } from './index.ts';
+import { userConfig } from '../config/index.ts';
 
 export function getJsonResultFromTags(tagsList: Tag[]) {
   const stats: Stats = statistics.getStats();

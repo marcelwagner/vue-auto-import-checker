@@ -1,6 +1,6 @@
-import { userConfig } from '../config/index.ts';
 import { logger } from '../utils/index.ts';
-import { getLineIndexAsString, pluralArray } from './index.ts';
+import { pluralArray, getLineIndexAsString } from './index.ts';
+import { userConfig } from '../config/index.ts';
 
 /**
  * Write the result to the console.

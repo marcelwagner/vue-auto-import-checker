@@ -1,6 +1,6 @@
 import { program } from 'commander';
-import { userConfig } from '../config/index.ts';
 import { logger } from '../utils/index.ts';
+import { userConfig } from '../config/index.ts';
 
 /**
  * Write the final state of the CLI to the console.

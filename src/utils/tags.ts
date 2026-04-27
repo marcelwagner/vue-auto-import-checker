@@ -1,7 +1,6 @@
 import type { Dirent } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
-import { vueTemplateEnd, vueTemplateStart } from '../config/index.ts';
 import {
   getFileContent,
   getFrameworkTools,
@@ -11,6 +10,7 @@ import {
   normalize,
   statistics
 } from './index.ts';
+import { vueTemplateEnd, vueTemplateStart } from '../config/index.ts';
 
 /**
  * Recursively traverse the directory list and process each file and directory.

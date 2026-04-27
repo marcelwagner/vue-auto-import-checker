@@ -9,8 +9,8 @@ To run this tool in your github actions you can use the following steps:
 - Decide when your workflow has to run (for us, we will run it on every push to the main branch)
 - We will use node 24.11 as recommended
 - Install the dependencies of your repository (for us, we will use `npm install`)
-- After that run this tool. (for us, we have the components.d.ts in the base folder and all files in ./src. We use the 
-vuetify framework and imports should be recognized as known)
+- After that run this tool. (for us, we have the components.d.ts in the base folder and all files in ./src. We use the
+  vuetify framework and imports should be recognized as known)
 - Add the following content to the file:
 
 ```yaml

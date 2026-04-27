@@ -2,21 +2,21 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { getUnknownTags } from '../index.ts';
+import { getUniqueFromList, statistics } from './utils/index.ts';
 import {
   nuxtComponentsImporter,
   quasarComponentsImporter,
   vuetifyComponentsImporter,
   vueUseComponentsImporter
 } from './tools/index.ts';
-import { getUniqueFromList, statistics } from './utils/index.ts';
+import { getUnknownTags } from './index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../');
 
-describe('no ignored frameworks', async () => {
-  const cachePath = 'node_modules/.cache';
+const cachePath = 'node_modules/.cache';
 
+describe('no ignored frameworks', async () => {
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -98,8 +98,6 @@ describe('no ignored frameworks', async () => {
 });
 
 describe('no ignored html', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -181,8 +179,6 @@ describe('no ignored html', async () => {
 });
 
 describe('no ignored svg', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -253,8 +249,6 @@ describe('no ignored svg', async () => {
 });
 
 describe('no ignored vue', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -324,8 +318,6 @@ describe('no ignored vue', async () => {
 });
 
 describe('vuetify as ignored framework (no custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -395,8 +387,6 @@ describe('vuetify as ignored framework (no custom file)', async () => {
 });
 
 describe('vuetify as ignored framework (with custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -462,8 +452,6 @@ describe('vuetify as ignored framework (with custom file)', async () => {
 });
 
 describe('vueUse as ignored framework (no custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -539,8 +527,6 @@ describe('vueUse as ignored framework (no custom file)', async () => {
 });
 
 describe('vueUse as ignored framework (with custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -612,8 +598,6 @@ describe('vueUse as ignored framework (with custom file)', async () => {
 });
 
 describe('quasar as ignored framework (no custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -688,8 +672,6 @@ describe('quasar as ignored framework (no custom file)', async () => {
 });
 
 describe('quasar as ignored framework (with custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -760,8 +742,6 @@ describe('quasar as ignored framework (with custom file)', async () => {
 });
 
 describe('nuxt as ignored framework (no custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -837,8 +817,6 @@ describe('nuxt as ignored framework (no custom file)', async () => {
 });
 
 describe('nuxt as ignored framework (with custom file)', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -910,8 +888,6 @@ describe('nuxt as ignored framework (with custom file)', async () => {
 });
 
 describe("ignore tags: 'v-date-input', 'v-icon'", async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -979,8 +955,6 @@ describe("ignore tags: 'v-date-input', 'v-icon'", async () => {
 });
 
 describe('ignore tags from file tests/data/customTagsFile.json', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -1048,8 +1022,6 @@ describe('ignore tags from file tests/data/customTagsFile.json', async () => {
 });
 
 describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.json and frameworks vuetify, vueUse, quasar & nuxt", async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
@@ -1109,8 +1081,6 @@ describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.
 });
 
 describe('ignored no tags html & svg', async () => {
-  const cachePath = 'node_modules/.cache';
-
   const config: InternalConfig = {
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [

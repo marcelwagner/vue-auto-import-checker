@@ -1,6 +1,10 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { getFileContent, logger, writeCustomPluginFile } from '../../utils/index.ts';
+import {
+  getFileContent,
+  logger,
+  writeCustomPluginFile
+} from '../../utils/index.ts';
 
 /**
  * Imports all vueUse components from the vueUse library

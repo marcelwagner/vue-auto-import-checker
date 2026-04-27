@@ -2,17 +2,13 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test, vi } from 'vitest';
-import {
-  getUniqueFromList,
-  default as getUnknownTags,
-  statistics,
-  type VAIC_Config
-} from '../../../index.ts';
-import { quasarComponentsImporter } from '../index.ts';
+import { getUniqueFromList, statistics } from '../../utils/index.ts';
+import { getUnknownTags } from '../../index.ts';
+import { quasarComponentsImporter } from './quasarComponentsImporter.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../../../');
-const cachePath = '.test-cache';
+const cachePath = 'node_modules/.cache';
 
 vi.stubGlobal('logger', {
   debug: vi.fn(),
@@ -29,7 +25,7 @@ describe('quasar-importer tool', () => {
   });
 
   describe('produced', async () => {
-    const quasarConfig: VAIC_Config = {
+    const quasarConfig: InternalConfig = {
       componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
       projectPaths: [
         'tests/data/vue-test-project-error/src',
@@ -65,7 +61,7 @@ describe('quasar-importer tool', () => {
 
     await quasarComponentsImporter(basePath, cachePath);
 
-    const customConfig: VAIC_Config = {
+    const customConfig: InternalConfig = {
       componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
       projectPaths: [
         'tests/data/vue-test-project-error/src',

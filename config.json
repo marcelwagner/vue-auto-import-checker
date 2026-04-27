@@ -1,0 +1,5 @@
+{
+  "repoUrl": "https://github.com/marcelwagner/vue-auto-import-checker",
+  "toolsFileExt": "json",
+  "defaultCachePath": "./node_modules/.cache"
+}

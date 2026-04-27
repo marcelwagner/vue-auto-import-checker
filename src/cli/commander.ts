@@ -1,5 +1,5 @@
 import { type Option, type OptionValues, program } from 'commander';
-import { commanderOptionsList, defaultCachePath, packageJson } from '../config/index.ts';
+import { commanderOptionsList, config, packageJson } from '../config/index.ts';
 
 /**
  * Initialize and parse command-line arguments.
@@ -7,7 +7,11 @@ import { commanderOptionsList, defaultCachePath, packageJson } from '../config/i
  * @returns an object containing parsed CLI options
  **/
 export function prepareCommander(): CommanderInit {
-  program.version(packageJson.version, '-v, --version', 'Output the current version');
+  program.version(
+    packageJson.version,
+    '-v, --version',
+    'Output the current version'
+  );
 
   commanderOptionsList.forEach((commanderOption: Option): void => {
     program.addOption(commanderOption);
@@ -25,7 +29,7 @@ export function prepareCommander(): CommanderInit {
     componentsFile: options.componentsFile || '',
     projectPaths: options.projectPaths || [],
 
-    cachePath: options.cachePath || defaultCachePath,
+    cachePath: options.cachePath || config.defaultCachePath,
     tool: options.tool || '',
 
     showStats: Boolean(options.stats || false),
