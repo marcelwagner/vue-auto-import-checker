@@ -94,8 +94,6 @@ export async function getFramework(
 export function findFrameworkByName(
   name: string
 ): FrameworkToolItem | undefined {
-  console.log('frameworksTools', frameworksTools);
-
   return frameworksTools.find(
     (framework: FrameworkToolItem): boolean =>
       framework.name === normalize(name)

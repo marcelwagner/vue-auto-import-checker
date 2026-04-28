@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     include: ['./**/*.spec.ts'],
     exclude: ['node_modules'],
-    fileParallelism: false,
+    fileParallelism: true,
     testTimeout: 30000
   }
 });

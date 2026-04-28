@@ -33,8 +33,10 @@ export async function getUnknownTags(config: InternalConfig): Promise<Tag[]> {
     statistics.end();
 
     return unknownTagsList;
-  } catch (error) {
+  } catch (error: any) {
     // Propagate a structured rejection so callers can handle errors consistently.
-    return Promise.reject({ errorText: `Error in getUnknownTags: ${error}` });
+    return Promise.reject({
+      errorText: `Error in getUnknownTags: ${error?.errorText ? error.errorText : error}`
+    });
   }
 }

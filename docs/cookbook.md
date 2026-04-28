@@ -73,7 +73,8 @@
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   -f vuetify \
-  -j ./tests/data/vue-test-project/custom-tags.json
+  -j ./tests/data/vue-test-project/custom-tags.json \
+  -q
 ```
 
 ## Kafka: Show all tags and a detailed report
@@ -91,5 +92,5 @@
   -p ./tests/data/vue-test-project/src/ \
   -k \
   -r \
-  -s \
+  -s
 ```

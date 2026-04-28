@@ -14,6 +14,7 @@ To run this tool in your github actions you can use the following steps:
 - Add the following content to the file:
 
 ```yaml
+## test-framework.yaml
 name: Test frontend
 
 on:
@@ -31,4 +32,27 @@ jobs:
           node-version: 24.11
       - run: npm install
       - run: npx vue-auto-import-checker -c ./components.d.ts -p ./src/ -f vuetify -i -q
+```
+
+Better approach would be to use a npm script so there are no files or folders exposed in the workflow file.
+
+```JSON
+// package.json
+{
+  ...
+  "scripts": {
+    ...
+    "components:check": "npx vue-auto-import-checker -c ./components.d.ts -p ./src/ -f vuetify -i -q"
+  }
+}
+```
+
+
+```yaml
+## test-framework.yaml
+name: Test frontend
+...
+    steps:
+      ...
+      - run: npm run components:check
 ```
