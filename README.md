@@ -111,7 +111,7 @@ But you can also start with an example from our [cookbook.md](docs/cookbook.md).
 ## CLI Options
 
 | Option                            | Alias | Description                                                                                                          | Default                   |
-| --------------------------------- | ----- | -------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+|-----------------------------------|-------|----------------------------------------------------------------------------------------------------------------------|---------------------------|
 | `--components-file <file-path>`   | `-c`  | Path to a file exporting registered components (relative to current working directory)                               | `""`                      |
 | `--project-paths [path...]`       | `-p`  | List of directory path`s containing Vue project files to scan (relative to current working directory)                | `[]`                      |
 | `--cache-path <cache-path>`       | `-a`  | Directory for storing and looking up cached/custom known files (relative to current working directory)               | `"./node_modules/.cache"` |
