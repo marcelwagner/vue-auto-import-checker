@@ -36,7 +36,7 @@ export const commanderOptionsList: Option[] = [
   ).default([]),
   new Option(
     '-n, --negate-known [sets...]',
-    'Explicitly treat tag sets as known (e.g., html, svg, vue, vuerouter)'
+    'Explicitly treat tag sets as unknown (e.g., html, svg, vue, vuerouter)'
   ).default([]),
   new Option(
     '-i, --imports-known',
@@ -65,7 +65,7 @@ export const commanderOptionsList: Option[] = [
     .default(false),
   new Option(
     '-o, --output-format <output-format>',
-    'Choose between plain text, md (markdown) or json output'
+    'Choose between (plain) text, md (markdown) or json output'
   )
     .env('OUTPUT_FORMAT')
     .choices(['text', 'md', 'json'])

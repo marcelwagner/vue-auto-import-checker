@@ -47,7 +47,6 @@ Better approach would be to use a npm script so there are no files or folders ex
 }
 ```
 
-
 ```yaml
 ## test-framework.yaml
 name: Test frontend

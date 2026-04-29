@@ -6,3 +6,4 @@ export * from './logger.ts';
 export * from './normalize.ts';
 export * from './statistics.ts';
 export * from './tags.ts';
+export * from './error.ts';

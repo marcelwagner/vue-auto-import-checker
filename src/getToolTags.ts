@@ -1,5 +1,9 @@
 import { program } from 'commander';
-import { findFrameworkByName, statistics } from './utils/index.ts';
+import {
+  findFrameworkByName,
+  statistics,
+  getErrorText
+} from './utils/index.ts';
 import { userConfig } from './config/index.ts';
 
 export async function getToolTags(config: InternalConfig): Promise<{
@@ -34,6 +38,8 @@ export async function getToolTags(config: InternalConfig): Promise<{
     };
   } catch (error) {
     // Propagate a structured rejection so callers can handle errors consistently.
-    return Promise.reject({ errorText: `Error in getToolTags: ${error}` });
+    return Promise.reject({
+      errorText: `Error in getToolTags: ${getErrorText(error)}`
+    });
   }
 }

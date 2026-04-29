@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import {
+  getErrorText,
   getFileContent,
   logger,
   writeCustomPluginFile
@@ -59,7 +60,7 @@ export async function quasarComponentsImporter(
     return componentsList;
   } catch (error) {
     return Promise.reject({
-      errorText: 'Error importing Quasar components:' + error
+      errorText: `Error importing Quasar components: ${getErrorText(error)}`
     });
   }
 }

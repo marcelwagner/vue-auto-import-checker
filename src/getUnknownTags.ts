@@ -1,5 +1,5 @@
 import { getTags } from './index.ts';
-import { getUnknownTagsList, statistics } from './utils/index.ts';
+import { getErrorText, getUnknownTagsList, statistics } from './utils/index.ts';
 import { userConfig } from './config/index.ts';
 
 /**
@@ -33,10 +33,10 @@ export async function getUnknownTags(config: InternalConfig): Promise<Tag[]> {
     statistics.end();
 
     return unknownTagsList;
-  } catch (error: any) {
+  } catch (error) {
     // Propagate a structured rejection so callers can handle errors consistently.
     return Promise.reject({
-      errorText: `Error in getUnknownTags: ${error?.errorText ? error.errorText : error}`
+      errorText: `Error in getUnknownTags: ${getErrorText(error)}`
     });
   }
 }

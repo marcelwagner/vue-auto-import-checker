@@ -2,6 +2,7 @@ import { existsSync, type Stats } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
+  getErrorText,
   getFileContent,
   logger,
   writeCustomPluginFile
@@ -149,7 +150,7 @@ export async function vuetifyComponentsImporter(
     return [...new Set(componentsList)];
   } catch (error) {
     return Promise.reject({
-      errorText: 'Error importing Vuetify components:' + error
+      errorText: `Error importing Vuetify components: ${getErrorText(error)}`
     });
   }
 }

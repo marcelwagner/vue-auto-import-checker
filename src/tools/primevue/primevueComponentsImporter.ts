@@ -1,7 +1,11 @@
 import { existsSync, type Stats } from 'node:fs';
 import { readdir, stat } from 'node:fs/promises';
 import { join } from 'node:path';
-import { logger, writeCustomPluginFile } from '../../utils/index.ts';
+import {
+  getErrorText,
+  logger,
+  writeCustomPluginFile
+} from '../../utils/index.ts';
 
 /**
  * Imports all primevue components from the primevue library
@@ -62,7 +66,7 @@ export async function primevueComponentsImporter(
     return componentsList;
   } catch (error) {
     return Promise.reject({
-      errorText: 'Error importing primevue components:' + error
+      errorText: `Error importing primevue components: ${getErrorText(error)}`
     });
   }
 }

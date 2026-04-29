@@ -4,7 +4,8 @@ import {
   getIdentifiedTagsList,
   getKnownLists,
   getTagsFromDirectoryPaths,
-  statistics
+  statistics,
+  getErrorText
 } from './utils/index.ts';
 import { userConfig } from './config/index.ts';
 
@@ -73,6 +74,8 @@ export async function getTags(config: InternalConfig): Promise<Tag[]> {
     return identifiedTags;
   } catch (error) {
     // Propagate a structured rejection so callers can handle errors consistently.
-    return Promise.reject({ errorText: `Error in getTags: ${error}` });
+    return Promise.reject({
+      errorText: `Error in getTags: ${getErrorText(error)}`
+    });
   }
 }

@@ -2,6 +2,7 @@ import { existsSync } from 'node:fs';
 import { readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 import {
+  getErrorText,
   getFileContent,
   logger,
   writeCustomPluginFile
@@ -74,7 +75,7 @@ export async function nuxtComponentsImporter(
     return componentsList;
   } catch (error) {
     return Promise.reject({
-      errorText: 'Error importing Nuxt components:' + error
+      errorText: `Error importing Nuxt components: ${getErrorText(error)}`
     });
   }
 }

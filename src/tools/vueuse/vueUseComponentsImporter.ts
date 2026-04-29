@@ -1,6 +1,7 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import {
+  getErrorText,
   getFileContent,
   logger,
   writeCustomPluginFile
@@ -71,7 +72,7 @@ export async function vueUseComponentsImporter(
     return componentsList;
   } catch (error) {
     return Promise.reject({
-      errorText: 'Error importing VueUse components:' + error
+      errorText: `Error importing VueUse components: ${getErrorText(error)}`
     });
   }
 }

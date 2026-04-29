@@ -2,6 +2,7 @@
 
 import { program } from 'commander';
 import {
+  getErrorText,
   getFrameworkList,
   getKnownBaseTagsList,
   statistics
@@ -59,12 +60,9 @@ async function main(): Promise<void> {
 
       return;
     } catch (error: any) {
-      program.error(
-        `Show config error ${error?.errorText ? error?.errorText : error}`,
-        {
-          exitCode: -1
-        }
-      );
+      program.error(`Show config error ${getErrorText(error)}`, {
+        exitCode: -1
+      });
     }
   }
 
@@ -78,12 +76,9 @@ async function main(): Promise<void> {
 
       return;
     } catch (error: any) {
-      program.error(
-        `Tool error ${error?.errorText ? error?.errorText : error}`,
-        {
-          exitCode: -1
-        }
-      );
+      program.error(`Tool error ${getErrorText(error)}`, {
+        exitCode: -1
+      });
     }
   }
 
@@ -97,12 +92,9 @@ async function main(): Promise<void> {
 
       return;
     } catch (error: any) {
-      program.error(
-        `Component list error ${error?.errorText ? error?.errorText : error}`,
-        {
-          exitCode: -1
-        }
-      );
+      program.error(`Component list error ${getErrorText(error)}`, {
+        exitCode: -1
+      });
     }
   }
 
@@ -116,12 +108,9 @@ async function main(): Promise<void> {
 
       return;
     } catch (error: any) {
-      program.error(
-        `Kafka error: ${error?.errorText ? error?.errorText : error}`,
-        {
-          exitCode: -1
-        }
-      );
+      program.error(`Kafka error: ${getErrorText(error)}`, {
+        exitCode: -1
+      });
     }
   }
 
@@ -132,12 +121,9 @@ async function main(): Promise<void> {
 
     writeTagsOutput(unknownTagsList);
   } catch (error: any) {
-    program.error(
-      `Program error: ${error?.errorText ? error?.errorText : error}`,
-      {
-        exitCode: -1
-      }
-    );
+    program.error(`Program error: ${getErrorText(error)}`, {
+      exitCode: -1
+    });
   }
 }
 

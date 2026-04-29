@@ -1,6 +1,11 @@
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { getFileContent, logger, statistics } from './utils/index.ts';
+import {
+  getErrorText,
+  getFileContent,
+  logger,
+  statistics
+} from './utils/index.ts';
 import { userConfig } from './config/index.ts';
 
 /**
@@ -76,7 +81,7 @@ export async function getComponentList(
   } catch (error) {
     // Propagate a structured rejection so callers can handle errors consistently.
     return Promise.reject({
-      errorText: `Error in getComponentsList: ${error}`
+      errorText: `Error in getComponentsList: ${getErrorText(error)}`
     });
   }
 }

@@ -74,7 +74,7 @@ export async function writeCustomPluginFile(
 
     logger.debug(`localTagsFile ${localTagsFile}`);
 
-    await writeFile(
+    return writeFile(
       localTagsFile,
       `${JSON.stringify(componentsList, null, 2)}\n`,
       {
