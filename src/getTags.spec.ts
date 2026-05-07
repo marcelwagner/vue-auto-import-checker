@@ -11,6 +11,7 @@ const cachePath = 'node_modules/.cache';
 
 describe('kafka', async () => {
   const config: InternalConfig = {
+    configFile: '',
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [
       'tests/data/vue-test-project-error/src',
@@ -21,6 +22,11 @@ describe('kafka', async () => {
     knownTagsFile: '',
     negateKnown: [],
     knownFrameworks: [],
+    showConfig: false,
+    showStats: false,
+    showResult: false,
+    quiet: false,
+    debug: false,
     cachePath,
     importsKnown: false,
     basePath,

@@ -7,7 +7,9 @@ import { userConfig } from '../config/index.ts';
 export function writeConfig(
   commanderOptions: CommanderInit | null = null
 ): void {
-  if (!commanderOptions?.showConfig) {
+  const showConfig = commanderOptions?.showConfig ?? userConfig?.showConfig;
+
+  if (!showConfig) {
     if (userConfig.showResult) {
       logger.info('....................................');
     }
@@ -17,13 +19,15 @@ export function writeConfig(
     logger.info('');
   }
 
-  logger.info('Commander options:');
-  logger.info(JSON.stringify(commanderOptions, null, 2));
-  logger.info('');
-  logger.info('Config options:');
-  logger.info(JSON.stringify(userConfig, null, 2));
+  if (commanderOptions) {
+    logger.info('Commander options:');
+    logger.info(JSON.stringify(commanderOptions, null, 2));
+  } else {
+    logger.info('Config options:');
+    logger.info(JSON.stringify(userConfig, null, 2));
+  }
 
-  if (!commanderOptions?.showConfig) {
+  if (!showConfig) {
     logger.debug('');
     logger.debug('....................................');
     logger.debug('');

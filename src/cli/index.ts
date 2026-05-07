@@ -8,3 +8,5 @@ export * from './writeToolsResult.ts';
 export * from './utils.ts';
 export * from './jsonResult.ts';
 export * from './writeOutput.ts';
+export * from './readConfigFile.ts';
+export * from './outputFormat.ts';

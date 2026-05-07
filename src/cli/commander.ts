@@ -26,6 +26,8 @@ export function prepareCommander(): CommanderInit {
   // commander maps `--known-tags` -> `options.knownTags` and
   // `--known-tags-file` -> `options.knownTagsFile`.
   return {
+    configFile: options.configFile || '',
+
     componentsFile: options.componentsFile || '',
     projectPaths: options.projectPaths || [],
 

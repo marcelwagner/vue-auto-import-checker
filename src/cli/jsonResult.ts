@@ -2,6 +2,12 @@ import { getUniqueFromList, statistics } from '../utils/index.ts';
 import { getDuration } from './index.ts';
 import { userConfig } from '../config/index.ts';
 
+/**
+ * Build the JSON result object from a list of found tags.
+ *
+ * @param tagsList - list of found tags
+ * @returns JSON result including tags, summary, stats, and success status
+ */
 export function getJsonResultFromTags(tagsList: Tag[]) {
   const stats: Stats = statistics.getStats();
 
@@ -36,6 +42,12 @@ export function getJsonResultFromTags(tagsList: Tag[]) {
   };
 }
 
+/**
+ * Build the JSON result object from a list of component names.
+ *
+ * @param componentsList - list of component names
+ * @returns JSON result including components, stats, and success status
+ */
 export function getJsonResultFromComponents(componentsList: string[]) {
   return {
     components: componentsList,
@@ -47,6 +59,12 @@ export function getJsonResultFromComponents(componentsList: string[]) {
   };
 }
 
+/**
+ * Build the JSON result object from a list of tool tag names.
+ *
+ * @param tagsList - list of tool tag names
+ * @returns JSON result including components, stats, and success status
+ */
 export function getJsonResultFromToolTags(tagsList: string[]) {
   return {
     components: tagsList,

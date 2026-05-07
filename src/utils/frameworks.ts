@@ -78,7 +78,7 @@ export async function getFramework(
   return {
     name: frameworkTool.name as Source,
     tags: localPluginFileExists
-      ? await getJsonFileContent(localPluginFile)
+      ? await getJsonFileContent<string[]>(localPluginFile)
       : frameworkTool.tags || [],
     file: localPluginFileExists ? localPluginFile : frameworkTool.source,
     known

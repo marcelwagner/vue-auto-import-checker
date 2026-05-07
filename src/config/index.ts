@@ -14,4 +14,7 @@ export * from './baseTags.ts';
 export * from './frameworksTools.ts';
 export * from './userConfig.ts';
 export * from './vue.ts';
+export * from './configFile.ts';
+export * from './outputFormatList.ts';
+export * from './regexp.ts';
 export { packageJson, config, repoTreeUrl };

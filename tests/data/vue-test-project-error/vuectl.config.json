@@ -1,0 +1,8 @@
+{
+  "componentsFile": "./tests/data/vue-test-project-error/components.d.ts",
+  "projectPaths": [
+    "./tests/data/vue-test-project-error/src",
+    "./tests/data/vue-test-project-error/lib"
+  ],
+  "quite": true
+}

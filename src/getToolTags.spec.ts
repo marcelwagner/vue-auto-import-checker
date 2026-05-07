@@ -11,6 +11,7 @@ const cachePath = 'node_modules/.cache';
 
 describe('naiveui as tool', async () => {
   const config: InternalConfig = {
+    configFile: '',
     componentsFile: '',
     projectPaths: [],
     tool: 'naiveui',
@@ -18,6 +19,11 @@ describe('naiveui as tool', async () => {
     knownTagsFile: '',
     negateKnown: [],
     knownFrameworks: [],
+    showConfig: false,
+    showStats: false,
+    showResult: false,
+    quiet: false,
+    debug: false,
     cachePath,
     importsKnown: false,
     basePath,

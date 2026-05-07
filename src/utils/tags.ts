@@ -10,7 +10,18 @@ import {
   normalize,
   statistics
 } from './index.ts';
-import { vueTemplateEnd, vueTemplateStart } from '../config/index.ts';
+import {
+  explicitClosingTagMatcher,
+  falseOpeningTagMatcher,
+  fullOpeningTagMatcher,
+  importListReplaceMatcher,
+  importMatcher,
+  importReplaceMatcher,
+  openingTagMatcher,
+  smallerMatcher,
+  vueTemplateEnd,
+  vueTemplateStart
+} from '../config/index.ts';
 
 /**
  * Recursively traverse the directory list and process each file and directory.
@@ -125,7 +136,7 @@ export async function getTagsFromFile(
   logger.debug(`File: ${file}`);
 
   // Split file into lines to provide accurate line numbers for reporting.
-  const linesOfFile: string[] = fileContent.split(/\n/);
+  const linesOfFile: string[] = fileContent.split('\n');
 
   logger.debug(`All lines length: ${linesOfFile.length}`);
 
@@ -306,7 +317,7 @@ export async function getKnownLists({
   cachePath
 }: KnownListProps): Promise<KnownList[]> {
   const knownTagsFileContent: string[] = knownTagsFile
-    ? await getJsonFileContent(knownTagsFile)
+    ? await getJsonFileContent<string[]>(knownTagsFile)
     : [];
   const knownTagsFileContentList: KnownList[] =
     knownTagsFileContent.length >= 1
@@ -371,18 +382,12 @@ export function getImportsListFromFile(fileContent: string): ComponentImport[] {
   const importsList: ComponentImport[] = [];
 
   const importMatches: RegExpExecArray[] = [
-    ...fileContent.matchAll(
-      /import\s+((?:[A-Za-z_$][\w$]*)\s*(?:,\s*)?)?(?:\*\s+as\s+([A-Za-z_$][\w$]*)|\{\s*([^}]+?)\s*})?\s*from\s*(['"])([^'"]+)\4/g
-    )
+    ...fileContent.matchAll(importMatcher)
   ];
 
   for (const match of importMatches) {
     if (match[1]) {
-      const tag: string = match[1]
-        .replace(/as/gm, '')
-        .replace(/default/gm, '')
-        .replace(/,/gm, '')
-        .replace(/ /gm, '');
+      const tag: string = match[1].replace(importListReplaceMatcher, '');
 
       const path: string = match[5];
 
@@ -395,11 +400,7 @@ export function getImportsListFromFile(fileContent: string): ComponentImport[] {
       const separatedMatches: string[] = match[3].split(',');
 
       separatedMatches.forEach((separatedMatch: string): void => {
-        const tag: string = separatedMatch
-          .replace(/as/gm, '')
-          .replace(/default/gm, '')
-          .replace(/ /gm, '')
-          .replace(/\n/gm, '');
+        const tag: string = separatedMatch.replace(importReplaceMatcher, '');
 
         const path: string = match[5];
 
@@ -465,7 +466,7 @@ export function getTagsFromTemplate(
  */
 export function getTagFromLine(line: string): string[] {
   // Find raw tag-like tokens such as "<my-tag"
-  const tagListRaw: RegExpMatchArray | null = line.match(/<([\w-]+)/g);
+  const tagListRaw: RegExpMatchArray | null = line.match(openingTagMatcher);
 
   // No tag-like token present
   if (tagListRaw === null) {
@@ -475,11 +476,12 @@ export function getTagFromLine(line: string): string[] {
   }
 
   return tagListRaw
-    .map((tag: string): string => tag.replace(/</, '').trim())
+    .map((tag: string): string => tag.replace(smallerMatcher, '').trim())
+
     .filter((tag: string): boolean => {
       // Attempt to find a full opening tag to compare with the raw candidate.
       const completeTag: RegExpMatchArray | null = line.match(
-        /<([\w]+?[^ ]+?)[\W]*?>/
+        fullOpeningTagMatcher
       );
 
       // If the complete tag contains stray angle brackets it's likely malformed/multiple tags.
@@ -487,13 +489,14 @@ export function getTagFromLine(line: string): string[] {
         completeTag?.[1].includes('>') || completeTag?.[1].includes('<');
 
       // Detect an explicit closing tag on the same line.
-      const endTag: RegExpMatchArray | null =
-        line.match(/<\/([a-zA-Z0-9-_]+)>/);
+      const endTag: RegExpMatchArray | null = line.match(
+        explicitClosingTagMatcher
+      );
 
       // Detect constructs where a "<" appears inside a property or a typed expression,
       // which can be mistaken for an actual tag.
       const propertyTyping: RegExpMatchArray | null = line.match(
-        /[=:"]+?[^</]+?<\s*([a-zA-Z0-9-_]+)\s*(?=>)|[=:"]+?[^</]+?<([a-zA-Z0-9-_]*?)<\s*?\W*?([a-zA-Z0-9-_]+?)\W*?\s*?>/
+        falseOpeningTagMatcher
       );
 
       // Exclude candidates that are quirks, inline fragments, or matched by property typing.

@@ -11,6 +11,7 @@ const cachePath = 'node_modules/.cache';
 
 describe('tests/data/vue-test-project-error/components.d.ts', async () => {
   const config: InternalConfig = {
+    configFile: '',
     componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
     projectPaths: [],
     tool: 'naiveui',
@@ -18,6 +19,11 @@ describe('tests/data/vue-test-project-error/components.d.ts', async () => {
     knownTagsFile: '',
     negateKnown: [],
     knownFrameworks: [],
+    showConfig: false,
+    showStats: false,
+    showResult: false,
+    quiet: false,
+    debug: false,
     cachePath,
     importsKnown: false,
     basePath,

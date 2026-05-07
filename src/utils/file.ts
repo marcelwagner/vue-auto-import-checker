@@ -34,9 +34,9 @@ export async function getFileContent(filePath: string): Promise<string> {
  * message on read or parse failures.
  *
  * @param filePath - path to the JSON file
- * @returns promise that resolves with the parsed JSON (expected as `string[]` in current usage)
+ * @returns promise that resolves with the parsed JSON
  */
-export async function getJsonFileContent(filePath: string): Promise<string[]> {
+export async function getJsonFileContent<T>(filePath: string): Promise<T> {
   try {
     const jsonFileContent: string = await getFileContent(filePath);
     return JSON.parse(jsonFileContent);

@@ -3,6 +3,10 @@ import { config } from './index.ts';
 
 export const commanderOptionsList: Option[] = [
   new Option(
+    '-x, --config-file <file-path>',
+    'Path to a config file holding the config for this run'
+  ).default(''),
+  new Option(
     '-c, --components-file <file-path>',
     'Path to a file exporting registered components (relative to current working directory)'
   ).default(''),
@@ -67,12 +71,12 @@ export const commanderOptionsList: Option[] = [
     '-o, --output-format <output-format>',
     'Choose between (plain) text, md (markdown) or json output'
   )
-    .env('OUTPUT_FORMAT')
     .choices(['text', 'md', 'json'])
     .default('text'),
   new Option('-d, --debug', 'Enable detailed debug logging')
     .implies({ outputFormat: 'text' })
     .implies({ quiet: false })
+    .env('debug')
     .default(false),
   new Option('-y, --show-config', 'Show config').default(false)
 ];

@@ -1,13 +1,13 @@
-interface VAIC_Config {
-  componentsFile: string;
-  projectPaths: string[];
-  tool: string;
-  negateKnown: Known[];
-  knownFrameworks: Framework[];
-  knownTags: string[];
-  knownTagsFile: string;
-  cachePath: string;
-  importsKnown: boolean;
+interface Vue_Ctl_Config {
+  componentsFile?: string;
+  projectPaths?: string[];
+  tool?: string;
+  negateKnown?: Known[];
+  knownFrameworks?: Framework[];
+  knownTags?: string[];
+  knownTagsFile?: string;
+  cachePath?: string;
+  importsKnown?: boolean;
   basePath?: string;
   kafka?: boolean;
   outputFormat: OutputFormat;

@@ -68,23 +68,11 @@ type BaseTags = {
   source: string;
 };
 
-type InternalConfig = {
-  componentsFile: string;
-  projectPaths: string[];
-  tool: string;
+type InternalConfig = CommanderInit & {
   negateKnown: Known[];
   knownFrameworks: Framework[];
-  knownTags: string[];
-  knownTagsFile: string;
-  cachePath: string;
-  importsKnown: boolean;
-  basePath: string;
-  kafka?: boolean;
   outputFormat: OutputFormat;
-  quiet?: boolean;
-  showStats?: boolean;
-  showResult?: boolean;
-  debug?: boolean;
+  basePath: string;
 };
 
 type UserConfig = InternalConfig & {
@@ -92,6 +80,8 @@ type UserConfig = InternalConfig & {
 };
 
 type CommanderInit = {
+  configFile: string;
+
   componentsFile: string;
   projectPaths: string[];
 
@@ -114,12 +104,6 @@ type CommanderInit = {
   importsKnown: boolean;
   debug: boolean;
   showConfig: boolean;
-};
-
-type CustomLogger = {
-  info: (message: string) => void;
-  debug: (message: string) => void;
-  exit: (message: string, json: Record<string, unknown>) => void;
 };
 
 type OutputFormat = 'text' | 'md' | 'json';

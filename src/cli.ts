@@ -5,6 +5,7 @@ import {
   getErrorText,
   getFrameworkList,
   getKnownBaseTagsList,
+  logger,
   statistics
 } from './utils/index.ts';
 import { userConfig } from './config/index.ts';
@@ -13,7 +14,9 @@ import {
   writeConfig,
   writeTagsOutput,
   writeToolOutput,
-  prepareCommander
+  prepareCommander,
+  readConfigFile,
+  getOutputFormat
 } from './cli/index.ts';
 import {
   getComponentList,
@@ -29,6 +32,11 @@ async function main(): Promise<void> {
   // Parse command-line arguments and normalize options.
   const commanderOptions: CommanderInit = prepareCommander();
 
+  const options: CommanderInit = await readConfigFile(
+    basePath,
+    commanderOptions
+  );
+
   const {
     knownFrameworks,
     negateKnown,
@@ -38,16 +46,16 @@ async function main(): Promise<void> {
     kafka,
     outputFormat,
     showConfig
-  } = commanderOptions;
+  } = options;
 
   // Set userConfig
   userConfig.set({
-    ...commanderOptions,
+    ...options,
     negateKnown:
       negateKnown.length >= 1 ? getKnownBaseTagsList(negateKnown) : [],
     knownFrameworks:
       knownFrameworks.length >= 1 ? getFrameworkList(knownFrameworks) : [],
-    outputFormat: outputFormat as OutputFormat,
+    outputFormat: getOutputFormat(outputFormat),
     basePath
   });
 
@@ -56,6 +64,8 @@ async function main(): Promise<void> {
 
   if (showConfig) {
     try {
+      logger.info('writeConfig');
+
       writeConfig(commanderOptions);
 
       return;
@@ -112,6 +122,15 @@ async function main(): Promise<void> {
         exitCode: -1
       });
     }
+  }
+
+  if (!componentsFile && projectPaths.length <= 0) {
+    program.error(
+      `No options provided. Please use "--h" to learn about options.`,
+      {
+        exitCode: -1
+      }
+    );
   }
 
   // Full scan flow: Inspect project files and report unknown tags, respecting known rules.

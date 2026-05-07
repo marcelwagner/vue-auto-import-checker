@@ -1,3 +1,5 @@
+import { normalizeMatcher } from '../config/index.ts';
+
 /**
  * Normalize a text by removing hyphens, space, minus, underscore and converting to lowercase.
  *
@@ -9,5 +11,5 @@
  * @example normalizeTag('MyButton') // 'mybutton'
  */
 export function normalize(text: string): string {
-  return text.replace(/_|-| /g, '').toLowerCase();
+  return text.replace(normalizeMatcher, '').toLowerCase();
 }

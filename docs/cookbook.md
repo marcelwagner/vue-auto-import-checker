@@ -7,8 +7,8 @@
 - And you want to see a detailed report of all components that are registered in the file.
 - And you want to see a detailed statistical output of the performance of the tool.
 
-```bash
- vue-auto-import-checker \
+```sh
+ npx vue-auto-import-checker \
   -c ./tests/data/vue-test-project/components.d.ts \
   -r \
   -s
@@ -24,8 +24,8 @@
 - You want to see a detailed report of all unknown components.
 - And you want to see a detailed statistical output of the performance of the tool.
 
-```bash
- vue-auto-import-checker \
+```sh
+ npx vue-auto-import-checker \
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   -f vuetify vueuse \
@@ -46,8 +46,8 @@
 - And you want to see a detailed report of all **unknown** components.
 - And you want to see a detailed statistical output of the performance of the tool.
 
-```bash
- vue-auto-import-checker \
+```sh
+ npx vue-auto-import-checker \
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   -f vuetify \
@@ -68,8 +68,8 @@
 - And you use custom components which you have listed in the file `custom-tags.json`.
 - And you only want this tool in your CI workflow to fail or pass.
 
-```bash
- vue-auto-import-checker \
+```sh
+ npx vue-auto-import-checker \
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   -f vuetify \
@@ -86,8 +86,8 @@
 - You want to see a detailed report of all **known and unknown** tags.
 - And you want to see a detailed statistical output of the performance of the tool.
 
-```bash
- vue-auto-import-checker \
+```sh
+ npx vue-auto-import-checker \
   -c ./tests/data/vue-test-project/components.d.ts \
   -p ./tests/data/vue-test-project/src/ \
   -k \

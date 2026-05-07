@@ -16,22 +16,34 @@ const basePath = join(dirname(__filename), '../');
 
 const cachePath = 'node_modules/.cache';
 
+const baseConfig: InternalConfig = {
+  configFile: '',
+  componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
+  projectPaths: [
+    'tests/data/vue-test-project-error/src',
+    'tests/data/vue-test-project-error/lib'
+  ],
+  tool: '',
+  knownTags: [],
+  knownTagsFile: '',
+  negateKnown: [],
+  knownFrameworks: [],
+  showConfig: false,
+  showStats: false,
+  showResult: false,
+  quiet: false,
+  debug: false,
+  kafka: false,
+  cachePath,
+  importsKnown: false,
+  basePath,
+  outputFormat: 'text'
+};
+
 describe('no ignored frameworks', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: []
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -99,20 +111,8 @@ describe('no ignored frameworks', async () => {
 
 describe('no ignored html', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: ['html'],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    negateKnown: ['html']
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -180,20 +180,8 @@ describe('no ignored html', async () => {
 
 describe('no ignored svg', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: ['svg'],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    negateKnown: ['svg']
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -250,20 +238,8 @@ describe('no ignored svg', async () => {
 
 describe('no ignored vue', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: ['vue'],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    negateKnown: ['vue']
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -319,20 +295,8 @@ describe('no ignored vue', async () => {
 
 describe('vuetify as ignored framework (no custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['vuetify'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['vuetify']
   };
 
   const customFile = join(basePath, 'node_modules/.cache/vuetifyTags.json');
@@ -388,20 +352,8 @@ describe('vuetify as ignored framework (no custom file)', async () => {
 
 describe('vuetify as ignored framework (with custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['vuetify'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['vuetify']
   };
 
   await vuetifyComponentsImporter(basePath, cachePath);
@@ -453,20 +405,8 @@ describe('vuetify as ignored framework (with custom file)', async () => {
 
 describe('vueUse as ignored framework (no custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['vueuse'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['vueuse']
   };
 
   const customFile = join(basePath, 'node_modules/.cache/vueUseTags.json');
@@ -528,20 +468,8 @@ describe('vueUse as ignored framework (no custom file)', async () => {
 
 describe('vueUse as ignored framework (with custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['vueuse'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['vueuse']
   };
 
   await vueUseComponentsImporter(basePath, cachePath);
@@ -599,20 +527,8 @@ describe('vueUse as ignored framework (with custom file)', async () => {
 
 describe('quasar as ignored framework (no custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['quasar'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['quasar']
   };
 
   const customFile = join(basePath, 'node_modules/.cache/quasarTags.json');
@@ -673,20 +589,8 @@ describe('quasar as ignored framework (no custom file)', async () => {
 
 describe('quasar as ignored framework (with custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['quasar'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['quasar']
   };
 
   await quasarComponentsImporter(basePath, cachePath);
@@ -743,20 +647,8 @@ describe('quasar as ignored framework (with custom file)', async () => {
 
 describe('nuxt as ignored framework (no custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['nuxt'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['nuxt']
   };
 
   const customFile = join(basePath, 'node_modules/.cache/nuxtTags.json');
@@ -818,20 +710,8 @@ describe('nuxt as ignored framework (no custom file)', async () => {
 
 describe('nuxt as ignored framework (with custom file)', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: ['nuxt'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownFrameworks: ['nuxt']
   };
 
   await nuxtComponentsImporter(basePath, cachePath);
@@ -889,20 +769,8 @@ describe('nuxt as ignored framework (with custom file)', async () => {
 
 describe("ignore tags: 'v-date-input', 'v-icon'", async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: ['v-date-input', 'v-icon'],
-    knownTagsFile: '',
-    negateKnown: [],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownTags: ['v-date-input', 'v-icon']
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -954,22 +822,10 @@ describe("ignore tags: 'v-date-input', 'v-icon'", async () => {
   });
 });
 
-describe('ignore tags from file tests/data/customTagsFile.json', async () => {
+describe("ignore tags from file 'tests/data/customTagsFile.json'", async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: 'tests/data/customTagsFile.json',
-    negateKnown: [],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    knownTagsFile: 'tests/data/customTagsFile.json'
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -1023,20 +879,10 @@ describe('ignore tags from file tests/data/customTagsFile.json', async () => {
 
 describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.json and frameworks vuetify, vueUse, quasar & nuxt", async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
+    ...baseConfig,
     knownTags: ['SupportIcon'],
     knownTagsFile: 'tests/data/customTagsFile.json',
-    negateKnown: [],
-    knownFrameworks: ['vuetify', 'vueuse', 'quasar', 'nuxt'],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    knownFrameworks: ['vuetify', 'vueuse', 'quasar', 'nuxt']
   };
 
   statistics._stats = { ...statistics._initialState };
@@ -1082,20 +928,8 @@ describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.
 
 describe('ignored no tags html & svg', async () => {
   const config: InternalConfig = {
-    componentsFile: 'tests/data/vue-test-project-error/components.d.ts',
-    projectPaths: [
-      'tests/data/vue-test-project-error/src',
-      'tests/data/vue-test-project-error/lib'
-    ],
-    tool: '',
-    knownTags: [],
-    knownTagsFile: '',
-    negateKnown: ['html', 'svg'],
-    knownFrameworks: [],
-    cachePath,
-    importsKnown: false,
-    basePath,
-    outputFormat: 'text'
+    ...baseConfig,
+    negateKnown: ['html', 'svg']
   };
 
   statistics._stats = { ...statistics._initialState };

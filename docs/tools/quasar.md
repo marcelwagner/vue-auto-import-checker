@@ -23,9 +23,6 @@ from your current implementation.
 
 This will add a `.cache` folder to your `node_modules` directory, if no other cache path is configured.
 
-Try using other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/12) for which
-version the importer works.
-
 We are working on more.
 
 ### Ignore Framework tags

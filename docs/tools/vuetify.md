@@ -1,4 +1,4 @@
-# VueUse Components Importer
+# Vuetify Components Importer
 
 ## Description
 
@@ -6,14 +6,16 @@ Use the tags from the specific version your project is using by using this impor
 
 Currently, we support:
 
-- 13.6.0
-- 14.1.0
-- 14.2.1
+- 3.8.4
+- 3.11.3
+- 4.0.1
+- 4.0.4
+- 4.0.5
 
 ## Usage
 
 ```bash
- npx vue-auto-import-checker -t vueuse
+ npx vue-auto-import-checker -t vuetify
 ```
 
 Use the tags from the specific version your project is using by using an importer.
@@ -22,9 +24,6 @@ An importer will add a new tag list from your actual framework version so that t
 from your current implementation.
 
 This will add a `.cache` folder to your `node_modules` directory, if no other cache path is configured.
-
-Try using other versions and [report](https://github.com/marcelwagner/vue-auto-import-checker/issues/12) for which
-version the importer works.
 
 We are working on more.
 
@@ -36,5 +35,5 @@ Depending on which framework you are using in your project, add the strings to t
  npx vue-auto-import-checker \
  -c ./tests/data/vue-test-project/components.d.ts \
  -p ./tests/data/vue-test-project/src/ \
- -f vueuse
+ -f vuetify
 ```
