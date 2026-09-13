@@ -49,7 +49,7 @@ export async function primevueComponentsImporter(
           continue;
         }
 
-        logger.debug(`found primevue component: ${component[1]}`);
+        logger.debug(`found primevue component: ${component}`);
 
         componentsList.push(component[1]);
       }

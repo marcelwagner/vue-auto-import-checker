@@ -35,18 +35,18 @@ export async function quasarComponentsImporter(
 
     for (const componentExport of listOfComponents.split('\n')) {
       const component: RegExpMatchArray | null = componentExport.match(
-        /export \* from \W.\/components\/([\w-]+)\/index.js\W/
+        /export \* from \W.\/components\/([\w-]+)\/index.js\W|export { default as ([\w-]+) } from \W.\/components\/[\w-]+\/[\w-]+.js\W/
       );
 
       if (component === null) {
         continue;
       }
 
-      logger.debug(
-        `found quasar component: ${JSON.stringify(`q-${component[1]}`)}`
-      );
+      logger.debug(`found quasar component: ${JSON.stringify(component)}`);
 
-      componentsList.push(`q-${component[1]}`);
+      const componentName = component[1] || component[2];
+
+      componentsList.push(`q-${componentName}`);
     }
 
     const customPluginPath: string = join(basePath, cachePath);

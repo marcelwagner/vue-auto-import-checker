@@ -1,8 +1,8 @@
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { getComponentList } from './index.ts';
-import { statistics } from './utils/index.ts';
+import { getComponentList } from '../src/index.ts';
+import { statistics } from '../src/utils/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../');

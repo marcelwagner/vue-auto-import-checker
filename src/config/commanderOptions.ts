@@ -1,5 +1,7 @@
 import { Option } from 'commander';
-import { config } from './index.ts';
+import { default as configJson } from '../../config.json' with { type: 'json' };
+
+const config: AppConfig = configJson as AppConfig;
 
 export const commanderOptionsList: Option[] = [
   new Option(

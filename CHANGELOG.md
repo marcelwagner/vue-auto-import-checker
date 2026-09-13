@@ -5,12 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.1] - 2026-06-20
+## [2.0.2] - 2026-07-27
+
+### Changed
+
+- Updated @vueuse/components to 14.3.0
+- Updated nuxt to 4.5.2
+- Updated primevue to 5.0.0
+- Updated quasar to 2.23.1
+- Updated vuetify to 4.1.6
+- Updated tests for new lib versions
+- Optimized tools debug output
+- Resolve vulnerabilities in dependencies
+- First iteration of type refactoring
 
 ### Fixed
 
 - Vulnerabilities in dependencies
 
+## [2.0.1] - 2026-06-20
+
+### Fixed
+
+- Vulnerabilities in dependencies
 
 ## [2.0.0] - 2026-05-20
 

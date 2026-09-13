@@ -9,6 +9,7 @@ Currently, we support:
 - 1.16.0
 - 2.18.6
 - 2.19.3
+- 2.23.1
 
 ## Usage
 

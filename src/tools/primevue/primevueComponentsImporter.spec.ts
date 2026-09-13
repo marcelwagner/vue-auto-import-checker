@@ -16,7 +16,7 @@ vi.stubGlobal('logger', {
 });
 
 describe('primevue-importer tool', () => {
-  const tags = 166;
+  const tags = 232;
 
   test(`should return ${tags} primevue tags`, async () => {
     const result = await primevueComponentsImporter(basePath, cachePath);
@@ -39,7 +39,14 @@ describe('primevue-importer tool', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     const customFile = join(basePath, cachePath, 'primevueTags.json');
@@ -74,7 +81,14 @@ describe('primevue-importer tool', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     statistics._stats = { ...statistics._initialState };

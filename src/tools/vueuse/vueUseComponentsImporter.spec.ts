@@ -39,7 +39,14 @@ describe('tool vuuse-importer', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     const customFile = join(basePath, cachePath, 'vueUseTags.json');
@@ -74,7 +81,14 @@ describe('tool vuuse-importer', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     statistics._stats = { ...statistics._initialState };

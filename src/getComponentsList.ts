@@ -74,8 +74,6 @@ export async function getComponentList(
     logger.debug(`Componentlist from file ${componentsFilePath}:`);
     logger.debug(JSON.stringify(componentsList, null, 2));
 
-    statistics.end();
-
     // Return the extracted list (caller expects ComponentTag[]).
     return componentsList;
   } catch (error) {
@@ -83,5 +81,7 @@ export async function getComponentList(
     return Promise.reject({
       errorText: `Error in getComponentsList: ${getErrorText(error)}`
     });
+  } finally {
+    statistics.end();
   }
 }

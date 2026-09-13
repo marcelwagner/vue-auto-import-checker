@@ -6,9 +6,9 @@ import { getUnknownTags } from './getUnknownTags.ts';
  * Scan a project directory for unknown component tags used inside template blocks.
  *
  * @param config - configuration object adhering to `Vue_Ctl_Config`
- * @returns Promise<Vue_Ctl_Config> - Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
+ * @returns Promise<VueCtlConfig> - Promise resolving to ComponentSearch containing stats, unknownTags and componentsList
  */
-export default async function (config: Vue_Ctl_Config): Promise<Tag[]> {
+export default async function (config: VueCtlConfig): Promise<Tag[]> {
   return getUnknownTags({
     ...config,
     basePath: config.basePath ?? dirname(fileURLToPath(import.meta.url))

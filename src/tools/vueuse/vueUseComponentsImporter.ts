@@ -26,37 +26,45 @@ export async function vueUseComponentsImporter(
     // index.d.mts for vuetify 14.0.0
     const indexFile: string = join(
       basePath,
+      'node_modules/@vueuse/components/index.d.ts'
+    );
+    // index.d.mts for vuetify 14.3.0
+    const indexDistFile: string = join(
+      basePath,
       'node_modules/@vueuse/components/dist/index.d.ts'
     );
 
     const indexMFileExists: boolean = existsSync(indexMFile);
     const indexFileExists: boolean = existsSync(indexFile);
+    const indexDistFileExists: boolean = existsSync(indexDistFile);
 
-    if (!indexMFileExists && !indexFileExists) {
+    if (!indexMFileExists && !indexFileExists && !indexDistFileExists) {
       return Promise.reject({
-        errorText: `No index.d.ts or index.d.mts found: ${indexMFile}, ${indexFile}`
+        errorText: `No index.d.ts or index.d.mts found: ${indexMFile}, ${indexFile}, ${indexDistFile}`
       });
     }
 
     logger.debug(`File: ${indexMFile} exists ${indexMFileExists}`);
     logger.debug(`File: ${indexFile} exists ${indexFileExists}`);
+    logger.debug(`File: ${indexDistFile} exists ${indexDistFileExists}`);
 
-    const fileContent: string = indexMFileExists
-      ? await getFileContent(indexMFile)
-      : await getFileContent(indexFile);
+    const fileContent: string =
+      (indexMFileExists && (await getFileContent(indexMFile))) ||
+      (indexFileExists && (await getFileContent(indexFile))) ||
+      (await getFileContent(indexDistFile));
 
     const componentsList: string[] = [];
 
     for (const fileContentLine of fileContent.split('\n')) {
       const component: RegExpMatchArray | null = fileContentLine.match(
-        /declare const ([\w]+): (vue.DefineComponent|vue1.DefineSetupFnComponent|vue0.DefineSetupFnComponent)/
+        /declare const ([\w]+): (vue.DefineComponent|vue1.DefineSetupFnComponent|vue0.DefineSetupFnComponent|_\$vue.DefineSetupFnComponent)/
       );
 
       if (component === null) {
         continue;
       }
 
-      logger.debug(`found vueUse component: ${JSON.stringify(component[1])}`);
+      logger.debug(`found vueUse component: ${JSON.stringify(component)}`);
 
       componentsList.push(component[1]);
     }

@@ -6,7 +6,7 @@ import { commanderOptionsList, config, packageJson } from '../config/index.ts';
  *
  * @returns an object containing parsed CLI options
  **/
-export function prepareCommander(): CommanderInit {
+export function prepareCommander(): CommanderConfig {
   program.version(
     packageJson.version,
     '-v, --version',

@@ -30,9 +30,9 @@ async function main(): Promise<void> {
   // Base path for resolving relative paths.
   const basePath: string = process.cwd() || '';
   // Parse command-line arguments and normalize options.
-  const commanderOptions: CommanderInit = prepareCommander();
+  const commanderOptions: CommanderConfig = prepareCommander();
 
-  const options: CommanderInit = await readConfigFile(
+  const options: CommanderConfig = await readConfigFile(
     basePath,
     commanderOptions
   );

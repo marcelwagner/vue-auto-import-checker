@@ -68,46 +68,11 @@ type BaseTags = {
   source: string;
 };
 
-type InternalConfig = CommanderInit & {
-  negateKnown: Known[];
-  knownFrameworks: Framework[];
-  outputFormat: OutputFormat;
-  basePath: string;
-};
-
 type UserConfig = InternalConfig & {
   set(config: InternalConfig): void;
 };
 
-type CommanderInit = {
-  configFile: string;
-
-  componentsFile: string;
-  projectPaths: string[];
-
-  cachePath: string;
-  tool: string;
-
-  showStats: boolean;
-  showResult: boolean;
-  quiet: boolean;
-
-  knownTags: string[];
-  knownTagsFile: string;
-  knownFrameworks: string[];
-  negateKnown: string[];
-
-  kafka: boolean;
-
-  outputFormat: string;
-
-  importsKnown: boolean;
-  debug: boolean;
-  showConfig: boolean;
-};
-
 type OutputFormat = 'text' | 'md' | 'json';
-
 type Framework =
   | 'vuetify'
   | 'vueuse'

@@ -16,7 +16,7 @@ vi.stubGlobal('logger', {
 });
 
 describe('vuetify-importer tool', () => {
-  const tags = 177;
+  const tags = 194;
 
   test(`should return ${tags} vuetify tags`, async () => {
     const result = await vuetifyComponentsImporter(basePath, cachePath);
@@ -39,7 +39,14 @@ describe('vuetify-importer tool', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     const customFile = join(basePath, cachePath, 'vuetifyTags.json');
@@ -74,7 +81,14 @@ describe('vuetify-importer tool', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     statistics._stats = { ...statistics._initialState };

@@ -66,7 +66,7 @@ export async function vuetifyComponentsImporter(
 
         componentMatchList.forEach((componentMatch: RegExpExecArray): void => {
           logger.debug(
-            `found vuetify component: ${JSON.stringify(componentMatch[1])}`
+            `found vuetify component: ${JSON.stringify(componentMatch)}`
           );
 
           componentsList.push(componentMatch[1]);
@@ -83,7 +83,7 @@ export async function vuetifyComponentsImporter(
 
         componentMatchList.forEach((componentMatch: RegExpExecArray): void => {
           logger.debug(
-            `found vuetify component: ${JSON.stringify(componentMatch[1])}`
+            `found vuetify component: ${JSON.stringify(componentMatch)}`
           );
 
           componentsList.push(componentMatch[1]);
@@ -132,7 +132,7 @@ export async function vuetifyComponentsImporter(
 
       directiveMatchList.forEach((directiveMatch: RegExpExecArray): void => {
         logger.debug(
-          `found vuetify directive: ${JSON.stringify(directiveMatch[1])}`
+          `found vuetify directive: ${JSON.stringify(directiveMatch)}`
         );
 
         componentsList.push(`V${directiveMatch[1]}`);

@@ -13,16 +13,16 @@ import { program } from 'commander';
  */
 export const readConfigFile = async (
   basePath: string,
-  commanderOptions: CommanderInit
-): Promise<CommanderInit> => {
+  commanderOptions: CommanderConfig
+): Promise<CommanderConfig> => {
   const { configFile } = commanderOptions;
   try {
     const configFilePath: string = join(basePath, configFile || configFileName);
 
     // Make sure the file is not too big and blocks more ram as needed
     if (existsSync(configFilePath) && statSync(configFilePath).size <= 2048) {
-      const fileConfig: Partial<CommanderInit> =
-        await getJsonFileContent<Partial<CommanderInit>>(configFilePath);
+      const fileConfig: Partial<CommanderConfig> =
+        await getJsonFileContent<Partial<CommanderConfig>>(configFilePath);
 
       return {
         ...commanderOptions,

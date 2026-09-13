@@ -30,8 +30,6 @@ export async function getToolTags(config: InternalConfig): Promise<{
     // Execute the tool with the current working directory and relative cache directory as context.
     const toolTags: string[] = await possibleTool.tool(basePath, cachePath);
 
-    statistics.end();
-
     return {
       toolTags,
       toolName: possibleTool.name
@@ -41,5 +39,7 @@ export async function getToolTags(config: InternalConfig): Promise<{
     return Promise.reject({
       errorText: `Error in getToolTags: ${getErrorText(error)}`
     });
+  } finally {
+    statistics.end();
   }
 }

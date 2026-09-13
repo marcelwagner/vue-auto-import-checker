@@ -16,7 +16,7 @@ vi.stubGlobal('logger', {
 });
 
 describe('quasar-importer tool', () => {
-  const tags = 79;
+  const tags = 123;
 
   test(`should return ${tags} quasar tags`, async () => {
     const result = await quasarComponentsImporter(basePath, cachePath);
@@ -39,7 +39,14 @@ describe('quasar-importer tool', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     const customFile = join(basePath, cachePath, 'quasarTags.json');
@@ -75,7 +82,14 @@ describe('quasar-importer tool', () => {
       cachePath,
       importsKnown: false,
       basePath,
-      outputFormat: 'text'
+      outputFormat: 'text',
+      configFile: '',
+      showStats: false,
+      showResult: false,
+      quiet: false,
+      kafka: false,
+      debug: false,
+      showConfig: false
     };
 
     statistics._stats = { ...statistics._initialState };

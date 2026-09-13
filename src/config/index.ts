@@ -1,9 +1,10 @@
-import { default as config } from '../../config.json' with { type: 'json' };
+import { default as configJson } from '../../config.json' with { type: 'json' };
 import { default as packageJson } from '../../package.json' with { type: 'json' };
 import { getBaseTags } from './baseTags.ts';
 import { getFrameworksTools } from './frameworksTools.ts';
 
-const repoTreeUrl = `${config.repoUrl}/tree/${packageJson.version}`;
+const config: AppConfig = configJson as AppConfig;
+const repoTreeUrl: string = `${config.repoUrl}/tree/${packageJson.version}`;
 
 export const baseTags: BaseTags[] = getBaseTags(repoTreeUrl);
 export const frameworksTools: FrameworkToolItem[] =
@@ -17,4 +18,5 @@ export * from './vue.ts';
 export * from './configFile.ts';
 export * from './outputFormatList.ts';
 export * from './regexp.ts';
+
 export { packageJson, config, repoTreeUrl };

@@ -2,14 +2,14 @@ import { existsSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { describe, expect, test } from 'vitest';
-import { getUniqueFromList, statistics } from './utils/index.ts';
+import { getUniqueFromList, statistics } from '../src/utils/index.ts';
 import {
   nuxtComponentsImporter,
   quasarComponentsImporter,
   vuetifyComponentsImporter,
   vueUseComponentsImporter
-} from './tools/index.ts';
-import { getUnknownTags } from './index.ts';
+} from '../src/tools/index.ts';
+import { getUnknownTags } from '../src/index.ts';
 
 const __filename = fileURLToPath(import.meta.url);
 const basePath = join(dirname(__filename), '../');
@@ -317,7 +317,7 @@ describe('vuetify as ignored framework (no custom file)', async () => {
 
   // Expected result
   const { lines, tags, files } = {
-    lines: 16,
+    lines: 14,
     tags: [
       'DocumentationIcon',
       'ToolingIcon',
@@ -326,7 +326,6 @@ describe('vuetify as ignored framework (no custom file)', async () => {
       'ToolingIcon2',
       'ToolingIcon3',
       'ToolingIcon4',
-      'v-date-input',
       'EcosystemIcon',
       'CommunityIcon',
       'WelcomeItemDialog',
@@ -370,7 +369,7 @@ describe('vuetify as ignored framework (with custom file)', async () => {
 
   // Expected result
   const { lines, tags, files } = {
-    lines: 16,
+    lines: 14,
     tags: [
       'DocumentationIcon',
       'ToolingIcon',
@@ -379,7 +378,6 @@ describe('vuetify as ignored framework (with custom file)', async () => {
       'ToolingIcon2',
       'ToolingIcon3',
       'ToolingIcon4',
-      'v-date-input',
       'EcosystemIcon',
       'CommunityIcon',
       'WelcomeItemDialog',
@@ -549,7 +547,7 @@ describe('quasar as ignored framework (no custom file)', async () => {
 
   // Expected result
   const { lines, tags, files } = {
-    lines: 23,
+    lines: 24,
     tags: [
       'v-responsive',
       'v-app',
@@ -568,9 +566,10 @@ describe('quasar as ignored framework (no custom file)', async () => {
       'EcosystemIcon',
       'CommunityIcon',
       'WelcomeItemDialog',
-      'SupportIcon'
+      'SupportIcon',
+      'q-avatar'
     ].sort(),
-    files: 3
+    files: 4
   };
 
   test(`should return unknown tags in ${lines} lines`, () => {
@@ -607,7 +606,7 @@ describe('quasar as ignored framework (with custom file)', async () => {
 
   // Expected result
   const { lines, tags, files } = {
-    lines: 23,
+    lines: 24,
     tags: [
       'v-responsive',
       'v-app',
@@ -626,9 +625,10 @@ describe('quasar as ignored framework (with custom file)', async () => {
       'EcosystemIcon',
       'CommunityIcon',
       'WelcomeItemDialog',
-      'SupportIcon'
+      'SupportIcon',
+      'q-avatar'
     ].sort(),
-    files: 3
+    files: 4
   };
 
   test(`should return unknown tags in ${lines} lines`, () => {
@@ -897,7 +897,7 @@ describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.
 
   // Expected result
   const { lines, tags, files } = {
-    lines: 11,
+    lines: 12,
     tags: [
       'ToolingIcon',
       'ToolingIcon0',
@@ -907,9 +907,10 @@ describe("ignored tag 'SupportIcon', ignore tags file tests/data/customTagsFile.
       'ToolingIcon4',
       'EcosystemIcon',
       'CommunityIcon',
-      'WelcomeItemDialog'
+      'WelcomeItemDialog',
+      'q-avatar'
     ].sort(),
-    files: 2
+    files: 3
   };
 
   test(`should return unknown tags in ${lines} lines`, () => {

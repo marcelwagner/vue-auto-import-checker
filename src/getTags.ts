@@ -61,21 +61,19 @@ export async function getTags(config: InternalConfig): Promise<Tag[]> {
       : [];
 
     // Run the actual tag identification logic.
-    const identifiedTags = await getIdentifiedTagsList({
+    return await getIdentifiedTagsList({
       knownTagsList,
       componentsList,
       componentsFile,
       tags: rawTagsList,
       importsKnown
     });
-
-    statistics.end();
-
-    return identifiedTags;
   } catch (error) {
     // Propagate a structured rejection so callers can handle errors consistently.
     return Promise.reject({
       errorText: `Error in getTags: ${getErrorText(error)}`
     });
+  } finally {
+    statistics.end();
   }
 }

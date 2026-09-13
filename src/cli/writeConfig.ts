@@ -5,7 +5,7 @@ import { userConfig } from '../config/index.ts';
  * Write the config to the console.
  */
 export function writeConfig(
-  commanderOptions: CommanderInit | null = null
+  commanderOptions: CommanderConfig | null = null
 ): void {
   const showConfig = commanderOptions?.showConfig ?? userConfig?.showConfig;
 

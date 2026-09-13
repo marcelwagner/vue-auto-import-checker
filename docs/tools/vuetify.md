@@ -11,6 +11,7 @@ Currently, we support:
 - 4.0.1
 - 4.0.4
 - 4.0.5
+- 4.1.6
 
 ## Usage
 

@@ -28,15 +28,13 @@ export async function getUnknownTags(config: InternalConfig): Promise<Tag[]> {
     const tagsList: Tag[] = await getTags(userConfig);
 
     // Run the actual unknown tag detection logic.
-    const unknownTagsList: Tag[] = await getUnknownTagsList(tagsList);
-
-    statistics.end();
-
-    return unknownTagsList;
+    return await getUnknownTagsList(tagsList);
   } catch (error) {
     // Propagate a structured rejection so callers can handle errors consistently.
     return Promise.reject({
       errorText: `Error in getUnknownTags: ${getErrorText(error)}`
     });
+  } finally {
+    statistics.end();
   }
 }
