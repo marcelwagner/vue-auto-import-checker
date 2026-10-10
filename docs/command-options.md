@@ -21,6 +21,7 @@
 - [Show config](#show-config)
 - [Version](#version)
 - [Help](#help)
+
 <!-- TOC -->
 
 ## Config file

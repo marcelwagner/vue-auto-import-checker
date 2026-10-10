@@ -8,14 +8,12 @@ import { baseTags } from '../config/index.ts';
  * @returns KnownList[] - list of base tags
  */
 export function getKnownBaseTags(negateKnown: Known[]): KnownList[] {
-  return baseTags.map(
-    (base: BaseTags): KnownList => ({
-      tags: base.tags,
-      name: base.name as Source,
-      known: !negateKnown.includes(base.name as Known),
-      file: base.source
-    })
-  );
+  return baseTags.map((base: BaseTags): KnownList => ({
+    tags: base.tags,
+    name: base.name as Source,
+    known: !negateKnown.includes(base.name as Known),
+    file: base.source
+  }));
 }
 
 /**
