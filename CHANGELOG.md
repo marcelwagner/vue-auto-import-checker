@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.3] - 2026-10-10
+
+### Changed
+
+- Updated nuxt to 4.6.1
+- Updated dev env node to 24.15.0
+- Updated tests for new lib versions
+- Partially resolve vulnerabilities in dependencies
+
+### Fixed
+
+- Vulnerabilities in dependencies
+
 ## [2.0.2] - 2026-07-27
 
 ### Changed
